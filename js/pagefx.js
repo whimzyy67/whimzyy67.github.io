@@ -29,8 +29,10 @@
     "html.wz-fx body > *" + SKIP + "{ transition: transform .2s ease, opacity .2s ease; }" +
     rule("wz-out-left",  "transform: translateX(-60px); opacity: 0;") +
     rule("wz-out-right", "transform: translateX(60px);  opacity: 0;") +
-    rule("wz-in-left",   "transform: translateX(-60px); opacity: 0; transition: none;") +
-    rule("wz-in-right",  "transform: translateX(60px);  opacity: 0; transition: none;") +
+    "@keyframes wz-slide-in-left{ from{ transform: translateX(-60px); opacity: 0; } to{ transform: none; opacity: 1; } }" +
+    "@keyframes wz-slide-in-right{ from{ transform: translateX(60px); opacity: 0; } to{ transform: none; opacity: 1; } }" +
+    rule("wz-in-left",   "animation: wz-slide-in-left .24s ease-out both; transition: none;") +
+    rule("wz-in-right",  "animation: wz-slide-in-right .24s ease-out both; transition: none;") +
     "@media (prefers-reduced-motion: reduce){ html.wz-fx body > *{ transition: none !important; } }";
   (document.head || root).appendChild(style);
   root.classList.add("wz-fx");
@@ -43,13 +45,9 @@
   var dir = null;
   try { dir = sessionStorage.getItem(KEY); sessionStorage.removeItem(KEY); } catch (e) { /* ignore */ }
   if (dir === "left" || dir === "right") {
+    // a keyframe animation (not a transition), so it plays even when the page is slow to paint
     root.classList.add("wz-in-" + dir);
-    var clear = function () {
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () { root.classList.remove("wz-in-" + dir); });
-      });
-    };
-    if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", clear); } else { clear(); }
+    setTimeout(function () { root.classList.remove("wz-in-" + dir); }, 450);
   }
 
   // slide OUT on click
