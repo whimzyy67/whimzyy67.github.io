@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+        <title>Whimzyy - My Day</title>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+
+        <link rel="stylesheet" href="../css/home.css">
+        <link rel="stylesheet" href="../css/myday.css">
+        <link rel="stylesheet" href="../css/aboutus.css">
+        <link rel="stylesheet" href="../css/rewards.css">
+        <link rel="stylesheet" href="../css/responsive.css"> 
+        
+        <script src="../js/auth.js"></script>
+        <script src="../js/theme.js"></script>
+        <script src="../js/rewards.js"></script>
+
+        <link rel="icon" href="icons/icon-192.png">
+    </head>
+      
+    <script src="../js/pwa.js"></script>
+
+    <body>
+
+        <!--Top Navigation bar-->
+        <header class="topbar">
+
+            <!--Whimzyy Side bar-->
+            <a href="../index.html" class="brand" title="Back to the start">
+                <img src="../stickers/whimzyy.png" alt="Whimzyy" class="whimzyy-logo">
+            </a>
+
+            <!--Navigation bar-->
+            <nav class="top-nav">
+
+                <!--Work Space-->
+                <a href="work-space.html" class="work" title="LOCK IN!!">
+                    <img src="../stickers/nav-work.png" alt="Work Space" class="icon" id="work-space-icon">
+                    Work Space
+                </a>
+
+                <!--Home-->
+                <a href="../home.html" class="tab" title="Your daily welcome">
+                    <img src="../stickers/nav-home.png" alt="Home" class="icon">
+                    Home
+                </a>
+
+                <!--About Us-->
+                <a href="about-us.html" class="tab" title="The story behind Whimzyy">
+                    <img src="../stickers/nav-about.png" alt="About Us" class="icon">
+                    About Us
+                </a>
+
+            </nav>
+        </header>
+
+        <!--Side Navigation bar-->
+        <aside class="sidebar" id="sidebar">
+            <ul>
+
+                <!--My Day-->
+                <li>
+                    <a href="my-day.html" title="Plan your day and write your journal">
+                        <img src="../stickers/side-myday.png" alt="My Day" class="icon" id="my-day-icon">
+                        My Day
+                    </a>
+                </li>
+
+                <!--Focus-->
+                <li>
+                    <a href="focus.html" title="Timer, Stopwatch and Pomodoro">
+                        <img src="../stickers/side-focus.png" alt="Focus" class="icon">
+                        Focus
+                    </a>
+                </li>
+
+                <!--Detox-->
+                <li>
+                    <a href="detox.html" title="Screen Time Limit">
+                        <img src="../stickers/side-detox.png" alt="Detox" class="icon">
+                        Detox
+                    </a>
+                </li>
+
+                <!--Wellness-->
+                <li>
+                    <a href="wellness.html" title="Check in, stretch and drink water">
+                        <img src="../stickers/side-wellness.png" alt="Wellness" class="icon">
+                        Wellness
+                    </a>
+                </li>
+
+                <!--Productivity-->
+                <li>
+                    <a href="productivity.html" title="See your progress and patterns">
+                        <img src="../stickers/side-productivity.png" alt="Productivity" class="icon">
+                        Productivity
+                    </a>
+                </li>
+
+                <!--Dayverse-->
+                <li>
+                    <a href="dayverse.html" title="Your slice of life">
+                        <img src="../stickers/side-dayverse.png" alt="Dayverse" class="icon">
+                        Dayverse
+                    </a>
+                </li>
+
+                <!--Vibe-->
+                <li>
+                    <a href="vibe.html" title="Change themes, sounds and backgrounds">
+                        <img src="../stickers/side-vibe.png" alt="Vibe" class="icon">
+                        Vibe
+                    </a>
+                </li>
+
+            </ul>
+        </aside>
+
+        <!--Main content-->
+        <main class="content">
+            <div class="myday-grid">
+
+                <!--Left side-->
+                <div class="left-side">
+
+                    <!--Greeting-->
+                    <section class="card greeting-card">
+
+                        <!--Date-->
+                        <p class="greeting-date" id="greetingDate"></p>
+
+                        <!--Greeting text-->
+                        <h1 id="greetingText">Hello</h1>
+                        
+                        <!--Sub greetings-->
+                        <p class="greeting-sub" id="greetingSub"></p>
+                    </section>
+
+                    <!--Mood check-up-->
+                    <section class="card mood-card">
+                        <h2>How are you feeling?</h2>
+
+                        <div class="mood-row" id="moodRow">
+
+                            <button type="button" class="mood-btn" data-mood="slay" aria-pressed="false" title="Confident and on top of everything.">
+                                <span class="mood-emoji">💅</span>
+                                <span class="mood-label">Slayed!</span>
+                            </button>
+
+                            <button type="button" class="mood-btn" data-mood="butterflies" aria-pressed="false" title="Excited, nervous in a good way.">
+                                <span class="mood-emoji">🦋</span>
+                                <span class="mood-label">Butterflies fr</span>
+                            </button>
+
+                            <button type="button" class="mood-btn" data-mood="lowkey" aria-pressed="false" title="It’s mild, not a big deal.">
+                                <span class="mood-emoji">🤏</span>
+                                <span class="mood-label">Lowkey</span>
+                            </button>
+
+                            <button type="button" class="mood-btn" data-mood="mid" aria-pressed="false" title="Flat and neutral.">
+                                <span class="mood-emoji">😐</span>
+                                <span class="mood-label">Mid ngl</span>
+                            </button>
+
+                            <button type="button" class="mood-btn" data-mood="complicated" aria-pressed="false" title="You’re foggy, or you can’t quite name it.">
+                                <span class="mood-emoji">🥴</span>
+                                <span class="mood-label">It's complicated</span>
+                            </button>
+
+                            <button type="button" class="mood-btn" data-mood="dead" aria-pressed="false" title="Drained, embarrassed or fed up.">
+                                <span class="mood-emoji">💀</span>
+                                <span class="mood-label">Never again homiee!!</span>
+                            </button>
+
+                        </div>
+
+                        <p class="mood-note" id="moodNote" aria-live="polite">Tap the one that fits today.</p>
+                    </section>
+
+                    <!--To-do list-->
+                    <section class="card todo-card">
+
+                        <!--Heading and Work Space button-->
+                        <div class="todo-head">
+                            <h2>To-do list</h2> 
+
+                            <a href="work-space.html" class="ws-btn" title="LOCK IN!!">
+                                Work Space
+                                <img src="../stickers/sidebar-play.png" alt="" class="ws-btn-icon">
+                            </a>
+                        </div>
+
+                        <!--How much of the work is done-->
+                        <div class="progress">
+                            <div class="progress-top">
+
+                                <span class="progress-percent" id="progressPercent">0%</span>
+                                <span class="progress-count" id="progressCount">No tasks yet</span>
+                            </div>
+
+                            <div class="progress-bar" role="progressbar" aria-label="Tasks completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar">
+
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                        </div>
+
+                        <!--Add a task-->
+                        <form class="todo-form" id="todoForm">
+                            
+                            <input type="text" id="todoInput" placeholder="Add a task..." aria-label="New task" maxlength="80">
+
+                            <button type="submit" class="save-btn">Add</button>
+
+                        </form>
+
+                        <ul class="todo-list" id="todoList"></ul>
+                    </section>
+
+                </div>
+
+                <!--Right side (40%): journal and previous entries-->
+                <div class="right-side">
+
+                    <!--Write a new entry-->
+                    <section class="card journal-card">
+                        <h2>Journal</h2>
+                        
+                        <form id="journalForm">
+                            <textarea id="journalInput" rows="5" placeholder="Dear Diary,
+                            " aria-label="Write a journal entry"></textarea>
+
+                            <div class="journal-actions">
+
+                                <button type="submit" class="save-btn">Save entry</button>
+
+                                <span class="save-note" id="journalNote" aria-live="polite"></span>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!--Previous entries-->
+                    <section class="card history-card">
+                        <h2>Previous entries</h2>
+                        <ul class="entry-list" id="entryList"></ul>
+                    </section>
+
+                </div>
+
+            </div>
+        </main>
+
+        <!--JavaScript Links-->
+        <script src="../js/sidebar.js"></script>
+        <script src="../js/tasks.js"></script>
+        <script src="../js/myday.js"></script>
+    </body>
+</html>

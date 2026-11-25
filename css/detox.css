@@ -1,0 +1,342 @@
+/* ==========================================================
+   detox.css  (html/detox.html only)
+
+   THE ORDER BELOW:
+    1. Page grid
+    2. Shared bits (rows, switches, buttons, inputs)
+    3. Today's screen time ring
+    4. Blockers
+    5. App limits
+    6. Week chart, stars, quiet hours
+   Colors come from the card, so every theme works.
+   ========================================================== */
+
+
+/* ---------- 1. Page grid (one screen on a laptop, stacks on tablets and phones) ---------- */
+
+.detox-grid{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+        "banner banner banner"
+        "today  blockers apps"
+        "week   quiet    apps";
+    gap: 12px;
+    align-items: stretch;
+    padding-bottom: 16px;
+}
+.detox-grid [hidden]{ display: none !important; }
+.detox-grid > .card{
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 12px 16px;
+    margin: 0;
+}
+.detox-grid h1,
+.detox-grid h2{
+    margin: 0 0 4px;
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+}
+.detox-grid h1{ font-size: 26px; }
+.detox-grid h2{ font-size: 18px; }
+.detox-grid p{ margin: 2px 0; line-height: 1.35; font-size: 14px; }
+
+.dx-banner{ grid-area: banner; }
+.dx-head{ grid-area: head; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.dx-head h1{ margin: 0; }
+.dx-today{ grid-area: today; }
+.dx-blockers{ grid-area: blockers; }
+.dx-apps{ grid-area: apps; }
+.dx-week{ grid-area: week; }
+.dx-quiet{ grid-area: quiet; }
+
+@media (max-width: 1100px){
+    .detox-grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-areas:
+            "banner banner"
+            "today blockers"
+            "apps apps"
+            "week quiet";
+    }
+}
+
+@media (max-width: 700px){
+    .detox-grid{
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "banner" "today" "blockers" "apps" "week" "quiet";
+    }
+    .detox-grid h1{ font-size: 28px; }
+    .dx-switch{ width: 56px; height: 32px; }
+    .dx-switch::after{ width: 22px; height: 22px; }
+    .dx-switch[aria-checked="true"]::after{ transform: translateX(24px); }
+    .detox-grid select,
+    .detox-grid input[type="text"],
+    .detox-grid input[type="time"],
+    .dx-btn{ min-height: 42px; font-size: 16px; }      /* easy to tap, and no zoom-in on iPhone */
+}
+
+
+/* ---------- 2. Shared bits ---------- */
+
+.dx-row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 6px 0;
+    font-weight: 700;
+}
+
+.dx-note{ font-size: 14px; opacity: 0.8; }
+
+
+
+/* on / off switch */
+.dx-switch{
+    position: relative;
+    flex-shrink: 0;
+    width: 52px;
+    height: 28px;
+    padding: 0;
+    border: 2px solid currentColor;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    opacity: 0.55;
+    cursor: pointer;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+.dx-switch::after{
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: currentColor;
+    transition: transform 0.2s ease;
+}
+.dx-switch[aria-checked="true"]{
+    opacity: 1;
+    border-color: var(--gold, #F2B83D);
+    background-color: var(--gold, #F2B83D);           /* golden yellow when ON */
+    box-shadow: 0 0 10px rgba(242, 184, 61, 0.55);
+}
+.dx-switch[aria-checked="true"]::after{ background-color: var(--bg, #3A0A12); }   /* dark knob on the gold */
+.dx-switch[aria-checked="true"]::after{ transform: translateX(24px); }
+
+.dx-btn{
+    padding: 8px 18px;
+    border: 2px solid currentColor;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.dx-btn:hover{ background-color: rgba(0, 0, 0, 0.12); }
+
+.detox-grid select,
+.detox-grid input[type="text"],
+.detox-grid input[type="time"]{
+    padding: 7px 12px;
+    border: 2px solid currentColor;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+}
+.detox-grid select option{ color: var(--warm-beige, #F3E7D3); background: var(--bg, #120000); }
+.detox-grid input::placeholder{ color: inherit; opacity: 0.55; }
+
+
+/* ---------- 3. Today's screen time ring ---------- */
+
+.dx-today{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.dx-ring-wrap{
+    position: relative;
+    flex-shrink: 0;
+    width: 112px;
+    height: 112px;
+}
+.dx-ring{ width: 100%; height: 100%; transform: rotate(-90deg); }
+.dx-ring circle{ fill: none; stroke-width: 11; }
+.dx-ring-track{ stroke: currentColor; opacity: 0.2; }
+.dx-ring-fill{
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-dasharray: 326.7;
+    stroke-dashoffset: 326.7;
+    transition: stroke-dashoffset 0.6s ease, stroke 0.3s ease;
+}
+.dx-ring-fill.warn{ stroke: #d98b1c; }
+.dx-ring-fill.over{ stroke: #c0392b; }
+
+.dx-ring-text{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.dx-ring-text b{ font-family: "Bricolage Grotesque", Arial, sans-serif; font-size: 17px; }
+.dx-ring-text span{ font-size: 12px; opacity: 0.8; }
+
+.dx-today-info{ flex: 1; }
+#leftLine{ font-size: 14px; font-weight: 700; }
+
+
+
+
+/* ---------- 4. Blockers ---------- */
+
+.dx-block{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 6px 0;
+    border-bottom: 1px dashed currentColor;
+}
+.dx-block p{ font-size: 13px; opacity: 0.8; }
+
+.dx-mode{
+    margin: 8px 0 0;
+    padding: 4px 12px 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    border: 1px solid currentColor;
+    border-radius: 16px;
+}
+.dx-mode legend{ padding: 0 6px; font-size: 14px; font-weight: 700; }
+.dx-mode label{ display: block; margin: 2px 0; font-size: 14px; font-weight: 500; cursor: pointer; }
+
+
+/* ---------- 5. App limits ---------- */
+
+.dx-app{
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 4px 12px;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px dashed currentColor;
+}
+.dx-app-name{ font-weight: 700; }
+.dx-app-used{ font-size: 13px; opacity: 0.8; }
+.dx-app-bar{
+    grid-column: 1 / -1;
+    height: 8px;
+    border-radius: 999px;
+    background-color: rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+.dx-app-bar i{
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background-color: currentColor;
+    transition: width 0.4s ease;
+}
+.dx-app-bar i.warn{ background-color: #d98b1c; }
+.dx-app-bar i.over{ background-color: #c0392b; }
+.dx-x{
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 16px;
+    opacity: 0.6;
+    cursor: pointer;
+}
+.dx-x:hover{ opacity: 1; }
+
+.dx-add{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+.dx-add input{ flex: 1 1 120px; min-width: 0; }
+
+
+/* ---------- 6. Week chart, stars, quiet hours ---------- */
+
+.dx-chart{
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 84px;
+    margin: 6px 0 4px;
+    padding-bottom: 22px;
+    border-bottom: 2px solid currentColor;
+}
+.dx-bar{
+    position: relative;
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+.dx-bar i{
+    display: block;
+    width: 70%;
+    min-height: 3px;
+    border-radius: 8px 8px 0 0;
+    background-color: currentColor;
+}
+.dx-bar i.over{ background-color: #c0392b; }
+.dx-bar span{
+    position: absolute;
+    bottom: -22px;
+    font-size: 13px;
+    font-weight: 700;
+}
+.dx-limit-line{
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 2px dashed currentColor;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.dx-streak{ font-size: 14px; }
+
+
+/* ---------- 7. Different shades of red for the cards ---------- */
+
+.detox-grid > .card{
+    color: var(--warm-beige, #F3E7D3);
+    border: 1px solid var(--soft-gold, #D4A24C);
+}
+.detox-grid h1,
+.detox-grid h2{ color: var(--gold, #F2B83D); }
+
+.dx-banner{ background-color: var(--wine-soft, #7A1B2B); }
+.dx-today{    background-color: var(--dark-red, #5E1322); }
+.dx-blockers{ background-color: var(--marron-red, #4A0E17); }
+.dx-apps{     background-color: var(--wine, #6C1828); }
+.dx-week{     background-color: var(--dark-cherry-red, #3F0B14); }
+.dx-quiet{    background-color: var(--wine, #571320); }
+
+.dx-app-bar{ background-color: rgba(0, 0, 0, 0.3); }
+
+/* Quiet hours: From / To share the row evenly so neither input pokes out of the card. */
+.dx-times{ gap: 10px; }
+.dx-times label{ flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.dx-times input[type="time"]{ width: 100%; min-width: 0; box-sizing: border-box; }

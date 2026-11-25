@@ -1,0 +1,558 @@
+/* ==========================================================
+   myday.css  (linked to my-day.html)
+
+   NOTE: my-day.html loads home.css FIRST, so the colors, the top bar,
+   the sidebar, the basic .card look, the to-do rows (.todo-form,
+   .todo-item ...) and the yellow .save-btn all come from there.
+   This file only holds what is special to the My Day page.
+   Names it borrows from home.css:
+   --home-width, --card-gap, --warm-beige, --wine, --wine-soft, --butter,
+   --bright-deep-yellow, --gold, --peach, --bg
+
+   THE ORDER BELOW IS THE ORDER OF THE BLOCKS IN my-day.html:
+    1. Page layout (left side 60%, right side 40%)
+    2. Left side: the column
+    3. Greeting card
+    4. Mood check-up card
+    5. To-do list card (heading, Work Space button, % completed)
+    6. Right side: the column
+    7. Journal card
+    8. Previous entries card
+    9. Screen-size rules
+   ========================================================== */
+
+
+/* ---------- 1. Page layout ---------- */
+
+/* Two columns: the left side takes 3 parts (60%), the right side 2 parts (40%).
+   minmax(0, ...) lets the columns shrink instead of being pushed wider by long text. */
+.myday-grid{
+    width: 100%;
+    max-width: var(--home-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: var(--card-gap);
+}
+
+
+/* ---------- 2. Left side: the column ---------- */
+
+/* The left side is itself a small grid:
+   top row = Greeting (5 parts, 25%) beside Mood (7 parts, 35%),
+   second row = the To-do list, which takes all the height that is left. */
+.left-side{
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: var(--card-gap);
+    min-width: 0;
+}
+
+
+/* ---------- 3. Greeting card (soft area) ---------- */
+
+/* A beige box with wine-red text. Its contents are centered up and down. */
+.greeting-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--warm-beige);
+    color: var(--wine);
+}
+.greeting-card:hover{
+    box-shadow: 0 0 20px var(--warm-beige);
+}
+
+/* The date line above the greeting. */
+.greeting-date{
+    margin: 0 0 4px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* Good morning / afternoon / evening / night. */
+.greeting-card h1{
+    margin: 0;
+    font-size: 36px;
+    color: var(--wine);
+}
+
+/* The gentle line under the greeting. */
+.greeting-sub{
+    margin: 6px 0 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+}
+
+
+/* ---------- 4. Mood check-up card ---------- */
+
+/* The six mood buttons: two columns, so three rows. */
+.mood-row{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+/* One mood button: emoji on the left, words on the right.
+   It lifts a little on hover. */
+.mood-btn{
+    min-width: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 8px 14px;
+    border: 1px solid rgba(243, 231, 211, 0.25);
+    border-radius: 18px;
+    background: transparent;
+    color: var(--warm-beige);
+    font-family: "DM Sans", Arial, sans-serif;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.mood-btn:hover{
+    transform: translateY(-2px);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* The mood you picked: solid yellow with a glow.
+   (It comes after :hover, so its yellow wins while the mouse is over it.) */
+.mood-btn.selected{
+    border-color: transparent;
+    background-color: var(--butter);
+    color: var(--bg);
+    box-shadow: 0 0 14px rgba(201, 148, 26, 0.6);
+}
+
+/* The emoji. */
+.mood-emoji{
+    font-size: 28px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+/* The words next to the emoji. */
+.mood-label{
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+/* The line under the buttons ("Saved: ..."). It keeps its height when empty,
+   so the card does not jump. */
+.mood-note{
+    margin: 10px 0 0;
+    min-height: 1.2em;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--peach);
+}
+
+
+/* ---------- 5. To-do list card ---------- */
+
+/* This card sits in the left-side grid (section 2) and stretches
+   across both of its columns, so it is as wide as the whole left side. */
+.left-side .todo-card{
+    grid-column: 1 / -1;
+}
+
+/* The top row of the card: the heading on the left, the Work Space button on the right. */
+.todo-head{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+/* The heading needs no space of its own, because the row above has it. */
+.todo-head h2{
+    margin: 0;
+}
+
+/* The Work Space button: a small yellow pill with a glow that lifts on hover. */
+.ws-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--bright-deep-yellow), var(--gold));
+    color: var(--bg);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 800;
+    box-shadow: 0 0 14px rgba(242, 184, 61, 0.4);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+.ws-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 0 24px rgba(242, 184, 61, 0.85);
+}
+
+/* The little arrow picture in the button: it slides forward on hover. */
+.ws-btn-icon{
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    transition: transform 0.25s ease;
+}
+.ws-btn:hover .ws-btn-icon{
+    transform: translateX(4px);
+}
+
+/* The "% completed" part: space below it, before the Add row. */
+.progress{
+    margin-bottom: 14px;
+}
+
+/* The big percentage and the "2 of 5 tasks done" words side by side. */
+.progress-top{
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.progress-percent{
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--gold);
+}
+
+.progress-count{
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--peach);
+}
+
+/* The bar: a faint track... */
+.progress-bar{
+    height: 12px;
+    border-radius: 999px;
+    background-color: rgba(243, 231, 211, 0.2);
+    overflow: hidden;
+}
+
+/* ...and the yellow fill inside it. JavaScript sets its width to the percentage;
+   the transition makes it slide smoothly. */
+.progress-fill{
+    width: 0;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--bright-deep-yellow), var(--gold));
+    transition: width 0.4s ease;
+}
+
+
+/* ---------- 6. Right side: the column ---------- */
+
+/* The Journal card on top, the Previous entries card below it. */
+.right-side{
+    display: flex;
+    flex-direction: column;
+    gap: var(--card-gap);
+    min-width: 0;
+}
+
+
+/* ---------- 7. Journal card (soft area) ---------- */
+
+/* A beige box with wine-red text. It never shrinks when the window is short. */
+.journal-card{
+    flex-shrink: 0;
+    background-color: var(--warm-beige);
+    color: var(--wine);
+}
+.journal-card:hover,
+.journal-card:focus-within{
+    box-shadow: 0 0 16px rgba(201, 148, 26, 0.6);
+}
+
+/* The "Journal" heading is wine red on the beige. */
+.journal-card h2{
+    color: var(--wine);
+}
+
+/* The writing box looks like lined paper: no box, only thin lines.
+   background-attachment: local makes the lines scroll with the text. */
+.journal-card textarea{
+    padding: 0 6px;
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: repeating-linear-gradient(
+        transparent 0,
+        transparent 27px,
+        rgba(138, 42, 58, 0.28) 27px,
+        rgba(138, 42, 58, 0.28) 28px
+    );
+    background-attachment: local;
+    font-size: 17px;
+    line-height: 28px;
+    resize: none;
+}
+.journal-card textarea:focus{
+    box-shadow: none;
+}
+
+/* The row under the box: Save button and its message side by side. */
+.journal-actions{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+/* The button sits in a row here, so it needs no top space. */
+.journal-actions .save-btn{
+    margin-top: 0;
+}
+
+/* The little "Saved." message, in a color that shows on beige. */
+.journal-card .save-note{
+    color: var(--wine-soft);
+}
+
+
+/* ---------- 8. Previous entries card ---------- */
+
+/* The list of saved entries (JavaScript fills it): one entry per row. */
+.entry-list{
+    list-style: none;
+    margin: 0;
+    padding: 0 4px 0 0;
+    display: grid;
+    gap: 12px;
+    align-content: start;
+}
+
+/* The message shown while there are no entries. */
+.entry-list:empty::before{
+    content: "No entries yet. Write your first one above.";
+    font-family: "DM Sans", Arial, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    opacity: 0.7;
+}
+
+/* One saved entry: a beige box with wine-red text. */
+.entry{
+    padding: 14px 16px;
+    border-radius: 16px;
+    background-color: var(--warm-beige);
+    color: var(--wine);
+}
+
+/* The day and time at the top of an entry. */
+.entry-time{
+    margin: 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--wine-soft);
+}
+
+/* The entry text. It keeps the line breaks you typed. */
+.entry-text{
+    margin: 8px 0 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* The box you type in while editing an entry. */
+.entry .entry-edit{
+    margin-top: 8px;
+    border-color: var(--wine-soft);
+    background-color: rgba(255, 255, 255, 0.55);
+    resize: vertical;
+}
+.entry .entry-edit:focus{
+    outline: none;
+    border-color: var(--bright-deep-yellow);
+}
+
+/* The row of buttons under an entry (Edit, Delete / Save, Cancel). */
+.entry-actions{
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* A small outlined pill button that fills wine red on hover. */
+.entry-btn{
+    padding: 4px 14px;
+    border: 1px solid var(--wine-soft);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--wine);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.entry-btn:hover{
+    border-color: var(--wine);
+    background-color: var(--wine);
+    color: var(--warm-beige);
+}
+
+/* The Save button while editing: solid yellow that glows on hover.
+   (It comes after .entry-btn:hover, so its yellow wins.) */
+.entry-btn.primary{
+    border-color: transparent;
+    background-color: var(--butter);
+    color: var(--bg);
+}
+.entry-btn.primary:hover{
+    box-shadow: 0 0 12px rgba(201, 148, 26, 0.7);
+}
+
+
+/* ---------- 9. Screen-size rules (these stay LAST so they can override the rules above) ---------- */
+
+/* Wide screens: everything fits the window, and the lists scroll inside their cards. */
+@media (min-width: 801px){
+
+    .myday-grid{
+        flex: 1;
+        min-height: 0;
+        grid-template-rows: minmax(0, 1fr);
+    }
+
+    .left-side,
+    .right-side{
+        min-height: 0;
+    }
+
+    .history-card{
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .entry-list{
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+    }
+}
+
+/* Short windows (like a laptop with 150% display scaling): smaller text and buttons. */
+@media (min-width: 801px) and (max-height: 700px){
+
+    .greeting-card h1{
+        font-size: 28px;
+    }
+
+    .greeting-sub{
+        font-size: 15px;
+    }
+
+    .mood-emoji{
+        font-size: 24px;
+    }
+
+    .mood-btn{
+        padding: 6px 4px;
+    }
+
+    .progress-percent{
+        font-size: 22px;
+    }
+}
+
+/* Narrow screens (phones): one column, with smaller greeting and mood buttons. */
+@media (max-width: 800px){
+
+    .myday-grid{
+        grid-template-columns: 1fr;
+    }
+
+    .greeting-card h1{
+        font-size: 30px;
+    }
+
+    .mood-row{
+        gap: 6px;
+    }
+
+    .mood-emoji{
+        font-size: 22px;
+    }
+
+    .mood-btn{
+        padding: 4px 12px;
+    }
+}
+
+/* Medium screens (small laptops and tablets): the Greeting and Mood cards
+   stack instead of sitting side by side, so neither gets too narrow. */
+@media (max-width: 1100px){
+
+    .left-side{
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto minmax(0, 1fr);
+    }
+}
+
+/* ===== Shorter Greeting + Mood cards (the to-do list gets the saved height) ===== */
+
+/* less padding and a smaller heading on both top cards */
+.left-side .greeting-card,
+.left-side .mood-card{
+    padding: 12px 16px;
+}
+
+.mood-card h2{
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+/* tighter mood buttons: smaller emoji, less padding, smaller gaps */
+.mood-row{
+    gap: 6px;
+}
+.mood-btn{
+    padding: 4px 10px;
+    gap: 8px;
+    border-radius: 14px;
+}
+.mood-emoji{
+    font-size: 20px;
+}
+.mood-label{
+    font-size: 12px;
+}
+
+/* the note under the buttons takes less room */
+.mood-note{
+    margin: 6px 0 0;
+    font-size: 12px;
+}
+
+/* smaller greeting text so that card is not taller than the mood card */
+.greeting-card h1{
+    font-size: 26px;
+}
+.greeting-sub{
+    font-size: 14px;
+    margin-top: 4px;
+}
+.greeting-date{
+    font-size: 13px;
+}

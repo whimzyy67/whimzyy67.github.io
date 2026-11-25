@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+        <title>Whimzyy - Work Space</title>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+
+        <link rel="stylesheet" href="../css/workspace.css">
+        <link rel="stylesheet" href="../css/aboutus.css">
+        <link rel="stylesheet" href="../css/rewards.css"> 
+        <link rel="stylesheet" href="../css/responsive.css">
+        
+        <script src="../js/auth.js"></script>
+        <script src="../js/theme.js"></script>
+        <script src="../js/rewards.js"></script>
+        <script src="../js/pagefx.js" defer></script>
+
+        <link rel="icon" href="icons/icon-192.png">
+    </head>
+      
+    <script src="../js/pwa.js"></script>
+
+    <body>
+
+        <!--Full-screen background video (muted: the sound comes from Ambience and Music)-->
+        <video class="bg-video" id="bgVideo" autoplay muted loop playsinline></video>
+
+        <!--A light dark layer over the video so text stays readable-->
+        <div class="bg-shade"></div>
+
+        <!--Whimzyy logo-->
+        <a href="../home.html" class="brand" title="Back to Home">
+            <img src="../stickers/whimzyy.png" alt="Whimzyy, back to Home" class="whimzyy-logo">
+        </a>
+
+        <!--Starts the ambience and music chosen on the Vibe page-->
+        <button type="button" class="vibe-play" id="vibePlay" hidden>▶ Play my vibe</button>
+
+        <!--Widgets on the screen-->
+        <section class="widgets" aria-label="Widgets">
+
+            <!--Date and time-->
+            <div class="widget" data-widget="clock" hidden>
+                <p class="w-time" id="wClock"></p>
+                <p class="w-date" id="wDate"></p>
+            </div>
+
+            <!--To-do list-->
+            <div class="widget widget-todo" data-widget="todo" hidden>
+                <h2>To-do list</h2>
+                <form class="w-form" id="wTodoForm">
+                    <input type="text" id="wTodoInput" placeholder="Add a task..." aria-label="New task" maxlength="80">
+                    <button type="submit" class="w-btn">Add</button>
+                </form>
+                <ul class="w-todo-list" id="wTodoList"></ul>
+            </div>
+
+            <!--Timer-->
+            <div class="widget" data-widget="timer" hidden>
+                <p class="w-label" id="wTimerPhase">Stopwatch</p>
+                <p class="w-time" id="wTimerDisplay">00:00</p>
+                <button type="button" class="w-btn" id="wTimerToggle">Start</button>
+            </div>
+
+            <!--Personal message-->
+            <div class="widget widget-message" data-widget="message" hidden>
+            
+                <!--text box and Save button-->
+                <form class="message-form" id="messageForm">
+                    <textarea id="messageBox" rows="3" maxlength="140" placeholder="Write something that keeps you motivated..." aria-label="Your personal message"></textarea>
+                    <button type="submit" class="w-btn">Save</button>
+                </form>
+                <button type="button" class="message-text" id="messageText" title="Click to edit" hidden></button>
+           </div>
+
+        </section>
+
+        <!--Right sidebar-->
+        <aside class="ws-sidebar">
+
+            <!--Video-->
+            <div class="side-item">
+
+                <!--Video Icon-->
+                <button type="button" class="side-btn" aria-label="Change video" aria-expanded="false" title="Video">
+                    <img src="../stickers/ws-video.png" alt="Video" class="side-icon">
+                </button>
+
+                <!--Video Panel-->
+                <div class="panel">
+                    <h2>Video</h2>
+                    <div class="video-picker">
+                        
+                        <!--Video slider left-->
+                        <button type="button" class="pick-arrow" id="videoPrev" aria-label="Previous video" title="Previous">
+                            <img src="../stickers/ws-slider-left.png" alt="">
+                        </button>
+
+                        <!--Video Thumbnail-->
+                        <div class="video-card">
+                            <video class="video-thumb" id="videoThumb" muted preload="metadata" playsinline></video>
+                            <p class="video-title" id="videoTitle"></p>
+                        </div>
+
+                        <!--Video slider right-->
+                        <button type="button" class="pick-arrow" id="videoNext" aria-label="Next video" title="Next">
+                            <img src="../stickers/ws-slider-right.png" alt="">
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+            <!--Music-->
+            <div class="side-item">
+
+                <!--Music Icon-->
+                <button type="button" class="side-btn" aria-label="Music" aria-expanded="false" title="Music">
+                    <img src="../stickers/ws-music.png" alt="Music" class="side-icon">
+                </button>
+
+                <!--Music Panel-->
+                <div class="panel">
+                    <h2>Music</h2>
+                    <div class="option-list" id="musicOptions"></div>
+                    
+                    <!--Volume Slider-->
+                    <label class="volume">Volume
+                        <input type="range" id="musicVolume" min="0" max="100" value="60">
+                    </label>
+                    <p class="panel-note" id="musicNote"></p>
+
+                </div>
+            </div>
+
+            <!--Ambience-->
+            <div class="side-item">
+
+                <!--Ambience Icon-->
+                <button type="button" class="side-btn" aria-label="Ambience sounds" aria-expanded="false" title="Ambience">
+                    <img src="../stickers/ws-ambience.png" alt="Ambience" class="side-icon">
+                </button>
+
+                <!--Ambience Panel-->
+                <div class="panel">
+                    <h2>Ambience</h2>
+                    <div class="option-list" id="ambienceOptions"></div>
+
+                    <!--Volume Adjust-->
+                    <label class="volume">Volume
+                        <input type="range" id="ambienceVolume" min="0" max="100" value="60">
+                    </label>
+                    <p class="panel-note" id="ambienceNote"></p>
+
+                </div>
+            </div>
+
+            <!--Timer-->
+            <div class="side-item">
+
+                <!--Timer Icon-->
+                <button type="button" class="side-btn" aria-label="Timer" aria-expanded="false" title="Timer">
+                    <img src="../stickers/ws-timer.png" alt="Timer" class="side-icon">
+                </button>
+
+                <!--Timer Panel-->
+                <div class="panel">
+                    <h2>Timer</h2>
+
+                    <!--Pomodoro and Stopwatch Button-->
+                    <div class="mode-tabs">
+                        <button type="button" class="mode-tab active" data-mode="stopwatch">Stopwatch</button>
+                        <button type="button" class="mode-tab" data-mode="pomodoro">Pomodoro</button>
+                    </div>
+
+                    <!--Stopwatch-->
+                    <p class="t-phase" id="timerPhase">Stopwatch</p>
+                    <p class="t-display" id="timerDisplay">00:00</p>
+
+                    <!--Pomodoro-->
+                    <div class="pomo-settings" id="pomoSettings" hidden>
+                        <label>Study time (min) <input type="number" id="studyMin" min="1" max="180" value="25"></label>
+                        <label>Break time (min) <input type="number" id="breakMin" min="1" max="60" value="5"></label>
+                    </div>
+
+                    <!--Start and Reset button-->
+                    <div class="t-buttons">
+                        <button type="button" class="w-btn" id="timerToggle">Start</button>
+                        <button type="button" class="w-btn ghost" id="timerReset">Reset</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--Widgets-->
+            <div class="side-item">
+
+                <!--Widgets Icon-->
+                <button type="button" class="side-btn" aria-label="Widgets" aria-expanded="false" title="Widgets">
+                    <img src="../stickers/ws-widgets.png" alt="Widgets" class="side-icon">
+                </button>
+
+                <!--Widgets Panel-->
+                <div class="panel">
+                    <h2>Widgets</h2>
+
+                    <!--Widgets Options-->
+                    <label class="check"><input type="checkbox" data-toggle="clock"> Date and time</label>
+
+                    <label class="check"><input type="checkbox" data-toggle="todo"> To-do list</label>
+
+                    <label class="check"><input type="checkbox" data-toggle="timer"> Timer</label>
+
+                    <label class="check"><input type="checkbox" data-toggle="message"> Personal message</label>
+                    
+                </div>
+            </div>
+
+        </aside>
+
+        <!--JavaScript Link-->
+        <script src="../js/tasks.js"></script>
+        <script src="../js/media.js"></script>
+        <script src="../js/workspace.js"></script>
+        <script src="../js/widgets.js"></script>
+        <script src="../js/rotate-hint.js"></script>
+    </body>
+</html>

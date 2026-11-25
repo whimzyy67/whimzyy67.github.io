@@ -1,0 +1,668 @@
+/* ==========================================================
+   wellness.css  (linked to wellness.html, AFTER home.css)
+
+   GOAL: on wide screens the whole page fits in ONE screen, with no scrolling.
+
+   NOTE: wellness.html loads home.css FIRST, so the top bar, the sidebar and the
+   basic .card look come from there. This file only holds what is special
+   to the Wellness page.
+   Names it borrows from home.css:
+   --home-width, --candle, --peach, --warm-beige, --wine
+
+   Some parts are made by JavaScript (wellness.js), so you will not find
+   them in the HTML: .glass (the water glasses, and .full when filled),
+   the buttons inside .stretch-list (and .current), and the text inside the
+   breathing circle.
+
+   THE ORDER BELOW IS THE ORDER OF THE BLOCKS IN wellness.html:
+    0. Colors
+    1. Page area and grid (and the look shared by the five cards)
+    2. Heading strip
+    3. Shared look (buttons and keyboard focus)
+    4. Energy card
+    5. Water card
+    6. Breathing card
+    7. Stretch card
+    8. Reminders card
+    9. Toast (the little pop-up message)
+   10. Screen-size rules
+   ========================================================== */
+
+
+/* ---------- 0. Colors ---------- */
+
+/* Colors used only on this page. (All the other colors come from home.css.) */
+:root{
+    --on-gold: #2A0A10;
+    --soft-fill: rgba(255, 255, 255, 0.08);
+    --soft-line: rgba(247, 231, 169, 0.35);
+}
+
+
+/* ---------- 1. Page area and grid ---------- */
+
+/* The area under the top bar. It is exactly as tall as the window, so the page never
+   scrolls. (If the window is really short, the area itself scrolls as a fallback.)
+   The second height line is for browsers that know "dvh"; the first is the fallback. */
+.content{
+    box-sizing: border-box;
+    display: block;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    padding: 76px 24px 14px;
+    overflow-y: auto;
+}
+
+/* The grid: six equal columns and three rows.
+   The heading row and the first card row take only the height they need;
+   the last row takes everything that is left.
+   Each card names its place in the grid with "grid-area" (see sections 2 to 8). */
+.wellness-grid{
+    max-width: var(--home-width);
+    height: 100%;
+    min-height: 0;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-areas:
+        "head    head    head    head    head    head"
+        "checkin checkin checkin water   water   water"
+        "breathe breathe stretch stretch remind  remind";
+    gap: 12px;
+}
+
+/* The box shared by the five cards: they may shrink inside the grid,
+   and nothing can leave its card (overflow: hidden). */
+.checkin-card,
+.breathing-card,
+.stretch-card,
+.water-card,
+.reminder-card{
+    box-sizing: border-box;
+    min-height: 0;
+    min-width: 0;
+    margin: 0;
+    padding: 12px 18px;
+    overflow: hidden;
+}
+
+/* The heading of every card: the same size everywhere. */
+.checkin-card h2,
+.breathing-card h2,
+.stretch-card h2,
+.water-card h2,
+.reminder-card h2{
+    margin: 0 0 8px;
+    font-size: 30px;
+    line-height: 1.1;
+}
+
+
+/* ---------- 2. Heading strip ---------- */
+
+/* The strip on top: heading and line side by side, sitting along the same baseline. */
+.well-head{
+    grid-area: head;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+/* "Take a breathe". */
+.well-head h1{
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.1;
+    text-align: center;
+    color: var(--candle);
+}
+
+/* "Small things, big difference." */
+.well-head p{
+    margin: 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--peach);
+}
+
+
+/* ---------- 3. Shared look (used by several cards) ---------- */
+
+/* The soft and ghost buttons share their round shape and font.
+   (Their colors and sizes are set per card, in sections 6 and 7.) */
+.soft-btn,
+.ghost-btn{
+    border-radius: 999px;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* The ghost button (the Next button of the Stretch card, which is hidden for now). */
+.ghost-btn{
+    padding: 7px 22px;
+    border: 2px solid var(--candle);
+    background-color: var(--warm-beige);
+    color: var(--wine);
+    font-size: 15px;
+}
+.ghost-btn:hover{
+    background-color: var(--soft-fill);
+}
+
+/* A clear outline around whatever button you reach with the keyboard (Tab key). */
+.soft-btn:focus-visible,
+.ghost-btn:focus-visible,
+.energy-btn:focus-visible,
+.chip:focus-visible,
+.round-btn:focus-visible,
+.glass:focus-visible,
+.stretch-list button:focus-visible{
+    outline: 3px solid var(--candle);
+    outline-offset: 2px;
+}
+
+
+/* ---------- 4. Energy card ---------- */
+
+/* A column on a darker red background. */
+.checkin-card{
+    grid-area: checkin;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--wine);
+}
+
+/* The five energy buttons side by side, sharing the width equally. */
+.energy-row{
+    display: flex;
+    gap: 8px;
+}
+
+/* One button: a faint pill that lifts a little on hover. */
+.energy-btn{
+    flex: 1;
+    height: 40px;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background-color: var(--soft-fill);
+    color: var(--warm-beige);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+.energy-btn:hover{
+    transform: translateY(-2px);
+    background-color: rgba(255, 255, 255, 0.16);
+}
+
+/* The one you picked: solid gold. (It comes after :hover, so its gold wins.) */
+.energy-btn[aria-pressed="true"]{
+    border-color: var(--candle);
+    background-color: var(--candle);
+    color: var(--on-gold);
+}
+
+/* The words "Drained" and "Charged" under the two ends. */
+.energy-ends{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* The line under the buttons ("Pick what fits right now."). */
+.checkin-note{
+    margin: 8px 0 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--warm-beige);
+}
+
+
+/* ---------- 5. Water card ---------- */
+
+/* A column on a light yellow background. */
+.water-card{
+    grid-area: water;
+    display: flex;
+    flex-direction: column;
+    background-color:var(--gold);
+}
+
+/* The heading is wine red on the light yellow. */
+.water-card h2{
+    color: var(--wine);
+}
+
+/* All 8 glasses in ONE row. */
+.glasses{
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2px;
+    justify-items: center;
+}
+
+/* One glass (made by JavaScript): a grey, faded emoji that lifts on hover. */
+.glass{
+    width: 100%;
+    max-width: 50px;
+    height: 38px;
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 30px;
+    line-height: 36px;
+    cursor: pointer;
+    filter: grayscale(1);
+    opacity: 0.35;
+    transition: transform 0.15s ease, opacity 0.2s ease, filter 0.2s ease;
+}
+.glass:hover{
+    transform: translateY(-2px);
+}
+
+/* A glass you have drunk: full color. */
+.glass.full{
+    filter: none;
+    opacity: 1;
+}
+
+/* The bottom row: the count on the left, the - and + buttons on the right.
+   margin-top: auto pushes it to the bottom of the card. */
+.water-bottom{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 6px;
+}
+
+/* "3 / 8". */
+.water-count{
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--wine);
+}
+
+.water-buttons{
+    display: flex;
+    gap: 8px;
+}
+
+/* The round - and + buttons. */
+.round-btn{
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--candle);
+    color: var(--wine);
+    font-family: inherit;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+.round-btn:hover{
+    box-shadow: 0 0 14px rgba(247, 231, 169, 0.5);
+}
+
+
+/* ---------- 6. Breathing card ---------- */
+
+/* A centered column on a beige (soft) background. */
+.breathing-card{
+    grid-area: breathe;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: var(--warm-beige);
+}
+
+/* The heading stays on the left even though everything else is centered. */
+.breathing-card h2{
+    align-self: flex-start;
+}
+
+/* The space for the circle: it takes the spare height but is allowed to shrink. */
+.breath-stage{
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* The circle. Its size follows the window height, so it always fits.
+   JavaScript makes it grow when you breathe in and shrink when you breathe out. */
+.breath-circle{
+    width: clamp(110px, 22vh, 190px);
+    height: clamp(110px, 22vh, 190px);
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--candle);
+    box-shadow: 0 0 30px var(--wine);
+    transition-property: transform;
+    transition-timing-function: ease-in-out;
+    transition-duration: 0.6s;
+}
+
+/* The words inside the circle ("Breathe in"). */
+.breath-text{
+    padding: 0 8px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--on-gold);
+}
+
+/* The row of pattern buttons (Calm, Box, Quick). */
+.chips{
+    display: flex;
+    gap: 8px;
+    margin: 4px 0 8px;
+    flex-shrink: 0;
+}
+
+/* One pattern button: an outlined pill that fills gold on hover. */
+.chip{
+    padding: 4px 14px;
+    border: 1px solid var(--candle);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--wine);
+    font-family: inherit;
+    font-size: 18px;
+    cursor: pointer;
+}
+.chip:hover{
+    background-color: var(--candle);
+}
+
+/* The pattern you picked: solid wine red. (It comes after :hover, so it wins.) */
+.chip.active{
+    background-color: var(--wine);
+    color: var(--candle);
+}
+
+/* The Start button: a big dark pill with a glow, because the card is light.
+   It never shrinks when the window is short. */
+.breathing-card .soft-btn{
+    flex-shrink: 0;
+    padding: 10px 38px;
+    border: 2px solid var(--candle);
+    background-color: var(--wine);
+    color: var(--candle);
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 0 18px rgba(107, 21, 32, 0.6);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.breathing-card .soft-btn:hover{
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 0 28px rgba(107, 21, 32, 0.9);
+}
+
+
+/* ---------- 7. Stretch card ---------- */
+
+/* A column. */
+.stretch-card{
+    grid-area: stretch;
+    display: flex;
+    flex-direction: column;
+}
+
+/* The name of the stretch you are doing now. */
+.stretch-card h3{
+    margin: 0 0 4px;
+    font-size: 16px;
+    color: var(--warm-beige);
+}
+
+/* The box showing the current stretch: emoji, name and how-to, time. */
+.stretch-now{
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 16px;
+    background-color: var(--soft-fill);
+}
+
+.stretch-emoji{
+    font-size: 30px;
+}
+
+/* The small text in that box. */
+.stretch-now p{
+    margin: 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* The countdown ("30s") is bigger, gold, and in the heading font.
+   It uses two class names so it wins over the small text rule above. */
+.stretch-now .stretch-time{
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-size: 22px;
+    color: var(--candle);
+}
+
+/* The Start button row. */
+.stretch-buttons{
+    display: flex;
+    gap: 10px;
+    margin: 8px 0;
+}
+
+/* The Start button: a big gold pill with a glow, because the card is dark. */
+.stretch-card .soft-btn{
+    padding: 10px 38px;
+    border: 2px solid var(--candle);
+    background-color: var(--candle);
+    color: var(--wine);
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 0 20px rgba(247, 231, 169, 0.7);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.stretch-card .soft-btn:hover{
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 0 30px rgba(247, 231, 169, 0.95);
+}
+
+/* The Next button is hidden for now. */
+#stretchNext{
+    display: none;
+}
+
+/* The other stretches (made by JavaScript): two columns of small pills. */
+.stretch-list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.stretch-list button{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    width: 100%;
+    padding: 4px 12px;
+    border: 1px solid var(--soft-line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--warm-beige);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.stretch-list button:hover{
+    background-color: var(--soft-fill);
+}
+
+/* The stretch you are on: solid gold with wine-red text.
+   (It comes after :hover, so its gold wins.) */
+.stretch-list button.current{
+    border-color: var(--candle);
+    background-color: var(--candle);
+    color: var(--wine);
+    font-weight: 700;
+}
+
+
+/* ---------- 8. Reminders card ---------- */
+
+/* A column. */
+.reminder-card{
+    grid-area: remind;
+    display: flex;
+    flex-direction: column;
+}
+
+/* The three reminders, one under the other. */
+.reminder-list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+}
+
+/* One reminder: the name on the left, the "every..." choice on the right. */
+.reminder-row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* The tick box and its name (clicking the name ticks the box too). */
+.reminder-name{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+.reminder-name input{
+    width: 24px;
+    height: 24px;
+    accent-color: var(--candle);
+    cursor: pointer;
+}
+
+/* The "every 30 min" drop-down. */
+.reminder-row select{
+    padding: 6px 14px;
+    border: 1px solid var(--soft-line);
+    border-radius: 999px;
+    background-color: transparent;
+    color: var(--warm-beige);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 15px;
+}
+.reminder-row select option{
+    background-color: var(--on-gold);
+    color: var(--warm-beige);
+}
+
+/* The small line at the bottom of the card. margin-top: auto pushes it down. */
+.reminder-hint{
+    margin: auto 0 0;
+    padding-top: 6px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    opacity: 0.85;
+}
+
+
+/* ---------- 9. Toast ---------- */
+
+/* The little message that pops up when a reminder goes off:
+   a gold pill at the bottom, in the middle of the window. */
+.toast{
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%);
+    max-width: calc(100vw - 48px);
+    padding: 14px 24px;
+    border-radius: 999px;
+    background-color: var(--candle);
+    color: var(--on-gold);
+    font-size: 17px;
+    box-shadow: 0 0 24px rgba(247, 231, 169, 0.6);
+    z-index: 20;
+}
+.toast[hidden]{
+    display: none;
+}
+
+
+/* ---------- 10. Screen-size rules (these stay LAST so they can override the rules above) ---------- */
+
+/* Short windows: tighten things a bit more. */
+@media (max-height: 760px){
+    .content{ padding-top: 70px; }
+    .well-head h1{ font-size: 21px; }
+    .energy-btn{ height: 34px; }
+    .glass{ height: 30px; font-size: 20px; line-height: 30px; }
+}
+
+/* Narrow windows and phones: one column, and the page scrolls again. */
+@media (max-width: 1000px){
+    .content{
+        height: auto;
+        overflow-y: visible;
+    }
+    .wellness-grid{
+        height: auto;
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+        grid-template-areas:
+            "head"
+            "checkin"
+            "water"
+            "breathe"
+            "stretch"
+            "remind";
+    }
+    .breath-stage{ min-height: 160px; }
+    .breath-circle{ width: 120px; height: 120px; }
+}
+
+/* For people who prefer less movement: turn the little animations off. */
+@media (prefers-reduced-motion: reduce){
+    .breath-circle,
+    .glass,
+    .energy-btn{ transition: none; }
+}

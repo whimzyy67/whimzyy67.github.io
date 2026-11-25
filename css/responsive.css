@@ -1,0 +1,676 @@
+/* ==========================================================
+   responsive.css  (phones and tablets)
+
+   Link it LAST in the <head> of EVERY page (after that page's own css), for example:
+       <link rel="stylesheet" href="../css/responsive.css">
+   It only changes things on small screens, so laptops look exactly as before.
+
+   THE ORDER BELOW:
+    1. Touch screens (bigger tap targets)
+    2. Top bar
+    3. Page padding
+    4. Home (quote slider)
+    5. Productivity
+    6. Work Space (the sidebar becomes a bottom bar)
+    7. Entry page
+    8. Wellness
+   ========================================================== */
+
+
+/* ---------- 1. Touch screens ---------- */
+
+html{
+    -webkit-text-size-adjust: 100%;      /* stops phones from blowing text up on their own */
+}
+
+@media (hover: none) and (pointer: coarse){
+    .chip,
+    .mode-tab,
+    .range-tab,
+    .soft-btn,
+    .ghost-btn,
+    .primary-btn,
+    .save-btn,
+    .w-btn,
+    .entry-btn,
+    .dx-btn{
+        min-height: 42px;
+    }
+
+    .round-btn,
+    .glass,
+    .energy-btn,
+    .task-delete,
+    .session-delete,
+    .dx-x{
+        min-width: 40px;
+        min-height: 40px;
+    }
+}
+
+
+/* ---------- 2. Top bar ---------- */
+
+/* Tablets: a little tighter */
+@media (max-width: 1000px){
+    .topbar{ padding: 0 14px; }
+    .top-nav .tab{ padding: 0 12px; }
+    .top-nav .work{ margin-right: 8px; }
+}
+
+/* Phones: the links show only their icons, so everything fits on one row */
+@media (max-width: 700px){
+    .topbar{ padding: 0 8px; gap: 4px; }
+    .whimzyy-logo{ height: 40px; }
+
+    .star-pill.in-bar{
+        margin-left: 6px;
+        padding: 3px 10px;
+        gap: 4px;
+        font-size: 15px;
+    }
+
+    .top-nav{ gap: 0; }
+    .top-nav a{
+        font-size: 0;                    /* hides the words, the icon stays (the title tooltip still names it) */
+        gap: 0;
+    }
+    .top-nav .icon{ width: 32px; height: 32px; }
+    .top-nav .work{ margin-right: 4px; padding: 3px 8px; }
+    .top-nav .tab{ padding: 0 8px; height: 48px; }
+
+    .auth-btn{ width: 36px; height: 36px; margin-left: 4px; font-size: 16px; }
+}
+
+/* Very small phones: the logo shrinks a bit more */
+@media (max-width: 380px){
+    .whimzyy-logo{ height: 32px; }
+    .star-pill.in-bar{ font-size: 13px; padding: 2px 8px; }
+    .top-nav .tab{ padding: 0 5px; }
+}
+
+
+/* ---------- 3. Page padding and columns ---------- */
+
+/* One-column rows must be allowed to get narrower than their content (that is what minmax(0, 1fr) does),
+   otherwise a wide input or button pushes the whole page sideways on a phone. */
+@media (max-width: 800px){
+    .top-row,
+    .bottom-row,
+    .myday-grid,
+    .about-grid,
+    .left-side{
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .left-col,
+    .right-col,
+    .left-side,
+    .right-side,
+    .stack,
+    .card{
+        min-width: 0;
+    }
+
+    input,
+    select,
+    textarea{
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 1000px){
+    .focus-grid{ grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 900px){
+    .dv-top,
+    .dv-top-right,
+    .dv-cols{
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+
+@media (max-width: 700px){
+    .content{
+        padding-top: 80px;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    :root{ --card-gap: 14px; }
+
+    .card{ padding: 16px; }
+
+    .card h1{ font-size: 26px; }
+    .card h2{ font-size: 21px; }
+}
+
+
+/* ---------- 4. Home: quote slider ---------- */
+
+@media (max-width: 800px){
+    .slider{
+        min-height: 150px;               /* the quotes sit on top of each other, so the box needs its own height */
+        padding: 16px 44px 12px;
+    }
+    .slides{ min-height: 96px; }
+    .slide p{ font-size: 20px; }
+
+    .slider-arrow img{ width: 38px; height: 38px; }
+    .slider-arrow.prev{ left: 2px; }
+    .slider-arrow.next{ right: 2px; }
+
+    .start-card{ font-size: 18px; padding: 14px 16px; gap: 10px; }
+    .clock{ font-size: 36px; }
+}
+
+
+/* Tablets: the quote box is only as tall as the time box, so the text gets smaller */
+@media (min-width: 801px) and (max-width: 1100px){
+    .slider{ padding: 14px 72px 10px; }
+    .slide p{ font-size: 24px; }
+    .slider-arrow img{ width: 56px; height: 56px; }
+}
+
+
+/* ---------- 5. Productivity ---------- */
+
+@media (max-width: 700px){
+    .prod-head h1{ font-size: 28px; }
+    .range-tabs{ width: 100%; }
+    .range-tab{ flex: 1; padding: 8px 6px; }
+
+    .stat-value{ font-size: 26px; }
+    .chart-plot{ min-height: 170px; }
+
+    .bars,
+    .bar-labels{ gap: 2px; }
+    .bar-label{ font-size: 9px; overflow: hidden; }
+
+    .goal-body,
+    .donut-wrap{ flex-wrap: wrap; justify-content: center; }
+    .part-row{ grid-template-columns: 72px 1fr auto; }
+}
+
+
+/* Detox page on phones: the screen time card stacks so its dropdown fits */
+@media (max-width: 700px){
+    .dx-today{ flex-direction: column; align-items: stretch; }
+    .dx-ring-wrap{ align-self: center; }
+}
+
+
+/* ---------- 6. Work Space (it has no top bar, so the right sidebar becomes a bar along the bottom) ---------- */
+
+@supports (height: 100dvh){
+    body{ min-height: 0; }
+}
+
+@media (max-width: 700px){
+    .brand .whimzyy-logo{ height: 38px; }
+
+    /* "Play my vibe" moves under the logo row so it does not sit on top of it */
+    .vibe-play{
+        top: 64px;
+        padding: 8px 18px;
+        font-size: 14px;
+    }
+
+    /* the icon strip lies along the bottom edge */
+    .ws-sidebar{
+        top: auto;
+        bottom: 12px;
+        left: 12px;
+        right: 12px;
+        width: auto;
+        transform: none;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 4px 6px;
+    }
+    .ws-sidebar::before{ border-radius: 20px; }
+    .side-item{ padding: 2px 0; }
+    .side-btn{ width: 46px; height: 46px; }
+    .side-icon{ width: 40px; height: 40px; }
+
+    /* the panels open as a sheet above that bar */
+    .panel{
+        position: fixed;
+        top: auto;
+        bottom: 84px;
+        left: 12px;
+        right: 12px;
+        transform: none;
+        width: auto;
+        max-height: 55vh;
+    }
+
+    /* widgets never wider than the screen */
+    .widget,
+    .widget.widget-todo,
+    .widget.widget-message{
+        max-width: calc(100vw - 24px);
+    }
+    .widget.widget-todo{ width: 300px; }
+    .widget.widget-message{ width: 240px; }
+
+    /* the little pop-ups sit above the bottom bar instead of on top of it */
+    body:has(.ws-sidebar) .star-toast,
+    body:has(.ws-sidebar) #wz-remind{ bottom: 92px; }
+
+    .star-pill.floating{ top: 14px; font-size: 15px; padding: 3px 10px; }
+    .auth-btn.floating{ top: 12px; right: 12px; width: 36px; height: 36px; }
+    body:has(.auth-btn.floating) .star-pill.floating{ right: 58px; }
+}
+
+
+/* ---------- 7. Entry page ---------- */
+
+@media (max-width: 700px){
+    .tagline{ font-size: 20px; padding: 0 16px; }
+    .pillars{
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px 20px;
+        font-size: 20px;
+    }
+    .enter-link{ font-size: 24px; }
+    .cursor{ width: 38px; right: -30px; bottom: -30px; }
+}
+
+
+/* ---------- 8. Wellness ---------- */
+
+@media (max-width: 700px){
+    .wellness-grid{ grid-template-columns: minmax(0, 1fr); }
+    /* eight glasses always fit one row, however narrow the card */
+    .glasses{ grid-template-columns: repeat(8, minmax(0, 1fr)); }
+    .glass{ max-width: none; font-size: 22px; }
+}
+
+
+/* ---------- 9. Vibe, Focus and Productivity on phones ---------- */
+
+@media (max-width: 600px){
+    /* The volume rows: the "Test" button used to push the page sideways. */
+    .vol{ flex-wrap: wrap; row-gap: 4px; }
+    .vol-name{ width: 64px; font-size: 13px; }
+    .vol input[type="range"]{ flex: 1 1 80px; }
+    .vol-val{ width: 36px; }
+    .test-btn{ flex-shrink: 0; min-height: 36px; }
+
+    .vibe-head h1{ font-size: 30px; }
+    .reset-btn{ min-height: 42px; }
+    .chip{ min-height: 38px; }
+}
+
+
+/* ---------- 10. Work Space, phone held sideways (short screen) ---------- */
+
+@media (hover: none) and (pointer: coarse) and (orientation: landscape) and (max-height: 500px){
+    /* small icon strip down the right edge, tucked under the star pill */
+    .ws-sidebar{
+        top: 60px;
+        right: 12px;
+        bottom: auto;
+        left: auto;
+        width: 56px;
+        transform: none;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 2px 0;
+    }
+    .side-item{ padding: 2px 0; }
+    .side-btn{ width: 40px; height: 40px; }
+    .side-icon{ width: 34px; height: 34px; }
+
+    /* every panel opens in the middle of the screen, left of the strip, and scrolls if it must */
+    .panel{
+        position: fixed;
+        top: 50%;
+        bottom: auto;
+        left: auto;
+        right: 80px;
+        transform: translateY(-50%);
+        width: min(320px, calc(100vw - 110px));
+        max-height: calc(100vh - 24px);
+        overflow-y: auto;
+    }
+    .vibe-play{ top: 12px; padding: 8px 18px; font-size: 14px; }
+}
+
+
+/* ---------- Wellness: make the Reminders card fit all its content ---------- */
+.reminder-card{ overflow-y: auto; scrollbar-width: thin; }
+@media (min-width: 901px){
+    /* sizes grow with the window (full screen / zoomed out) but never past the card */
+    .reminder-card h2{ font-size: clamp(26px, min(2.1vw, 4vh), 44px); margin-bottom: 6px; }
+    /* spread the three rows over the free space so there is no big hole in the middle */
+    .reminder-list{ gap: 8px; flex: 1 1 auto; align-content: space-evenly; }
+    .reminder-row{ font-size: clamp(17px, min(1.05vw, 2.2vh), 21px); gap: 8px; }
+    .reminder-name{ min-width: 0; white-space: nowrap; }
+    .reminder-name input{ flex: 0 0 auto; width: clamp(24px, min(1.4vw, 3vh), 32px); height: clamp(24px, min(1.4vw, 3vh), 32px); }
+    .reminder-row select{ padding: 4px 8px; font-size: clamp(14px, min(0.85vw, 1.8vh), 16px); }
+    .reminder-hint{ margin: 0; padding-top: 4px; font-size: clamp(13px, min(0.85vw, 1.7vh), 19px); line-height: 1.3; }
+    .reminder-card .reminder-hint:first-of-type{ margin-top: auto; }
+    .reminder-card .stretch-buttons{ margin-top: 8px; gap: 8px; flex-wrap: wrap; }
+    .reminder-card .stretch-buttons button{ padding: 8px 14px; font-size: clamp(13px, min(0.8vw, 1.7vh), 18px); white-space: nowrap; }
+}
+
+/* ---------- Wellness: top row 35% of the height, bottom row 65% ---------- */
+@media (min-width: 901px){
+    .wellness-grid{ grid-template-rows: auto minmax(0, 35fr) minmax(0, 65fr); }
+}
+
+/* ---------- Wellness: Energy and Water cards fill their taller space ---------- */
+@media (min-width: 901px){
+    /* Energy */
+    .checkin-card{ justify-content: space-between; }
+    .checkin-card h2, .water-card h2{ font-size: clamp(26px, min(2.1vw, 4vh), 44px); }
+    .energy-row{ flex: 1 1 auto; min-height: 40px; max-height: clamp(44px, 9vh, 90px); margin: 6px 0; gap: 10px; }
+    .energy-btn{ height: auto; font-size: clamp(15px, min(1.1vw, 2.2vh), 22px); }
+    .energy-ends{ font-size: clamp(12px, min(0.95vw, 1.9vh), 19px); margin-top: 0; }
+    .checkin-note{ font-size: clamp(14px, min(1.1vw, 2.1vh), 22px); margin-top: 0; }
+
+    /* Water */
+    .water-card{ justify-content: space-between; }
+    .glasses{ flex: 1 1 auto; align-items: center; min-height: 0; }
+    .glass{ max-width: none; height: auto; font-size: clamp(24px, min(2.2vw, 5.5vh), 46px); line-height: 1.1; min-width: 0; }
+    .water-bottom{ margin-top: 0; padding-top: 0; }
+    .water-count{ font-size: clamp(24px, min(2vw, 4vh), 40px); }
+    .round-btn{ width: clamp(34px, min(2.6vw, 5vh), 52px); height: clamp(34px, min(2.6vw, 5vh), 52px); font-size: clamp(18px, 2vh, 26px); }
+}
+
+
+/* =====================================================================
+   BIG SCREENS: home PCs with big monitors and TVs
+
+   Everything on the site is sized in pixels for a laptop, so on a 1920x1080 / 4K screen it looked small.
+   These steps scale the whole page up with the screen (laptops under 1700px wide are not touched).
+   The page height rules (100vh) are shrunk by the same amount so the page still fits exactly.
+   ===================================================================== */
+:root{ --z: 1; }
+@media (min-width: 1700px) and (min-height: 950px){  :root{ --z: 1.25; } }   /* 1080p monitors, small TVs */
+@media (min-width: 1900px) and (min-height: 1050px){ :root{ --z: 1.4;  } }   /* 1920x1080: full HD monitors and TVs */
+@media (min-width: 2400px) and (min-height: 1300px){ :root{ --z: 1.85; } }   /* 1440p monitors */
+@media (min-width: 3600px) and (min-height: 2000px){ :root{ --z: 2.7;  } }   /* 4K monitors */
+
+@media (min-width: 1700px) and (min-height: 950px){
+    html{ zoom: var(--z); }
+
+    .content{ height: calc(100vh / var(--z)); height: calc(100dvh / var(--z)); }
+    .sidebar{ height: calc(100vh / var(--z) - 64px); }
+    .entry{ min-height: calc(100vh / var(--z)); }
+    body:has(#bgVideo){ height: calc(100vh / var(--z)); }            /* Work Space */
+    .star-dialog{ max-height: calc(86vh / var(--z)); }
+}
+
+/* ---------- TVs and keyboards: a clear highlight for whatever is selected with the remote / arrow keys ---------- */
+a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible,
+textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible{
+    outline: 3px solid var(--gold, #F2B83D);
+    outline-offset: 3px;
+    border-radius: 12px;
+}
+
+
+/* ---------- Wellness: "next in … min" sits on top of its own reminder ---------- */
+.reminder-row{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+        "left left"
+        "name pick";
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 2px;
+}
+.reminder-row .reminder-name{ grid-area: name; }
+.reminder-row select{ grid-area: pick; }
+.reminder-row .reminder-left{
+    grid-area: left;
+    min-height: 1.3em;                                   /* keeps the row the same height when it is empty */
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--candle, #E8B86D);
+    line-height: 1.3;
+}
+.reminder-row select{ min-width: 124px; }
+
+/* ---------- Scrollbars: the site's own, on every page and every scrolling box ---------- */
+:root{ --sb-thumb: rgba(243,231,211,.30); --sb-thumb-hover: rgba(243,231,211,.55); }
+html{ scrollbar-color: var(--marron-red, #4A0E17) var(--dark-cherry-red, #2E0A10); }
+*{ scrollbar-width: thin; scrollbar-color: var(--sb-thumb) transparent; }
+html{ scrollbar-color: var(--marron-red, #4A0E17) var(--dark-cherry-red, #2E0A10); }
+*::-webkit-scrollbar{ width: 10px; height: 10px; background: transparent; }
+*::-webkit-scrollbar-track{ background: transparent; }
+*::-webkit-scrollbar-thumb{ background: var(--sb-thumb); border-radius: 10px; border: 2px solid transparent; background-clip: padding-box; }
+*::-webkit-scrollbar-thumb:hover{ background: var(--sb-thumb-hover); background-clip: padding-box; }
+*::-webkit-scrollbar-corner{ background: transparent; }
+html::-webkit-scrollbar{ background: var(--dark-cherry-red, #2E0A10); }
+html::-webkit-scrollbar-track{ background: var(--dark-cherry-red, #2E0A10); }
+html::-webkit-scrollbar-thumb{ background: var(--marron-red, #4A0E17); background-clip: padding-box; }
+
+/* ---------- Wellness: Stretch first, Breathe second ---------- */
+.wellness-grid{
+    grid-template-areas:
+        "head    head    head    head    head    head"
+        "checkin checkin checkin water   water   water"
+        "stretch stretch breathe breathe remind  remind";
+}
+@media (max-width: 1000px){
+    .wellness-grid{
+        grid-template-areas:
+            "head"
+            "checkin"
+            "water"
+            "stretch"
+            "breathe"
+            "remind";
+    }
+}
+
+/* ---------- Small phones: the Account icon must stay on screen ---------- */
+@media (max-width: 420px){
+    .topbar .brand{ flex: 0 1 96px; min-width: 0; }
+    .topbar .whimzyy-logo{ max-width: 100%; height: auto; }
+    .top-nav{ flex: 1 1 auto; min-width: 0; justify-content: flex-end; }
+    .top-nav a{ flex: 0 0 auto; }
+    .top-nav .work{ margin-right: 2px; padding: 3px 5px; }
+    .top-nav .tab{ padding: 0 3px; }
+    .top-nav .acct-btn{ padding: 0 4px; }
+}
+@media (max-width: 345px){
+    .topbar{ padding: 0 4px; gap: 2px; }
+    .topbar .brand{ flex-basis: 72px; }
+    .star-pill.in-bar{ padding: 2px 6px; font-size: 12px; }
+    .top-nav .icon{ width: 28px; height: 28px; }
+    .top-nav .tab{ padding: 0 1px; }
+    .top-nav .acct-btn{ padding: 0 2px; }
+}
+
+/* ---------- Smooth, gliding motion ---------- */
+/* :where() has zero weight, so any transition a component already has still wins. */
+:where(a, button, select, input, textarea, .card, .chip, .tab, .energy-btn, .round-btn, .soft-btn, .theme-btn, .sd-item){
+    transition: background-color .22s ease, color .22s ease, border-color .22s ease,
+                box-shadow .22s ease, transform .22s cubic-bezier(.2,.8,.2,1), opacity .22s ease;
+}
+/* Phones can't hover, so give every tap an instant press response instead. */
+@media (hover: none){
+    :where(a, button, .chip, .tab, .energy-btn, .round-btn, .soft-btn, .theme-btn, .sd-item):active{
+        transform: scale(.96); opacity: .9;
+    }
+}
+/* Cards float in softly when a page opens */
+@keyframes wz-rise{ from{ opacity: 0; transform: translateY(14px); } to{ opacity: 1; transform: none; } }
+:where(.content .card, .content .about-card){ animation: wz-rise .45s cubic-bezier(.2,.8,.2,1) both; }
+:where(.content .card:nth-child(2), .content .about-card:nth-child(2)){ animation-delay: .05s; }
+:where(.content .card:nth-child(3), .content .about-card:nth-child(3)){ animation-delay: .10s; }
+:where(.content .card:nth-child(4), .content .about-card:nth-child(4)){ animation-delay: .15s; }
+:where(.content .card:nth-child(n+5), .content .about-card:nth-child(n+5)){ animation-delay: .20s; }
+html{ scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{ animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+
+/* ---------- 11. Footer bar for phones and tablets (js/mobile-nav.js builds it) ----------
+   Home | Detox | Focus | Work Space (special) | More.   No hover: every item shows its name.
+   Laptops and desktops never see it. */
+
+:root{ --tabbar-h: 64px; }
+
+.wz-tabbar, .wz-more{ display: none; }
+
+@media (max-width: 820px), (hover: none) and (pointer: coarse) and (max-width: 1100px){
+
+    /* the old side rail and the top-bar page links give way to the footer bar (Account stays up top) */
+    html.has-tabbar .sidebar{ display: none; }
+    html.has-tabbar .top-nav a:not(.acct-btn){ display: none; }
+    html.has-tabbar .top-nav .acct-btn{ display: flex; }
+
+    /* room for the bar at the bottom of every page */
+    html.has-tabbar body{ padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px)); }
+    html.has-tabbar .content{ padding-bottom: 24px; }
+    html.has-tabbar .star-toast,
+    html.has-tabbar #wz-remind,
+    html.has-tabbar #pwaPill{ bottom: calc(var(--tabbar-h) + 14px + env(safe-area-inset-bottom, 0px)); }
+
+    .wz-tabbar{
+        display: flex;
+        position: fixed;
+        left: 0; right: 0; bottom: 0;
+        z-index: 900;
+        height: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px));
+        padding: 0 6px env(safe-area-inset-bottom, 0px);
+        align-items: stretch;
+        background: var(--bg);
+        border-top: 1px solid var(--marron-red);
+        box-shadow: 0 -4px 14px rgba(0,0,0,.35);
+    }
+
+    .wz-tab{
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        padding: 6px 2px 4px;
+        margin: 0;
+        border: 0;
+        background: transparent;
+        color: var(--peach);
+        font: 600 11px/1.1 "DM Sans", system-ui, sans-serif;
+        letter-spacing: .01em;
+        text-decoration: none;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        border-radius: 14px;
+    }
+    .wz-tab .wz-ico{ width: 28px; height: 28px; object-fit: contain; flex: none; }
+    .wz-tab .wz-dots{ fill: currentColor; }
+    .wz-tab .wz-lbl{ max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .wz-tab:active{ transform: scale(.94); }
+    .wz-tab.active{ color: var(--gold); }
+    .wz-tab.active .wz-lbl{ text-shadow: 0 0 10px color-mix(in srgb, var(--gold) 45%, transparent); }
+    .wz-tab.active::after{
+        content: ""; width: 18px; height: 3px; border-radius: 3px; background: var(--gold); margin-top: 1px;
+    }
+
+    /* Work Space is the special one: it sits in a gold pill that rises above the bar */
+    .wz-tab.wz-special{
+        flex: 1.25 1 0;
+        position: relative;
+        top: -10px;
+        margin: 0 2px;
+        padding: 8px 4px 6px;
+        color: var(--bg);
+        background: linear-gradient(160deg, var(--gold), var(--bright-deep-yellow));
+        box-shadow: 0 6px 16px rgba(0,0,0,.45), 0 0 0 3px var(--bg);
+        border-radius: 20px;
+        font-weight: 800;
+    }
+    .wz-tab.wz-special .wz-ico{ width: 30px; height: 30px; }
+    .wz-tab.wz-special.active{ color: var(--bg); outline: 2px solid var(--candle); outline-offset: 1px; }
+    .wz-tab.wz-special.active::after{ display: none; }
+    .wz-tab.wz-special.active .wz-lbl{ text-shadow: none; }
+
+    /* the More sheet */
+    .wz-more{
+        display: block;
+        position: fixed; inset: 0;
+        z-index: 950;
+        visibility: hidden;
+        pointer-events: none;
+    }
+    .wz-more.open{ visibility: visible; pointer-events: auto; }
+    .wz-scrim{
+        position: absolute; inset: 0;
+        background: rgba(0,0,0,.55);
+        opacity: 0; transition: opacity .2s ease;
+    }
+    .wz-more.open .wz-scrim{ opacity: 1; }
+    .wz-sheet{
+        position: absolute; left: 0; right: 0;
+        bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px));
+        max-height: calc(100dvh - var(--tabbar-h) - 70px);
+        overflow-y: auto;
+        padding: 8px 14px 14px;
+        background: var(--dark-cherry-red);
+        border: 1px solid var(--marron-red);
+        border-bottom: 0;
+        border-radius: 22px 22px 0 0;
+        transform: translateY(24px); opacity: 0;
+        transition: transform .22s ease, opacity .2s ease;
+    }
+    .wz-more.open .wz-sheet{ transform: none; opacity: 1; }
+    .wz-grip{ width: 40px; height: 4px; border-radius: 4px; background: var(--wine-soft); margin: 4px auto 8px; }
+    .wz-sheet-title{ margin: 0 4px 6px; font: 800 18px "Bricolage Grotesque", system-ui, sans-serif; color: var(--text); }
+
+    .wz-row{
+        display: flex; align-items: center; gap: 14px;
+        min-height: 60px;
+        padding: 8px 12px;
+        margin-top: 6px;
+        border-radius: 16px;
+        background: var(--marron-red);
+        color: var(--text);
+        text-decoration: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .wz-row:active{ transform: scale(.98); }
+    .wz-row .wz-ico{ width: 38px; height: 38px; object-fit: contain; flex: none; }
+    .wz-row-text{ display: flex; flex-direction: column; min-width: 0; }
+    .wz-row-name{ font: 700 16px "Bricolage Grotesque", system-ui, sans-serif; }
+    .wz-row-sub{ font: 400 12.5px "DM Sans", system-ui, sans-serif; color: var(--peach); opacity: .9; }
+    .wz-row.active{ outline: 2px solid var(--gold); background: var(--wine); }
+
+    html.wz-sheet-open body{ overflow: hidden; }
+
+    /* Work Space keeps its own dock (Video, Music, Ambient, Timer, Widgets): it now sits just above the footer bar */
+    html.has-tabbar .ws-sidebar{ bottom: calc(var(--tabbar-h) + 22px + env(safe-area-inset-bottom, 0px)); }
+    html.has-tabbar .panel{ bottom: calc(var(--tabbar-h) + 96px + env(safe-area-inset-bottom, 0px)); }
+    html.has-tabbar body:has(.ws-sidebar) .star-toast,
+    html.has-tabbar body:has(.ws-sidebar) #wz-remind{ bottom: calc(var(--tabbar-h) + 100px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* phone held sideways: a slimmer bar so the page keeps its height */
+@media (max-height: 500px) and (orientation: landscape) and (hover: none) and (pointer: coarse){
+    :root{ --tabbar-h: 50px; }
+    .wz-tab{ flex-direction: row; gap: 6px; font-size: 12px; }
+    .wz-tab .wz-ico{ width: 24px; height: 24px; }
+    .wz-tab.wz-special{ top: -6px; }
+    .wz-tab.active::after{ display: none; }
+    html.has-tabbar .ws-sidebar{ bottom: auto; }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .wz-sheet, .wz-scrim{ transition: none; }
+}

@@ -1,0 +1,858 @@
+/* ==========================================================
+   home.css  (linked to home.html)
+
+   NOTE: focus.html and about-us.html also load this file, so the
+   colors, top bar, sidebar, .card, .save-btn and textarea rules
+   below are shared by those pages too.
+
+   THE ORDER BELOW IS THE ORDER OF THE BLOCKS IN home.html:
+    0. Colors and sizes
+    1. Body (the whole page)
+    2. Top bar (logo, Work Space, Home, About Us)
+    3. Side bar (the menu that slides in)
+    4. Side bar button (the arrow handle)
+    5. Main content area
+    6. The shared look of every card
+    7. Top row (time box and slider side by side)
+    8. Time card
+    9. Quote slider
+   10. Bottom row (two columns)
+   11. Start a Focus Session button
+   12. To-do list card
+   13. How was your day card
+   14. Next focus session card
+   15. Screen-size rules (narrow, wide, short windows)
+   ========================================================== */
+
+/*Fonts*/   
+/*@font-face{
+    font-family: "Bricolage Grotesque";
+    src: url("../fonts/BricolageGrotesque.ttf") format("truetype");
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face{
+    font-family: "DM Sans";
+    src: url("../fonts/DMSans.ttf") format("truetype");
+    font-style: normal;
+    font-display: swap;
+}*/
+
+/* ---------- 0. Colors and sizes ---------- */
+
+/* Every color and size used on the site gets a name here.
+   Change a value once and it updates everywhere.
+   Keep all of them: focus.css and the other pages use many of these names. */
+:root{
+    --home-width: 1162px;/*screen width*/
+
+    --bg:#1F0508;
+    --dark-cherry-red:#2E0A10;
+    --marron-red:#4A0E17;
+    --wine: #5A0F1E;
+    --dark-red:#6B1520;
+    --wine-soft: #8A2A3A;
+    --bright-deep-yellow:#C9941A;
+    --butter:#C9941A;
+    --candle: #E8B86D;
+    --gold:#F2B83D;
+    --soft-gold:#D4A24C;
+    --text: #f7e7a9;
+    --peach: #f8c9a0;
+    --warm-beige:#F3E7D3;
+
+    --time-w: 240px;     /*time box size */
+    --time-h:130px;
+    --card-gap: 24px;    /* space between blocks */
+}
+
+
+/* ---------- 1. Body: the whole page ---------- */
+
+/* Dark cherry-red page background, the page font and default text color.
+   margin: 0 removes the default gap around the page. */
+body{
+    background-color:var(--dark-cherry-red);
+    font-family:"Bricolage Grotesque", Arial, sans-serif;
+    color:var(--bright-deep-yellow);
+    font-weight:700;
+    margin:0;
+}
+
+
+/* ---------- 2. Top bar ---------- */
+
+/* The bar pinned to the top of the window: logo on the left, links on the right. */
+.topbar{
+    background-color:var(--bg) ;
+    height:64px;
+    top:0;
+    left:0;
+    right:0;
+    position:fixed;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 24px;
+    z-index:10;
+    box-shadow: 0 0 5px var(--wine);
+}
+
+/* The logo link (goes back to the first page). */
+.brand{
+    display:block;
+}
+
+/* The Whimzyy logo image, with a soft pink glow on hover. */
+.whimzyy-logo{
+    display: block;
+    height: 54px;
+    width: auto;
+    transition: filter 0.2s ease;
+}
+.whimzyy-logo:hover{
+    filter: drop-shadow(0 0 20px #BD8690);
+}
+
+/* The row of navigation links, lined up along the bottom of the bar. */
+.top-nav{
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    height: 100%;
+}
+
+/* Every link in the bar: icon and text side by side, no underline. */
+.top-nav a{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    text-decoration: none;
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-size: 18px;
+}
+
+/* Work Space: the special yellow pill with a glow. */
+.top-nav .work{
+    align-self: center;
+    margin-right: 16px;
+    padding: 2px 12px;
+    border-radius: 999px;
+    background-color: var(--butter);
+    color: var(--wine-soft);
+    box-shadow: 0 0 14px var(--candle);
+}
+.top-nav .work:hover{
+    box-shadow: 0 0 22px var(--gold);
+}
+
+/* Home and About Us: tabs that sit on the bottom edge of the bar. */
+.top-nav .tab{
+    height: 56px;
+    padding: 0 20px;
+    border-radius: 14px 14px 0 0;
+}
+.top-nav .tab:hover{
+    background-color: rgba(255, 255, 255, 0.08);
+    text-shadow: var(--text);
+}
+
+/* The tab for the page you are on: same color as the page, so it blends into it. */
+.top-nav .tab.active{
+    background-color: var(--dark-cherry-red);
+}
+
+/* Icon pictures: one size for every icon in the top bar AND the sidebar. */
+.icon{
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.icon:hover{
+     filter: drop-shadow(0 0 5px #000000);
+}
+
+
+/* ---------- 3. Side bar (an icon rail that opens to show names) ---------- */
+
+/* Always visible, 64px wide (icons only). The names are clipped until it opens. */
+.sidebar{
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: 64px;
+    height: calc(100vh - 64px);
+    overflow: hidden;
+    background-color: var(--bg);
+    transition: width 0.6s ease;
+    z-index: 5;
+}
+body.sidebar-open .sidebar{
+    width: 240px;
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
+}
+
+.sidebar ul{
+    list-style: none;
+    margin: 0;
+    padding: 1px 0;
+}
+
+.sidebar a{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    white-space: nowrap;
+    text-decoration: none;
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-size: 18px;
+    background-color: var(--bg);
+    color: var(--warm-beige);
+    transition: 0.2s, color 0.2s;
+}
+.sidebar a:hover{
+    background-color: var(--warm-beige);
+    color: var(--bg);
+}
+
+/* The page you are on: yellow, so you always know where you are */
+.sidebar a.active,
+.sidebar a.active:hover{
+    background-color: var(--warm-beige);
+    color: var(--bg);
+    box-shadow: inset 4px 0 0 var(--gold);
+}
+
+/* smaller icons inside the rail (the top bar keeps the 50px ones) */
+.sidebar .icon{
+    width: 40px;
+    height: 40px;
+}
+
+/* the rail takes up room, so the page is pushed to the right of it */
+body{
+    padding-left: 64px;
+}
+
+@media (max-width: 800px){
+    .sidebar{ width: 56px; }
+    .sidebar .icon{ width: 32px; height: 32px; }
+    body{ padding-left: 56px; }
+}
+
+
+/* ---------- 5. Main content area ---------- */
+
+/* The space under the top bar that holds all the blocks.
+   The padding keeps content clear of the fixed bar. (Wide screens
+   override this further down so everything fits the window.) */
+.content{
+    height: auto;
+    min-height: 0;
+    display: block;
+    padding: 96px 24px 24px;
+}
+
+
+/* ---------- 6. The shared look of every card ---------- */
+
+/* Every block: a rounded dark-red box. box-sizing makes padding count
+   inside the size. */
+.card{
+    box-sizing: border-box;
+    padding: 20px;
+    border-radius: 24px;
+    background-color: var(--marron-red);
+    color: var(--warm-beige);
+    transition: box-shadow 0.3s ease;
+}
+/* A soft yellow glow when the mouse is over a card. */
+.card:hover{
+    box-shadow: 0 0 10px var(--butter);
+}
+
+/* Headings inside cards: soft gold, no space below the edge. */
+.card h1,
+.card h2{
+    margin: 0 0 12px;
+    color: var(--soft-gold);
+}
+.card h1{ font-size: 28px; }
+.card h2{ font-size: 24px; }
+
+/* The lighter body font for the writing box (How was your day)
+   and the line in the Next focus session card. */
+.card textarea,
+.focus-card p{
+    font-family: "DM Sans", Arial, sans-serif;
+    font-weight: 400;
+}
+
+
+/* ---------- 7. Top row ---------- */
+
+/* Time box on the left (fixed width), slider on the right (the rest). */
+.top-row{
+    max-width: var(--home-width);
+    margin: 0 auto var(--card-gap);
+    display: grid;
+    grid-template-columns: var(--time-w) 1fr;
+    gap: var(--card-gap);
+}
+
+
+/* ---------- 8. Time card ---------- */
+
+/* The beige box showing the time and date, centered in both directions. */
+.time-card{
+    height: var(--time-h);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: var(--warm-beige);
+    color: var(--wine);
+}
+.time-card:hover{
+    box-shadow:0 0 20px var(--warm-beige);
+}
+
+/* The big time numbers. */
+.clock{
+    margin: 0;
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+/* The date under the time. */
+.today-date{
+    margin: 8px 0 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+
+/* ---------- 9. Quote slider ---------- */
+
+/* The wine-red box holding the quotes. It is a column: quotes on top, dots below.
+   position: relative lets the arrows be placed against its edges. */
+.slider{
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 90px 16px;
+    border-radius: 24px;
+    background-color: var(--wine);
+    color: var(--warm-beige);
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+}
+.slider:hover{
+    box-shadow: 0 0 15px var(--candle);
+}
+
+/* The area where quotes appear: takes all the height above the dots. */
+.slides{
+    position: relative;
+    flex: 1;
+}
+
+/* Every quote: stacked in the same spot, invisible, centered.
+   The fade comes from the opacity transition. */
+.slide{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+    pointer-events: none;
+}
+/* The quote showing now (JavaScript moves "active" from quote to quote). */
+.slide.active{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* The quote text itself. */
+.slide p{
+    margin: 0;
+    font-size: 32px;
+    line-height: 1.15;
+    color: var(--warm-beige);
+}
+
+/* The two arrow buttons: no button look, centered vertically on the slider. */
+.slider-arrow{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding:0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition:transform 0.2s ease, filter 0.2s ease;
+}
+
+/* The picture inside each arrow button. */
+.slider-arrow img{
+    display: block;
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+/* Previous on the left edge, next on the right edge. */
+.slider-arrow.prev{ left: 10px; }
+.slider-arrow.next{ right: 10px; }
+
+/* On hover the arrow grows slightly and glows. */
+.slider-arrow:hover{
+    transform: translateY(-50%) scale(1.08);
+    filter: drop-shadow(0 0 12px var(--bright-deep-yellow));
+}
+
+/* The row of dots under the quote. */
+.slider-dots{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+/* One dot: small and faint. */
+.dot{
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(243, 231, 211, 0.35);
+    cursor: pointer;
+}
+
+/* The dot for the quote showing now: solid yellow. */
+.dot.active{
+    background-color: var(--bright-deep-yellow);
+}
+
+
+/* ---------- 10. Bottom row ---------- */
+
+/* Two equal columns side by side under the top row. */
+.bottom-row{
+    max-width: var(--home-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--card-gap);
+}
+
+/* Each column: its blocks stacked with a gap between them. */
+.left-col,
+.right-col{
+    display: flex;
+    flex-direction: column;
+    gap: var(--card-gap);
+}
+
+
+/* ---------- 11. Start a Focus Session button ---------- */
+
+/* The special button: a yellow pill with a gradient and glow. The whole block is a link. */
+.start-card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--bright-deep-yellow), var(--gold));
+    color: var(--bg);
+    text-align: center;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 800;
+    box-shadow: 0 0 18px rgba(242, 184, 61, 0.45);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+/* The picture inside the button, with a thin dark shadow so it stays visible. */
+.start-icon{
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 2px rgba(31, 5, 8, 0.6));
+    transition: transform 0.25s ease;
+}
+
+/* On hover: the button lifts and glows brighter... */
+.start-card:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(242, 184, 61, 0.85);
+}
+
+/* ...and the picture slides forward. */
+.start-card:hover .start-icon{
+    transform: translateX(6px);
+}
+
+
+/* ---------- 12. To-do list card ---------- */
+
+/* The card holding the to-do list: a column with its own darker red. */
+.todo-card{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--dark-red);
+}
+
+/* The "Add a task" row: text box and Add button side by side. */
+.todo-form{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+/* The box you type a new task in: a beige pill. */
+.todo-form input{
+    flex: 1;
+    min-width: 0;
+    padding: 10px 14px;
+    border: 1px solid rgba(243, 231, 211, 0.3);
+    border-radius: 999px;
+    background-color: var(--warm-beige);
+    color: var(--wine);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+}
+
+/* The faded hint inside the empty box. */
+.todo-form input::placeholder{
+    color: rgba(90, 15, 30, 0.5);
+}
+
+/* While you are typing: yellow outline and glow. */
+.todo-form input:focus{
+    outline: none;
+    border-color: var(--bright-deep-yellow);
+    box-shadow: 0 0 12px rgba(201, 148, 26, 0.55);
+}
+
+/* The yellow pill button used for "Add" here AND "Save" in the day card. */
+.save-btn{
+    margin-top: 12px;
+    padding: 10px 26px;
+    border: none;
+    border-radius: 999px;
+    background-color: var(--bright-deep-yellow);
+    color: var(--bg);
+    font-family: inherit;
+    font-size: 16px;
+    cursor: pointer;
+}
+.save-btn:hover{
+    box-shadow: 0 0 16px rgba(201, 148, 26, 0.7);
+}
+
+/* In the Add row the button sits beside the box, so it needs no top margin. */
+.todo-form .save-btn{
+    margin-top: 0;
+}
+
+/* The list of tasks (JavaScript fills it): one task per row. */
+.todo-list{
+    list-style: none;
+    margin: 0;
+    padding: 0 4px 0 0;
+    display: grid;
+    gap: 10px;
+    align-content: start;
+}
+
+/* The message shown while the list is empty. */
+.todo-list:empty::before{
+    content: "No tasks yet. Add one above.";
+    font-family: "DM Sans", Arial, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    opacity: 0.7;
+}
+
+/* One task (made by JavaScript): tick box, text, delete button in a row. */
+.todo-item{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* The tick box. */
+.todo-item input[type="checkbox"]{
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    accent-color: var(--candle);
+    cursor: pointer;
+}
+
+/* The task text: a box you can click and edit. It looks like plain text
+   until you hover (faint underline) or click (yellow underline). */
+.task-text{
+    flex: 1;
+    min-width: 0;
+    padding: 6px 8px;
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    color: inherit;
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-size: 18px;
+}
+.task-text:hover{
+    border-bottom-color: rgba(243, 231, 211, 0.3);
+}
+.task-text:focus{
+    outline: none;
+    border-bottom-color: var(--bright-deep-yellow);
+}
+
+/* A finished task: crossed out and faded. */
+.task-text.done{
+    text-decoration: line-through;
+    opacity: 0.55;
+}
+
+/* The little ✕ that deletes a task. */
+.task-delete{
+    background: none;
+    border: none;
+    color: var(--warm-beige);
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.6;
+}
+.task-delete:hover{
+    opacity: 1;
+    color: var(--gold);
+}
+
+
+/* ---------- 13. How was your day card ---------- */
+
+/* The writing box: full width, beige. (Also the base look for the
+   boxes on the Focus page.) */
+textarea{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    border: 1px solid rgba(243, 231, 211, 0.3);
+    border-radius: 14px;
+    background-color: var(--warm-beige);
+    color: var(--wine);
+    font-size: 16px;
+    resize: vertical;
+}
+
+/* The faded hint inside the empty writing box. */
+textarea::placeholder{
+    color: rgba(90, 15, 30, 0.5);
+}
+
+/* While you are typing: yellow border and glow. */
+textarea:focus{
+    outline: none;
+    border-color: var(--bright-deep-yellow);
+    box-shadow: 0 0 12px rgba(201, 148, 26, 0.55);
+}
+
+/* The row under the box: Save button and its message side by side. */
+.day-actions{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+/* Save sits in a row here, so it needs no top margin. */
+.day-actions .save-btn{
+    margin-top: 0;
+}
+
+/* The little "Saved for today." message. */
+.save-note{
+    font-family: "DM Sans", Arial, sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--peach);
+}
+
+
+/* ---------- 14. Next focus session card ---------- */
+
+/* The line "Nothing planned yet.": no extra space, slightly larger text. */
+.focus-card p{
+    margin: 0;
+    font-size: 18px;
+}
+
+
+/* ---------- 15. Screen-size rules (these stay LAST so they can override the rules above) ---------- */
+
+/* Narrow screens (phones): every row becomes one column, with smaller quotes. */
+@media (max-width: 800px){
+    .top-row,
+    .bottom-row{
+        grid-template-columns: 1fr;
+    }
+
+    .time-card{
+        height: auto;
+        padding: 28px 20px;
+    }
+
+    .slider{
+        padding: 20px 60px 16px;
+    }
+
+    .slide p{
+        font-size: 22px;
+    }
+}
+
+/* Wide screens: everything fits the window, no page scrolling. */
+@media (min-width: 801px){
+
+    /* the content area is as tall as the window (never shorter than 640px) */
+    .content{
+        box-sizing: border-box;
+        height: 100vh;
+        min-height: 640px;
+        display: flex;
+        flex-direction: column;
+        padding: 88px 24px 24px;
+    }
+
+    /* the top row keeps its own height */
+    .top-row{
+        flex-shrink: 0;
+    }
+
+    .top-row,
+    .bottom-row{
+        width: 100%;
+    }
+    /* the bottom row takes ALL the space left over, and its single grid row is
+       exactly that tall, so the left and right columns always end together */
+    .bottom-row{
+        flex: 1;
+        min-height: 0;
+        grid-template-rows: minmax(0, 1fr);
+    }
+
+    .left-col,
+    .right-col{
+        min-height: 0;
+    }
+
+    /* left column: the start button keeps its size, the to-do card fills the rest */
+    .start-card{
+        flex-shrink: 0;
+    }
+
+    .todo-card{
+        flex: 1;
+        min-height: 0;
+    }
+
+    /* if there are many tasks, the list scrolls inside its box, not the page */
+    .todo-list{
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+    }
+
+    /* right column: "How was your day" fills the rest, the focus card keeps its size */
+    .day-card{
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .day-card form{
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .day-card textarea{
+        flex: 1;
+        min-height: 60px;
+        resize: none;
+    }
+
+    .day-card .save-btn{
+        align-self: flex-start;
+    }
+
+    .focus-card{
+        flex-shrink: 0;
+    }
+}
+
+/* Short windows (like a laptop with 150% display scaling): tighter spacing. */
+@media (min-width: 801px) and (max-height: 700px){
+
+    :root{
+        --card-gap: 16px;
+    }
+
+    .content{
+        min-height: 520px;
+        padding: 76px 24px 16px;
+    }
+
+    .card{
+        padding: 16px;
+    }
+
+    .card h1{
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+
+    .card h2{
+        font-size: 22px;
+        margin-bottom: 8px;
+    }
+
+    .clock{
+        font-size: 34px;
+    }
+
+    .slider{
+        padding: 12px 90px 10px;
+    }
+
+    .slide p{
+        font-size: 26px;
+    }
+
+    .start-card{
+        padding: 12px 20px;
+        font-size: 20px;
+    }
+}

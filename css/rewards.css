@@ -1,0 +1,476 @@
+/* ==========================================================
+   rewards.css  (link it LAST on every page that loads rewards.js)
+
+   Uses the same color names as the rest of the site. The second value in
+   var(--name, #color) is only a fallback, so this also works on Work Space.
+
+   THE ORDER BELOW:
+    1. Star pill (top bar, or floating on Work Space)
+    2. Toast
+    3. Shop window
+    4. Home: the stars strip
+    5. Dayverse: stars card and Share button
+    6. Productivity: the fifth number card
+    7. Vibe: locked themes, backgrounds and quick vibes
+   ========================================================== */
+
+
+/* ---------- 1. Star pill ---------- */
+
+.star-pill{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border: 1px solid rgba(243, 231, 211, 0.3);
+    border-radius: 999px;
+    background-color: var(--marron-red, #4A0E17);
+    color: var(--warm-beige, #F3E7D3);
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(242, 184, 61, 0.35);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.star-pill:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px rgba(242, 184, 61, 0.75);
+}
+.star-pill.pop{
+    animation: star-pop 0.45s ease;
+}
+@keyframes star-pop{
+    0%{ transform: scale(1); }
+    40%{ transform: scale(1.18); }
+    100%{ transform: scale(1); }
+}
+
+/* Work Space has no top bar, so the pill floats in the top right. */
+.star-pill.floating{
+    position: fixed;
+    top: 18px;
+    right: 24px;               /* top right corner */
+    z-index: 25;
+    background: color-mix(in srgb, var(--bg, #1F0508) 55%, transparent);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+}
+
+/* only if the login icon is on the page, step aside for it */
+body:has(.auth-btn.floating) .star-pill.floating{
+    right: 84px;
+}
+
+@media (prefers-reduced-motion: reduce){
+    .star-pill.pop{ animation: none; }
+}
+
+
+/* ---------- 2. Toast ---------- */
+
+.star-toast{
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translate(-50%, 20px);
+    max-width: calc(100vw - 48px);
+    padding: 12px 22px;
+    border-radius: 999px;
+    background-color: var(--gold, #F2B83D);
+    color: var(--bg, #1F0508);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 0 0 24px rgba(242, 184, 61, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 60;
+}
+.star-toast.show{
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+
+/* ---------- 3. Shop window ---------- */
+
+.star-dialog{
+    width: min(620px, 94vw);
+    max-height: 86vh;
+    box-sizing: border-box;
+    padding: 0;
+    border: 1px solid rgba(243, 231, 211, 0.2);
+    border-radius: 26px;
+    background-color: var(--dark-cherry-red, #2E0A10);
+    color: var(--warm-beige, #F3E7D3);
+    font-family: "DM Sans", Arial, sans-serif;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), 0 0 18px rgba(242, 184, 61, 0.25);
+    overflow: hidden;
+}
+.star-dialog[open]{
+    display: flex;
+    flex-direction: column;
+}
+.star-dialog::backdrop{
+    background-color: rgba(31, 5, 8, 0.75);
+}
+
+.sd-head{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px 24px 8px;
+}
+.sd-balance{
+    margin: 0;
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--gold, #F2B83D);
+}
+.sd-sub{
+    margin: 2px 0 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--peach, #f8c9a0);
+}
+.sd-close{
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 20px;
+    opacity: 0.7;
+    cursor: pointer;
+}
+.sd-close:hover{ opacity: 1; color: var(--gold, #F2B83D); }
+
+.sd-tabs{
+    display: flex;
+    gap: 8px;
+    padding: 8px 24px 12px;
+}
+.sd-tab{
+    padding: 6px 18px;
+    border: 1px solid rgba(243, 231, 211, 0.3);
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.sd-tab:hover{ background-color: rgba(255, 255, 255, 0.08); }
+.sd-tab.active{
+    border-color: transparent;
+    background-color: var(--butter, #C9941A);
+    color: var(--bg, #1F0508);
+    font-weight: 700;
+}
+
+.sd-body{
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 4px 24px 24px;
+}
+
+.sd-h{
+    margin: 16px 0 2px;
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-size: 20px;
+    color: var(--soft-gold, #D4A24C);
+}
+.sd-hint{
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 400;
+    opacity: 0.8;
+}
+.sd-empty{
+    margin: 8px 0 12px;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+.sd-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+.sd-list{
+    display: grid;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.sd-item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 2px solid rgba(243, 231, 211, 0.12);
+    border-radius: 16px;
+    background-color: var(--marron-red, #4A0E17);
+}
+.sd-item.owned{ border-color: rgba(242, 184, 61, 0.35); }
+.sd-item.flash{ animation: sd-flash 1.2s ease 2; }
+@keyframes sd-flash{
+    50%{ border-color: var(--gold, #F2B83D); box-shadow: 0 0 18px rgba(242, 184, 61, 0.7); }
+}
+
+.sd-item-text{
+    flex: 1;
+    min-width: 0;
+    display: grid;
+}
+.sd-item-name{
+    font-size: 15px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+.sd-item-note{
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--peach, #f8c9a0);
+}
+
+.sd-strip{
+    display: flex;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.sd-strip span{
+    display: block;
+    width: 12px;
+    height: 28px;
+}
+
+.sd-btn{
+    padding: 6px 16px;
+    border: 1px solid rgba(243, 231, 211, 0.35);
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.sd-btn:hover:not(:disabled){ background-color: rgba(255, 255, 255, 0.1); }
+.sd-btn.on{
+    border-color: transparent;
+    background-color: var(--butter, #C9941A);
+    color: var(--bg, #1F0508);
+}
+.sd-btn.short{ opacity: 0.55; }            /* not enough stars yet */
+.sd-btn:disabled{ opacity: 0.5; cursor: default; }
+
+.sd-x{
+    border: none;
+    background: none;
+    color: inherit;
+    opacity: 0.6;
+    cursor: pointer;
+}
+.sd-x:hover{ opacity: 1; color: var(--gold, #F2B83D); }
+
+.sd-form{
+    display: flex;
+    gap: 8px;
+}
+.sd-form input{
+    min-width: 0;
+    padding: 9px 14px;
+    border: 1px solid rgba(243, 231, 211, 0.3);
+    border-radius: 999px;
+    background-color: var(--warm-beige, #F3E7D3);
+    color: var(--wine, #5A0F1E);
+    font-family: inherit;
+    font-size: 15px;
+}
+.sd-form input[type="text"]{ flex: 1; }
+.sd-form input[type="number"]{ width: 70px; text-align: center; }
+.sd-form input:focus{
+    outline: none;
+    border-color: var(--bright-deep-yellow, #C9941A);
+}
+
+.sd-rules{
+    margin: 6px 0 0;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.sd-log{
+    list-style: none;
+    margin: 6px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+.sd-log li{
+    display: grid;
+    grid-template-columns: 92px 1fr auto;
+    gap: 10px;
+    align-items: baseline;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed rgba(243, 231, 211, 0.2);
+    font-size: 14px;
+}
+.sd-log-when{ color: var(--peach, #f8c9a0); font-size: 12px; }
+.sd-log-amt{ font-weight: 800; }
+.sd-log-amt.plus{ color: var(--gold, #F2B83D); }
+.sd-log-amt.minus{ color: var(--peach, #f8c9a0); }
+
+@media (max-width: 520px){
+    .sd-grid{ grid-template-columns: 1fr; }
+    .sd-log li{ grid-template-columns: 1fr auto; }
+    .sd-log-when{ grid-column: 1 / -1; }
+}
+
+
+/* ---------- 4. Home: the stars strip ---------- */
+
+.star-strip{
+    flex-shrink: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 20px;
+    padding: 12px 18px;
+    background-color: var(--wine, #5A0F1E);
+}
+.ss-big{
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--gold, #F2B83D);
+}
+.ss-small{
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--peach, #f8c9a0);
+}
+.ss-goal{
+    flex: 1;
+    min-width: 140px;
+}
+.ss-bar{
+    height: 8px;
+    margin-top: 4px;
+    border-radius: 999px;
+    background-color: rgba(243, 231, 211, 0.2);
+    overflow: hidden;
+}
+.ss-fill{
+    height: 100%;
+    width: 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--bright-deep-yellow, #C9941A), var(--gold, #F2B83D));
+    transition: width 0.4s ease;
+}
+.ss-shop{
+    padding: 6px 16px;
+    border: none;
+    border-radius: 999px;
+    background-color: var(--butter, #C9941A);
+    color: var(--bg, #1F0508);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+}
+.ss-shop:hover{ box-shadow: 0 0 14px rgba(201, 148, 26, 0.7); }
+
+
+/* ---------- 5. Dayverse: stars card and Share button ---------- */
+
+.dv-stars h2{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+}
+.dv-stars h2 span{
+    font-size: 18px;
+    color: var(--gold, #F2B83D);
+}
+
+.dv-share{
+    margin-top: 14px;
+    padding: 9px 22px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--bright-deep-yellow, #C9941A), var(--gold, #F2B83D));
+    color: var(--bg, #1F0508);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 0 14px rgba(242, 184, 61, 0.4);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+.dv-share:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 0 24px rgba(242, 184, 61, 0.85);
+}
+
+
+/* ---------- 6. Productivity: the fifth number card ---------- */
+
+/* Five cards in one row on wide windows. (On medium and narrow windows
+   productivity.css makes 2 columns, so the new card takes a whole row there.) */
+@media (min-width: 1001px){
+    .stat-row{
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+@media (max-width: 1000px){
+    .stat-card.stars-stat{
+        grid-column: 1 / -1;
+    }
+}
+
+
+/* ---------- 7. Vibe: locked items ---------- */
+
+.theme-btn.locked,
+.bg-btn.locked,
+.quick-btn.locked{
+    opacity: 0.55;
+}
+/* the tick turns into a lock */
+.theme-btn.locked .theme-check{
+    font-size: 0;
+    opacity: 1;
+}
+.theme-btn.locked .theme-check::after{
+    content: "🔒";
+    font-size: 16px;
+}
+.bg-btn.locked::after{
+    content: "🔒";
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 16px;
+}
+.quick-btn.locked .quick-name::after{
+    content: " 🔒";
+}
+
+
+/* ---------- Star pill right after the logo in the top bar ---------- */
+
+.star-pill.in-bar{
+    margin-left: 14px;
+    margin-right: auto;      /* pushes the nav links to the right edge */
+    align-self: center;
+}

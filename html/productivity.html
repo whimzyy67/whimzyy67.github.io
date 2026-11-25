@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+        <title>Whimzyy - Productivity</title>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+
+        <link rel="stylesheet" href="../css/home.css">
+        <link rel="stylesheet" href="../css/productivity.css">
+        <link rel="stylesheet" href="../css/aboutus.css">
+        <link rel="stylesheet" href="../css/rewards.css"> 
+        <link rel="stylesheet" href="../css/responsive.css">
+        
+        <script src="../js/auth.js"></script>
+        <script src="../js/theme.js"></script>
+        <script src="../js/rewards.js"></script>
+
+        <link rel="icon" href="icons/icon-192.png">
+    </head>
+      
+    <script src="../js/pwa.js"></script>
+
+    <body>
+
+        <!--Top Navigation bar-->
+        <header class="topbar">
+
+            <!--Whimzyy Side bar-->
+            <a href="../index.html" class="brand" title="Back to the start">
+                <img src="../stickers/whimzyy.png" alt="Whimzyy" class="whimzyy-logo">
+            </a>
+
+            <!--Navigation bar-->
+            <nav class="top-nav">
+
+                <!--Work Space-->
+                <a href="work-space.html" class="work" title="LOCK IN!!">
+                    <img src="../stickers/nav-work.png" alt="Work Space" class="icon" id="work-space-icon">
+                    Work Space
+                </a>
+
+                <!--Home-->
+                <a href="../home.html" class="tab" title="Your daily welcome">
+                    <img src="../stickers/nav-home.png" alt="Home" class="icon">
+                    Home
+                </a>
+
+                <!--About Us-->
+                <a href="about-us.html" class="tab" title="The story behind Whimzyy">
+                    <img src="../stickers/nav-about.png" alt="About Us" class="icon">
+                    About Us
+                </a>
+
+            </nav>
+        </header>
+
+        <!--Side Navigation bar-->
+        <aside class="sidebar" id="sidebar">
+            <ul>
+
+                <!--My Day-->
+                <li>
+                    <a href="my-day.html" title="Plan your day and write your journal">
+                        <img src="../stickers/side-myday.png" alt="My Day" class="icon" id="my-day-icon">
+                        My Day
+                    </a>
+                </li>
+
+                <!--Focus-->
+                <li>
+                    <a href="focus.html" title="Timer, Stopwatch and Pomodoro">
+                        <img src="../stickers/side-focus.png" alt="Focus" class="icon">
+                        Focus
+                    </a>
+                </li>
+
+                <!--Detox-->
+                <li>
+                    <a href="detox.html" title="Screen Time Limit">
+                        <img src="../stickers/side-detox.png" alt="Detox" class="icon">
+                        Detox
+                    </a>
+                </li>
+
+                <!--Wellness-->
+                <li>
+                    <a href="wellness.html" title="Check in, stretch and drink water">
+                        <img src="../stickers/side-wellness.png" alt="Wellness" class="icon">
+                        Wellness
+                    </a>
+                </li>
+
+                <!--Productivity-->
+                <li>
+                    <a href="productivity.html" title="See your progress and patterns">
+                        <img src="../stickers/side-productivity.png" alt="Productivity" class="icon">
+                        Productivity
+                    </a>
+                </li>
+
+                <!--Dayverse-->
+                <li>
+                    <a href="dayverse.html" title="Your slice of life">
+                        <img src="../stickers/side-dayverse.png" alt="Dayverse" class="icon">
+                        Dayverse
+                    </a>
+                </li>
+
+                <!--Vibe-->
+                <li>
+                    <a href="vibe.html" title="Change themes, sounds and backgrounds">
+                        <img src="../stickers/side-vibe.png" alt="Vibe" class="icon">
+                        Vibe
+                    </a>
+                </li>
+
+            </ul>
+        </aside>
+
+        <!--Main content-->
+        <main class="content">
+            <div class="prod-wrap">
+
+                <!--Heading, one-line summary, and the Today | Week | Month tabs-->
+                <header class="prod-head">
+                    <div>
+                        <h1>Productivity</h1>
+                        <p class="summary" id="summaryLine"></p>
+                    </div>
+
+                    <div class="range-tabs" role="tablist" aria-label="Time range">
+
+                        <button type="button" class="range-tab" role="tab" aria-selected="false" data-range="1">Today</button>
+
+                        <button type="button" class="range-tab active" role="tab" aria-selected="true" data-range="7">Week</button>
+                        
+                        <button type="button" class="range-tab" role="tab" aria-selected="false" data-range="30">Month</button>
+                    </div>
+                </header>
+
+                <!--number cards-->
+                <section class="stat-row">
+
+                    <!--Focus Time-->
+                    <article class="card stat-card focus-stat">
+                        <p class="stat-label">Focus time</p>
+                        <p class="stat-value" id="statFocus">0 min</p>
+                        <p class="delta same" id="statFocusDelta"></p>
+                    </article>
+
+                    <!--Session-->
+                    <article class="card stat-card">
+                        <p class="stat-label">Sessions</p>
+                        <p class="stat-value" id="statSessions">0</p>
+                        <p class="delta same" id="statSessionsDelta"></p>
+                    </article>
+                    
+                    <!--Task Done-->
+                    <article class="card stat-card">
+                        <p class="stat-label">Tasks done</p>
+                        <p class="stat-value" id="statTasks">0</p>
+                        <p class="delta same" id="statTasksDelta"></p>
+                    </article>
+
+                    <!--Day Streak-->
+                    <article class="card stat-card">
+                        <p class="stat-label">Day streak</p>
+                        <p class="stat-value" id="statStreak">0 days</p>
+                        <p class="delta same" id="statStreakBest"></p>
+                    </article>
+                    
+                    <!--Stars-->
+                    <article class="card stat-card stars-stat">
+                        <p class="stat-label">Stars earned</p>
+                        <p class="stat-value" id="statStars">0</p>
+                        <p class="delta same" id="statStarsDelta"></p>
+                    </article>
+
+                </section>
+
+                <!--Bar chart and daily goal-->
+                <section class="chart-row">
+
+                    <!--Bar chart-->
+                    <article class="card chart-card">
+                        <h2 id="chartTitle">Focus time per day</h2>
+
+                        <!--Graphs-->
+                        <div class="chart-plot">
+                            <div class="bars" id="bars"></div>
+                            <div class="goal-line" id="goalLine"><span id="goalLineText"></span></div>
+                        </div>
+
+                        <div class="bar-labels" id="barLabels"></div>
+                    </article>
+
+                    <!--Daily goal-->
+                    <article class="card goal-card">
+                        <h2>Daily goal</h2>
+
+                        <div class="goal-body">
+
+                            <div class="goal-dial">
+                                
+                                <!--Circle Pie diagram-->
+                                <svg class="goal-svg" viewBox="0 0 200 200" aria-hidden="true">
+                                    <circle class="goal-track" cx="100" cy="100" r="85"></circle>
+                                    <circle class="goal-ring" id="goalRing" cx="100" cy="100" r="85"></circle>
+                                </svg>
+
+                                <!--Work done in number represented inside the circle-->
+                                <div class="goal-text">
+                                    <p class="goal-done" id="goalDone">0 min</p>
+                                    <p class="goal-of" id="goalOf"></p>
+                                </div>
+                            </div>
+
+                            <!--Goal-->
+                            <div class="goal-side">
+                                <p class="goal-note" id="goalNote"></p>
+
+                                <label class="goal-edit">Goal (min)
+                                    <input type="number" id="goalInput" min="10" max="720" step="5">
+                                </label>
+                            </div>
+
+                        </div>
+                    </article>
+                </section>
+
+                <!--Three insight cards-->
+                <section class="insight-row">
+
+                    <!--Tools used-->
+                    <article class="card tools-card">
+                        <h2>Tools used</h2>
+
+                        <div class="donut-wrap">
+                            <div class="donut">
+                                <svg class="donut-svg" viewBox="0 0 200 200" aria-hidden="true">
+                                    
+                                    <!--Represented Circle-->
+                                    <circle class="donut-track" cx="100" cy="100" r="70"></circle>
+
+                                    <!--Representatives circle-->
+                                    <circle class="donut-seg seg-pomodoro" id="seg-pomodoro" cx="100" cy="100" r="70"></circle>
+                                    <circle class="donut-seg seg-timer" id="seg-timer" cx="100" cy="100" r="70"></circle>
+                                    <circle class="donut-seg seg-stopwatch" id="seg-stopwatch" cx="100" cy="100" r="70"></circle>
+                                </svg>
+                                <p class="donut-total" id="donutTotal">0 min</p>
+                            </div>
+
+                            <!--Names of Representatives-->
+                            <ul class="legend">
+                                <li><span class="swatch seg-pomodoro"></span><span class="legend-name">Pomodoro</span><span class="legend-val" id="val-pomodoro">0%</span></li>
+                                <li><span class="swatch seg-timer"></span><span class="legend-name">Timer</span><span class="legend-val" id="val-timer">0%</span></li>
+                                <li><span class="swatch seg-stopwatch"></span><span class="legend-name">Stopwatch</span><span class="legend-val" id="val-stopwatch">0%</span></li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!--Best time of day-->
+                    <article class="card parts-card">
+                        <h2>Best time of day</h2>
+
+                        <ul class="part-list">
+
+                            <!--Morning-->
+                            <li class="part-row">
+                                <span class="part-name">Morning</span>
+                                <span class="part-track"><span class="part-fill"></span></span>
+                                <span class="part-val">0 min</span>
+                            </li>
+
+                            <!--Afternoon-->
+                            <li class="part-row">
+                                <span class="part-name">Afternoon</span>
+                                <span class="part-track"><span class="part-fill"></span></span>
+                                <span class="part-val">0 min</span>
+                            </li>
+
+                            <!--Evening-->
+                            <li class="part-row">
+                                <span class="part-name">Evening</span>
+                                <span class="part-track"><span class="part-fill"></span></span>
+                                <span class="part-val">0 min</span>
+                            </li>
+
+                            <!--Night-->
+                            <li class="part-row">
+                                <span class="part-name">Night</span>
+                                <span class="part-track"><span class="part-fill"></span></span>
+                                <span class="part-val">0 min</span>
+                            </li>
+                        </ul>
+                    </article>
+
+                    <!--Top tasks-->
+                    <article class="card tasks-card">
+                        <h2>Top tasks</h2>
+                        <ol class="top-tasks" id="topTasks"></ol>
+                    </article>
+
+                </section>
+
+            </div>
+        </main>
+
+        <!--JavaScript Links-->
+        <script src="../js/sidebar.js"></script>
+        <script src="../js/productivity.js"></script>
+    </body>
+</html>

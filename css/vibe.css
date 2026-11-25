@@ -1,0 +1,432 @@
+/* ==========================================================
+   vibe.css  (linked to vibe.html, AFTER home.css)
+
+   NOTE: vibe.html loads home.css FIRST, so the colors, the top bar, the sidebar
+   and the basic .card look all come from there. This file only holds what is
+   special to the Vibe page.
+   Names it borrows from home.css:
+   --home-width, --card-gap, --soft-gold, --peach, --gold, --butter, --bg,
+   --warm-beige, --dark-red, --bright-deep-yellow
+
+   Most of the buttons on this page are made by JavaScript (vibe.js) and
+   are not in the HTML: .quick-btn, .theme-btn, .bg-btn, .chip and the colored
+   .swatch-strip. JavaScript adds the class "selected" to the one you chose.
+
+   THE ORDER BELOW IS THE ORDER OF THE BLOCKS IN vibe.html:
+    1. Page basics
+    2. Heading, summary and reset button
+    3. The shared look of the cards
+    4. Quick vibes card
+    5. Two columns: themes on the left, background and sounds on the right
+    6. Themes card
+    7. Right column (holds the next two cards)
+    8. Work Space background card
+    9. Sounds and volume card
+   10. Screen-size rules
+   ========================================================== */
+
+
+/* ---------- 1. Page basics ---------- */
+
+/* Anything with the "hidden" attribute disappears. */
+[hidden]{
+    display: none !important;
+}
+
+/* Unlike the other pages, this one scrolls normally instead of fitting the window.
+   These lines undo the "fit the window" rules from home.css. */
+.content{
+    height: auto;
+    min-height: 0;
+    display: block;
+}
+
+/* Holds everything on the page: one column of blocks, centered, with a gap between them. */
+.vibe-wrap{
+    width: 100%;
+    max-width: var(--home-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--card-gap);
+}
+
+
+/* ---------- 2. Heading, summary and reset button ---------- */
+
+/* The top row: the heading and summary on the left, the Reset button on the right.
+   If there is not enough room, the button wraps under the heading. */
+.vibe-head{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px 20px;
+}
+
+/* The page heading "Vibe". */
+.vibe-head h1{
+    margin: 0;
+    font-size: 34px;
+    color: var(--soft-gold);
+}
+
+/* The one-line summary of your current vibe. */
+.vibe-summary{
+    margin: 4px 0 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--peach);
+}
+
+/* The "Reset to default vibe" button: a see-through pill. */
+.reset-btn{
+    padding: 10px 22px;
+    border: 1px solid rgba(243, 231, 211, 0.35);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--warm-beige);
+    font-family: inherit;
+    font-size: 15px;
+    cursor: pointer;
+}
+.reset-btn:hover{
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+
+/* ---------- 3. The shared look of the cards ---------- */
+
+/* The small heading of every card on this page. */
+.vibe-wrap .card h2{
+    margin: 0 0 10px;
+    font-size: 20px;
+}
+
+/* A small strip of color squares with rounded ends.
+   Quick vibes and Themes both use it to show their colors. */
+.swatch-strip{
+    display: flex;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.swatch-strip span{
+    display: block;
+    width: 22px;
+    height: 22px;
+}
+
+
+/* ---------- 4. Quick vibes card ---------- */
+
+/* The quick vibes in four equal columns. */
+.quick-list{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+/* One quick vibe (made by JavaScript): a dark box with a thin border,
+   its contents stacked, lifting a little on hover. */
+.quick-btn{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 12px 14px;
+    border: 2px solid rgba(243, 231, 211, 0.15);
+    border-radius: 18px;
+    background-color: var(--dark-red);
+    color: var(--warm-beige);
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.quick-btn:hover{
+    transform: translateY(-2px);
+    border-color: var(--soft-gold);
+}
+
+/* The one you picked: a gold border and glow.
+   (It comes after :hover, so its gold wins while the mouse is over it.) */
+.quick-btn.selected{
+    border-color: var(--gold);
+    box-shadow: 0 0 14px rgba(242, 184, 61, 0.45);
+}
+
+/* The name of the quick vibe. */
+.quick-name{
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--gold);
+}
+
+/* The small line describing it. */
+.quick-info{
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.35;
+    opacity: 0.85;
+}
+
+
+/* ---------- 5. Two columns ---------- */
+
+/* Themes on the left (1 part), background and sounds on the right (1.5 parts).
+   align-items: start lets each card be only as tall as it needs. */
+.vibe-cols{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    gap: var(--card-gap);
+    align-items: start;
+}
+
+
+/* ---------- 6. Themes card ---------- */
+
+/* The list of themes (made by JavaScript), one per row. */
+.theme-list{
+    display: grid;
+    gap: 10px;
+}
+
+/* One theme: color strip, name and a tick in a row. */
+.theme-btn{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid rgba(243, 231, 211, 0.15);
+    border-radius: 16px;
+    background-color: var(--dark-red);
+    color: var(--warm-beige);
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.theme-btn:hover{
+    border-color: var(--soft-gold);
+}
+
+/* The theme you picked: a gold border and glow. (It comes after :hover, so it wins.) */
+.theme-btn.selected{
+    border-color: var(--gold);
+    box-shadow: 0 0 14px rgba(242, 184, 61, 0.45);
+}
+
+/* The theme's name takes the free space, which pushes the tick to the right. */
+.theme-name{
+    flex: 1;
+    text-align: left;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+/* The tick: invisible, until its theme is picked. */
+.theme-check{
+    color: var(--gold);
+    font-size: 18px;
+    opacity: 0;
+}
+.theme-btn.selected .theme-check{
+    opacity: 1;
+}
+
+
+/* ---------- 7. Right column ---------- */
+
+/* The background card on top, the sounds card below it. */
+.vibe-right{
+    display: flex;
+    flex-direction: column;
+    gap: var(--card-gap);
+    min-width: 0;
+}
+
+
+/* ---------- 8. Work Space background card ---------- */
+
+/* The background pictures in four equal columns. */
+.bg-grid{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+}
+
+/* One background (made by JavaScript): a picture with its name on top of it.
+   position: relative lets the name be placed on the picture. */
+.bg-btn{
+    position: relative;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background-color: #000000;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.bg-btn:hover{
+    transform: translateY(-2px);
+}
+
+/* The one you picked: a gold border and glow. */
+.bg-btn.selected{
+    border-color: var(--gold);
+    box-shadow: 0 0 14px rgba(242, 184, 61, 0.55);
+}
+
+/* The little preview picture (16:9). pointer-events: none makes a click
+   go to the button instead of the picture. */
+.bg-thumb{
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+/* The name along the bottom of the picture, on a dark fade so it stays readable. */
+.bg-name{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 14px 6px 4px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: left;
+    color: #ffffff;
+}
+
+
+/* ---------- 9. Sounds and volume card ---------- */
+
+/* The small capital labels "AMBIENCE" and "MUSIC". */
+.group-label{
+    margin: 10px 0 6px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--peach);
+}
+
+/* The sound buttons (chips) in a row that wraps onto the next line. */
+.chips{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* One sound (made by JavaScript): an outlined pill. */
+.chip{
+    padding: 6px 16px;
+    border: 1px solid rgba(243, 231, 211, 0.3);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--warm-beige);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.chip:hover{
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* The one you picked: solid yellow. (It comes after :hover, so it wins.) */
+.chip.selected{
+    border-color: transparent;
+    background-color: var(--butter);
+    color: var(--bg);
+}
+
+/* The four volume sliders, one under the other, under a thin line. */
+.volume-list{
+    display: grid;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(243, 231, 211, 0.15);
+}
+
+/* One slider row: name, slider, number (and the Test button). */
+.vol{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* The name has a fixed width, so all the sliders line up. */
+.vol-name{
+    width: 80px;
+    flex-shrink: 0;
+}
+
+/* The slider takes the free space. */
+.vol input[type="range"]{
+    flex: 1;
+    min-width: 0;
+    accent-color: var(--bright-deep-yellow);
+}
+
+/* The number on the right (for example "60%"). */
+.vol-val{
+    width: 44px;
+    text-align: right;
+    opacity: 0.85;
+}
+
+/* The small Test button beside the chime volume. */
+.test-btn{
+    padding: 4px 14px;
+    border: 1px solid rgba(243, 231, 211, 0.35);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--warm-beige);
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+.test-btn:hover{
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+
+/* ---------- 10. Screen-size rules (these stay LAST so they can override the rules above) ---------- */
+
+/* Medium and narrow screens: fewer columns. */
+@media (max-width: 1000px){
+
+    .quick-list{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .vibe-cols{
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Phones: one column of quick vibes, two columns of backgrounds.
+   (This comes after the block above, so its quick-list wins on a phone.) */
+@media (max-width: 600px){
+
+    .quick-list{
+        grid-template-columns: 1fr;
+    }
+
+    .bg-grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

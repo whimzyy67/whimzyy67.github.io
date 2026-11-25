@@ -1,0 +1,821 @@
+/* ==========================================================
+   workspace.css  (linked to work-space.html)
+
+   NOTE: work-space.html loads ONLY this file (not home.css), so the
+   colors and the page basics are all defined here.
+
+   THE ORDER BELOW IS THE ORDER OF THE BLOCKS IN work-space.html:
+    0. Colors
+    1. The whole page (body and the "hidden" rule)
+    2. Background video
+    3. Dark layer over the video
+    4. Whimzyy logo
+    5. The shared look (glass boxes, headings, buttons)
+    6. The widgets area
+    7. Date and time widget
+    8. To-do list widget
+    9. Timer widget
+   10. Personal message widget
+   11. Right sidebar (icon buttons and the panels that open)
+   12. Video panel
+   13. Music and Ambience panels
+   14. Timer panel
+   15. Widgets panel (the tick boxes)
+   ========================================================== */
+
+
+/* ---------- 0. Colors ---------- */
+
+/* Every color gets a name here. Change a value once and it updates everywhere. */
+:root {
+    --bg: #1F0508;
+    --gold: #F2B83D;
+    --bright-deep-yellow: #C9941A;
+    --peach: #f8c9a0;
+    --warm-beige: #F3E7D3;
+
+    /* Transparent dark background for glass elements */
+    --glass: color-mix(in srgb, var(--bg) 55%, transparent); /* see-through, tinted by the theme */
+
+    /* Border colour for glass elements */
+    --glass-border: rgba(243, 231, 211, 0.18);
+}
+
+
+/* ---------- 1. The whole page ---------- */
+
+/* Anything with the "hidden" attribute disappears. JavaScript adds and removes it
+   to hide or show the widgets and other parts. */
+[hidden] {
+    display: none !important;
+}
+
+/* The page: black behind the video, no scrolling, the page font and light text. */
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #000;
+    color: var(--warm-beige);
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-weight: 700;
+}
+
+
+/* ---------- 2. Background video ---------- */
+
+/* The video fills the whole window and sits behind everything (z-index -2).
+   object-fit: cover crops it instead of stretching it. */
+.bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+
+
+/* ---------- 3. Dark layer over the video ---------- */
+
+/* A light dark-red layer between the video and the widgets,
+   so the text stays easy to read. */
+.bg-shade {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(31, 5, 8, 0.25);
+    z-index: -1;
+}
+
+
+/* ---------- 4. Whimzyy logo ---------- */
+
+/* The logo link, pinned to the top left (goes back to Home). */
+.brand {
+    position: fixed;
+    top: 16px;
+    left: 24px;
+    z-index: 20;
+    display: block;
+}
+
+/* The logo picture, with a dark shadow. On hover it glows beige instead. */
+.whimzyy-logo {
+    display: block;
+    height: 52px;
+    width: auto;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+}
+.whimzyy-logo:hover {
+    filter: drop-shadow(0 0 20px var(--warm-beige));
+}
+
+/*the "Play my vibe" pill at the top center*/
+.vibe-play{
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    padding: 10px 22px;
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    color: var(--warm-beige);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 0 16px rgba(201, 148, 26, 0.45);
+}
+.vibe-play:hover{
+    box-shadow: 0 0 24px rgba(201, 148, 26, 0.8);
+}
+
+/* ---------- 5. The shared look (used by the widgets AND the sidebar panels) ---------- */
+
+/* Glass: a dark see-through box with a blurred background,
+   a thin light border and a soft shadow. */
+.panel,
+.widget {
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-weight: 500;
+}
+
+/* Headings inside widgets and panels ("To-do list", "Video", "Music"...). */
+.panel h2,
+.widget h2 {
+    margin: 0 0 12px;
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--gold);
+}
+
+/* The main yellow pill button (Add, Save, Start...). */
+.w-btn {
+    padding: 8px 22px;
+    border: none;
+    border-radius: 999px;
+    background-color: var(--bright-deep-yellow);
+    color: var(--bg);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.w-btn:hover {
+    box-shadow: 0 0 16px rgba(201, 148, 26, 0.7);
+}
+
+/* The see-through version (Reset). */
+.w-btn.ghost {
+    border: 1px solid var(--glass-border);
+    background: transparent;
+    color: inherit;
+}
+
+/* A button that cannot be pressed yet: faded, no glow. */
+.w-btn:disabled {
+    opacity: 0.4;
+    box-shadow: none;
+    cursor: default;
+}
+
+/* Buttons inside a widget get a little space above them. */
+.widget .w-btn {
+    margin-top: 8px;
+}
+
+
+/* ---------- 6. The widgets area ---------- */
+
+/* Full-screen layer for widgets. It lets clicks through to the page;
+   only the widgets themselves catch clicks. */
+.widgets {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Smaller widgets, placed with left/top (JavaScript sets those) */
+.widget {
+    position: absolute;
+    box-sizing: border-box;
+    width: 200px;
+    padding: 12px 14px;
+    border-radius: 18px;
+    pointer-events: auto;
+}
+.widget-todo { width: 300px; }
+.widget-message { width: 260px; }
+
+/* Align / Done bar: only visible while placing a widget */
+.w-bar {
+    display: none;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+.widget.aligning { outline: 2px dashed var(--gold); outline-offset: 3px; }
+.widget.aligning .w-bar { display: flex; }
+
+.w-chip {
+    padding: 4px 12px;
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    color: inherit;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.w-chip.done-chip { background: var(--bright-deep-yellow); color: var(--bg); border-color: transparent; }
+.w-align { cursor: grab; touch-action: none; }
+.w-align:active { cursor: grabbing; }
+
+/* the little ✥ that appears on hover to move a placed widget again */
+.w-realign {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--warm-beige);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.widget:hover .w-realign { opacity: 1; }
+.widget.aligning .w-realign { display: none; }
+
+/* smaller text inside widgets */
+.widget h2 { font-size: 18px; margin-bottom: 8px; }
+.w-time { font-size: 34px; }
+.w-date { font-size: 13px; }
+.w-label { font-size: 12px; }
+.w-form input { font-size: 13px; padding: 6px 10px; }
+.task-text { font-size: 14px; }
+.w-todo-list { max-height: 30vh; }
+.message-text { font-size: 18px; }
+.message-form textarea { font-size: 14px; padding: 8px; }
+.widget .w-btn { font-size: 13px; padding: 6px 14px; }
+
+
+/* ---------- 7. Date and time widget ---------- */
+
+/* The big time numbers. (The Timer widget uses this too.) */
+.w-time {
+    margin: 0;
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.05;
+}
+
+/* The date under the time. */
+.w-date {
+    margin: 6px 0 0;
+    font-size: 15px;
+    text-align: center;
+}
+
+
+/* ---------- 8. To-do list widget ---------- */
+
+/* The "Add a task" row: text box and Add button side by side. */
+.w-form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+/* The box you type a new task in: a see-through pill. */
+.w-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 12px;
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.14);
+    color: inherit;
+    font-family: inherit;
+    font-size: 15px;
+}
+
+/* The faded hint inside the empty box. */
+.w-form input::placeholder {
+    color: rgba(243, 231, 211, 0.6);
+}
+
+/* While you are typing: yellow border. */
+.w-form input:focus {
+    outline: none;
+    border-color: var(--bright-deep-yellow);
+}
+
+/* The Add button sits beside the box, so it needs no top space and is a bit narrower. */
+.widget .w-form .w-btn {
+    margin-top: 0;
+    padding: 8px 16px;
+}
+
+/* The list of tasks (JavaScript fills it): one task per row.
+   If there are many, the list scrolls inside the widget. */
+.w-todo-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);   /* a long task shrinks inside the box instead of pushing it sideways */
+    gap: 6px;
+    max-height: 40vh;
+    overflow-x: hidden;                      /* no scroll bar at the bottom */
+    overflow-y: auto;
+}
+
+/* The message shown while the list is empty. */
+.w-todo-list:empty::before {
+    content: "No tasks yet.";
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* One task (made by JavaScript): tick box, text, delete button in a row. */
+.todo-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* The tick box. */
+.todo-item input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--bright-deep-yellow);
+    cursor: pointer;
+}
+
+/* The task text: a box you can click and edit. It looks like plain text
+   until you hover (faint underline) or click (yellow underline). */
+.task-text {
+    flex: 1;
+    min-width: 0;
+    padding: 4px 6px;
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    font-size: 16px;
+}
+.task-text:hover {
+    border-bottom-color: var(--glass-border);
+}
+.task-text:focus {
+    outline: none;
+    border-bottom-color: var(--bright-deep-yellow);
+}
+
+/* A finished task: crossed out and faded. */
+.task-text.done {
+    text-decoration: line-through;
+    opacity: 0.55;
+}
+
+/* The little ✕ that deletes a task. */
+.task-delete {
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 15px;
+    opacity: 0.6;
+    cursor: pointer;
+}
+.task-delete:hover {
+    opacity: 1;
+    color: var(--gold);
+}
+
+
+/* ---------- 9. Timer widget ---------- */
+
+/* The small label above the time ("Stopwatch", "Study time"...).
+   The time itself uses .w-time from section 7. */
+.w-label {
+    margin: 0;
+    font-size: 14px;
+    color: var(--peach);
+}
+
+
+/* ---------- 10. Personal message widget ---------- */
+
+
+/* The box you write your message in: see-through, no resizing. */
+.message-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    background-color: rgba(255, 255, 255, 0.12);
+    color: var(--warm-beige);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+    resize: none;
+}
+
+/* The faded hint inside the empty box. */
+.message-form textarea::placeholder {
+    color: rgba(243, 231, 211, 0.6);
+}
+
+/* While you are typing: yellow border. */
+.message-form textarea:focus {
+    outline: none;
+    border-color: var(--bright-deep-yellow);
+}
+
+/* The saved message, shown as big centered text. It is a button, so you can
+   click it to edit; the button look is removed and it glows on hover. */
+.message-text {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--warm-beige);
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: center;
+    cursor: pointer;
+}
+.message-text:hover {
+    text-shadow: 0 0 14px rgba(201, 148, 26, 0.6);
+}
+
+
+/* ---------- 11. Right sidebar ---------- */
+
+/* The strip of icon buttons, pinned to the right edge and centered vertically. */
+.ws-sidebar {
+    position: fixed;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    width: 68px;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 0;
+}
+
+/* The glass background behind the icon buttons.
+   It is drawn behind them (z-index -1). */
+.ws-sidebar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 22px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    z-index: -1;
+}
+
+/* One sidebar item (a button and its panel). position: relative lets its
+   panel line up beside its own button. */
+.side-item {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 6px 0;
+}
+
+/* The round-cornered button holding an icon. */
+.side-btn {
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 16px;
+    background: transparent;
+    color: var(--warm-beige);
+    font-size: 11px;
+    cursor: pointer;
+    transition: background-color 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+/* On hover, or while its panel is held open, the button lights up. */
+.side-btn:hover,
+.side-item.open .side-btn {
+    background-color: rgba(243, 231, 211, 0.14);
+    box-shadow: 0 0 16px rgba(201, 148, 26, 0.55);
+}
+
+/* The icon picture. */
+.side-icon {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+/* The panel that opens beside a button: hidden (see-through) until needed.
+   right: 100% puts it just to the left of the sidebar. */
+.panel {
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    transform: translateY(-50%);
+    width: min(300px, 70vw);
+    max-height: 80vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 18px;
+    border-radius: 22px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease,
+                visibility 0s linear 0.2s;
+}
+
+/* The panel shows while the mouse is over its item, or while a click holds it open. */
+.side-item:hover .panel,
+.side-item.open .panel {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+
+/* ---------- 12. Video panel ---------- */
+
+/* Previous arrow, picture and next arrow in a row. */
+.video-picker {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* The previous and next arrow buttons: no button look. */
+.pick-arrow {
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: transform 0.2s ease,
+                filter 0.2s ease;
+}
+
+/* The picture inside each arrow. */
+.pick-arrow img {
+    display: block;
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+}
+
+/* On hover the arrow grows slightly and glows. */
+.pick-arrow:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 10px var(--bright-deep-yellow));
+}
+
+/* The middle part: the preview and its title, taking the space between the arrows. */
+.video-card {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+}
+
+/* The small video preview (16:9). */
+.video-thumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 12px;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* The name of the video under the preview. */
+.video-title {
+    margin: 8px 0 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+/* ---------- 13. Music and Ambience panels ---------- */
+
+/* The list of sounds (JavaScript fills it): one option per row. */
+.option-list {
+    display: grid;
+    gap: 4px;
+}
+
+/* One sound: radio button and name in a row. */
+.option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.option:hover {
+    background-color: rgba(243, 231, 211, 0.12);
+}
+
+/* The sound that is playing now is highlighted yellow. */
+.option:has(input:checked) {
+    background-color: rgba(201, 148, 26, 0.28);
+}
+
+/* The round radio button. */
+.option input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--bright-deep-yellow);
+}
+
+/* The volume row: the word "Volume" and the slider side by side. */
+.volume {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    font-size: 14px;
+}
+
+/* The volume slider fills the rest of the row. */
+.volume input {
+    flex: 1;
+    accent-color: var(--bright-deep-yellow);
+}
+
+/* A small message under the volume (for example "Couldn't play this one"). */
+.panel-note {
+    margin: 8px 0 0;
+    min-height: 1em;
+    font-size: 13px;
+    color: var(--peach);
+}
+
+
+/* ---------- 14. Timer panel ---------- */
+
+/* The Stopwatch and Pomodoro tabs side by side. */
+.mode-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+/* One tab: a see-through pill that shares the width equally. */
+.mode-tab {
+    flex: 1;
+    padding: 8px 0;
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* The tab you are on: solid yellow. */
+.mode-tab.active {
+    border-color: transparent;
+    background-color: var(--bright-deep-yellow);
+    color: var(--bg);
+    font-weight: 700;
+}
+
+/* The small label above the time ("Stopwatch", "Study time"...). */
+.t-phase {
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+    color: var(--peach);
+}
+
+/* The big time in the panel. */
+.t-display {
+    margin: 4px 0 12px;
+    text-align: center;
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+/* The Pomodoro settings (study and break minutes), one per row. */
+.pomo-settings {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+/* Each setting: its words on the left, the number box on the right. */
+.pomo-settings label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+/* The little number boxes. */
+.pomo-settings input {
+    width: 64px;
+    padding: 6px 8px;
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.12);
+    color: inherit;
+    font-family: inherit;
+    font-size: 15px;
+    text-align: center;
+}
+
+/* The Start and Reset buttons, centered side by side. */
+.t-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+
+/* ---------- 15. Widgets panel (the tick boxes) ---------- */
+
+/* One option: tick box and name in a row. */
+.check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* The tick box. */
+.check input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--bright-deep-yellow);
+}
+
+/* ===== Compact widgets (these win over everything above) ===== */
+.widget{ width: 190px; padding: 12px 14px; }
+.widget.widget-todo{ width: 300px; }
+.widget.widget-message{ width: 260px; }
+
+.widget .w-time{ font-size: 30px; }
+.widget .w-date{ font-size: 13px; margin-top: 4px; }
+.widget .w-label{ font-size: 11px; }
+.widget h2{ font-size: 17px; margin-bottom: 8px; }
+
+.widget .w-form input{ font-size: 13px; padding: 6px 10px; }
+.widget .task-text{ font-size: 14px; }
+.widget .w-todo-list{ max-height: 30vh; }
+.widget .message-text{ font-size: 18px; }
+.widget .message-form textarea{ font-size: 14px; padding: 8px; }
+.widget .w-btn{ font-size: 13px; padding: 6px 14px; }

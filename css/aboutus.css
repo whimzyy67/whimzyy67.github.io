@@ -1,0 +1,328 @@
+/* ==========================================================
+   aboutus.css  (linked to about-us.html)
+
+   NOTE: about-us.html loads home.css FIRST, so the colors
+   (--wine, --butter, --candle ...), the top bar, the sidebar and
+   the basic textarea look all come from there. This file only holds
+   what is special to the About Us page.
+
+   THE ORDER BELOW IS THE ORDER OF THE BLOCKS IN about-us.html:
+    0. Sizes
+    1. Page layout (story on the left, two cards on the right)
+    2. The shared look of every card
+    3. Left: the story card (heading, intro, timeline)
+    4. Right: the column that holds the two cards
+    5. How to use card
+    6. Contact card (email, phone, feedback)
+    7. Screen-size rules
+   ========================================================== */
+
+
+/* ---------- 0. Sizes ---------- */
+
+/* The widest the page content can be. Only this page uses this name.
+   (All colors come from home.css, so they are not repeated here.) */
+:root{
+    --page-width: 1162px;
+}
+
+
+/* ---------- 1. Page layout ---------- */
+
+/* Two columns: the story takes 3 parts, the right-hand cards take 2 parts.
+   minmax(0, ...) lets the columns shrink instead of being pushed wider by long text. */
+.about-grid{
+    max-width: var(--page-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 24px;
+}
+
+
+/* ---------- 2. The shared look of every card ---------- */
+
+/* Every About Us card: rounded wine-red box with a soft gold glow
+   and the lighter body font. (The How to use and Contact cards
+   change the background color further down.) */
+.about-card{
+    padding: 28px;
+    border-radius: 24px;
+    background-color: var(--wine);
+    color: var(--text);
+    box-shadow: 0 0 10px var(--soft-gold);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-weight: 400;
+}
+
+/* Headings inside cards: the heading font, extra bold, butter yellow. */
+.about-card h1,
+.about-card h2,
+.about-card h3{
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-weight: 800;
+    color: var(--butter);
+}
+
+/* The sub-heading of the two right-hand cards ("How to use Whimzyy",
+   "Contact Us"): wine red, so it reads well on their light backgrounds.
+   This comes after the rule above so its color wins. */
+.about-card h2{
+    margin: 0 0 8px;
+    font-size: 26px;
+    color: var(--wine);
+}
+
+
+/* ---------- 3. Left: the story card ---------- */
+
+/* The big heading "How Whimzyy came alive". */
+.about-card h1{
+    margin: 0 0 12px;
+    font-size: 36px;
+}
+
+/* The introduction paragraph under the heading. */
+.intro{
+    margin: 0 0 28px;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* The story list: no numbers, and a thin line down its left side
+   (the line that joins the circles). */
+.timeline{
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 28px;
+    border-left: 1.5px solid var(--candle);
+}
+
+/* One step of the story: spaced apart.
+   position: relative lets the circle be placed against it. */
+.timeline li{
+    position: relative;
+    padding-bottom: 24px;
+}
+
+/* The last step has no space below it, so the line stops where the text ends. */
+.timeline li:last-child{
+    padding-bottom: 0;
+}
+
+/* The yellow circle on the line, next to each step. */
+.timeline li::before{
+    content: "";
+    position: absolute;
+    left: -36px;
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--bright-deep-yellow);
+}
+
+/* The small heading of each step ("The spark", "The plan"...). */
+.timeline h3{
+    margin: 0 0 4px;
+    font-size: 21px;
+    color: var(--bright-deep-yellow);
+}
+
+/* The text of each step. */
+.timeline p{
+    margin: 0;
+    line-height: 1.6;
+}
+
+
+/* ---------- 4. Right: the column that holds the two cards ---------- */
+
+/* How to use and Contact are stacked with a gap between them. */
+.stack{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+
+/* ---------- 5. How to use card ---------- */
+
+/* A soft-gold card that stretches to fill the space left in the column. */
+.howto-card{
+    flex: 1;
+    background-color: var(--soft-gold);
+}
+
+/* The numbered list of steps: space on the left for the numbers. */
+.steps{
+    margin: 12px 0 0;
+    padding-left: 22px;
+}
+
+/* Each step: space below it and wine-red text. */
+.steps li{
+    margin-bottom: 10px;
+    line-height: 1.5;
+    color: var(--wine);
+}
+
+/* The last step needs no space below. */
+.steps li:last-child{
+    margin-bottom: 0;
+}
+
+/* The numbers in front of the steps: bold and beige. */
+.steps li::marker{
+    font-weight: 700;
+    color: var(--warm-beige);
+}
+
+/* The bold first words of each step ("Enter.", "Check in."...). */
+.steps strong{
+    color: var(--warm-beige);
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+}
+
+
+/* ---------- 6. Contact card ---------- */
+
+/* A light candle-colored card with dark text. */
+.contact-card{
+    background-color: var(--candle);
+    color: var(--dark-cherry-red);
+}
+
+/* The list of contact rows: no bullets, space between rows. */
+.contact-list{
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 20px;
+}
+
+/* One row (email or phone): icon and text side by side. */
+.contact-item{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* The picture beside each row. It glows darker on hover. */
+.contact-icon{
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+.contact-icon:hover{
+    filter: drop-shadow(0 0 5px var(--bg));
+}
+
+/* The small capital label above the link ("EMAIL", "PHONE", "FEEDBACK"). */
+.contact-label{
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    color: var(--dark-red);
+}
+
+/* The email and phone links: dark, bold, no underline until hovered. */
+.contact-item a{
+    text-decoration: none;
+    font-size: 18px;
+    color: var(--dark-cherry-red);
+    font-weight: 900;
+}
+.contact-item a:hover{
+    text-shadow: 0 0 12px var(--marron-red);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* The Feedback row: unlike the others, its parts stack in a column
+   (icon and label on top, then the form). This comes after .contact-item
+   so it can override it. */
+.feedback-item{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+}
+
+/* The top of the feedback row: icon and "FEEDBACK" label side by side. */
+.feedback-head{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* The box you type feedback in: beige with a wine-red border. */
+.feedback-item textarea{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1.5px solid var(--wine-soft);
+    border-radius: 14px;
+    background-color: var(--warm-beige);
+    color: var(--dark-cherry-red);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    resize: vertical;
+}
+
+/* The faded hint inside the empty box. */
+.feedback-item textarea::placeholder{
+    color: rgba(46, 10, 16, 0.55);
+}
+
+/* While you are typing: darker border and a soft glow. */
+.feedback-item textarea:focus{
+    outline: none;
+    border-color: var(--wine);
+    box-shadow: 0 0 12px rgba(90, 15, 30, 0.35);
+}
+
+/* The Send button: a yellow pill that glows on hover. */
+.send-btn{
+    margin-top: 10px;
+    padding: 10px 26px;
+    border: none;
+    border-radius: 999px;
+    background-color: var(--butter);
+    color: var(--wine);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.send-btn:hover{
+    box-shadow: 0 0 16px var(--dark-cherry-red);
+}
+
+/* The message that appears under the button. It keeps its height
+   even when empty, so the card does not jump when text appears. */
+.feedback-note{
+    margin: 10px 0 0;
+    min-height: 1.2em;
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+.story-card .legal-link{ margin: 18px 0 0; font-size: 14px; opacity: .85; }
+.story-card .legal-link a{ color: var(--gold, #E8B86D); text-decoration: underline; }
+.story-card .legal-link a:hover{ opacity: 1; }
+
+/* ---------- 7. Screen-size rules (these stay LAST so they can override the rules above) ---------- */
+
+/* Narrow screens (phones): the two columns become one. */
+@media (max-width: 800px){
+    .about-grid{
+        grid-template-columns: 1fr;
+    }
+}

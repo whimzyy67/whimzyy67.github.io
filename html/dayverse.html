@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+        <title>Whimzyy - Day Verse</title>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+
+        <link rel="stylesheet" href="../css/home.css">
+        <link rel="stylesheet" href="../css/dayverse.css">
+        <link rel="stylesheet" href="../css/rewards.css">
+        <link rel="stylesheet" href="../css/responsive.css">
+        
+        <script src="../js/auth.js"></script>
+        <script src="../js/theme.js"></script>
+        <script src="../js/rewards.js"></script>
+
+        <link rel="icon" href="icons/icon-192.png">
+    </head>
+      
+    <script src="../js/pwa.js"></script>
+
+    <body>
+
+        <!--Top Navigation bar-->
+        <header class="topbar">
+
+            <!--Whimzyy Side bar-->
+            <a href="../index.html" class="brand" title="Back to the start">
+                <img src="../stickers/whimzyy.png" alt="Whimzyy" class="whimzyy-logo">
+            </a>
+
+            <!--Navigation bar-->
+            <nav class="top-nav">
+
+                <!--Work Space-->
+                <a href="work-space.html" class="work" title="LOCK IN!!">
+                    <img src="../stickers/nav-work.png" alt="Work Space" class="icon" id="work-space-icon">
+                    Work Space
+                </a>
+
+                <!--Home-->
+                <a href="../home.html" class="tab" title="Your daily welcome">
+                    <img src="../stickers/nav-home.png" alt="Home" class="icon">
+                    Home
+                </a>
+
+                <!--About Us-->
+                <a href="about-us.html" class="tab" title="The story behind Whimzyy">
+                    <img src="../stickers/nav-about.png" alt="About Us" class="icon">
+                    About Us
+                </a>
+
+            </nav>
+        </header>
+
+        <!--Side Navigation bar-->
+        <aside class="sidebar" id="sidebar">
+            <ul>
+
+                <!--My Day-->
+                <li>
+                    <a href="my-day.html" title="Plan your day and write your journal">
+                        <img src="../stickers/side-myday.png" alt="My Day" class="icon" id="my-day-icon">
+                        My Day
+                    </a>
+                </li>
+
+                <!--Focus-->
+                <li>
+                    <a href="focus.html" title="Timer, Stopwatch and Pomodoro">
+                        <img src="../stickers/side-focus.png" alt="Focus" class="icon">
+                        Focus
+                    </a>
+                </li>
+
+                <!--Detox-->
+                <li>
+                    <a href="detox.html" title="Screen Time Limit">
+                        <img src="../stickers/side-detox.png" alt="Detox" class="icon">
+                        Detox
+                    </a>
+                </li>
+
+                <!--Wellness-->
+                <li>
+                    <a href="wellness.html" title="Check in, stretch and drink water">
+                        <img src="../stickers/side-wellness.png" alt="Wellness" class="icon">
+                        Wellness
+                    </a>
+                </li>
+
+                <!--Productivity-->
+                <li>
+                    <a href="productivity.html" title="See your progress and patterns">
+                        <img src="../stickers/side-productivity.png" alt="Productivity" class="icon">
+                        Productivity
+                    </a>
+                </li>
+
+                <!--Dayverse-->
+                <li>
+                    <a href="dayverse.html" title="Your slice of life">
+                        <img src="../stickers/side-dayverse.png" alt="Dayverse" class="icon">
+                        Dayverse
+                    </a>
+                </li>
+
+                <!--Vibe-->
+                <li>
+                    <a href="vibe.html" title="Change themes, sounds and backgrounds">
+                        <img src="../stickers/side-vibe.png" alt="Vibe" class="icon">
+                        Vibe
+                    </a>
+                </li>
+                
+            </ul>
+        </aside>
+
+        <!--Main content-->
+        <main class="content">
+            <div class="dv-page">
+
+                <!--Top row: heading and date on the left, feeling and energy on the right-->
+                <section class="dv-top">
+
+                    <!--heading and date picker-->
+                    <header class="dv-header">
+                        <h1>Day Verse</h1>
+                        <p>Your day, written as a verse.</p>
+
+                        <div class="dv-datebar">
+                            <button type="button" id="prevDay" aria-label="Previous day" title="Previous day">‹</button>
+                            <span id="dateLabel"></span>
+                            <button type="button" id="nextDay" aria-label="Next day" title="Next day">›</button>
+                            <input type="date" id="datePicker" aria-label="Pick a date">
+                        </div>
+
+                        <button type="button" class="dv-share" id="shareDay" title="Make a picture of this day to share">Share my day</button>
+                    </header>
+
+                    <!-- feeling check-in, then energy check-up below it-->
+                    <div class="dv-top-right">
+
+                        <article class="dv-card">
+                            <h2>Feeling check-in</h2>
+                            <div id="moodBox" class="dv-body"></div>
+                        </article>
+
+                        <article class="dv-card">
+                            <h2>Energy check-up</h2>  
+                            <div id="energyBox" class="dv-body"></div>
+                        </article>
+
+                    </div>
+                </section>
+
+                <!--Three columns-->
+                <section class="dv-cols">
+
+                    <!--Left: How was your day, with Parking lot below it-->
+                    <div class="dv-col">
+
+                        <article class="dv-card dv-day">
+                            <h2>How was your day</h2>
+                            <div id="dayNoteBox" class="dv-body"></div>
+                        </article>
+
+                        <article class="dv-card dv-parking">
+                            <h2>Parking lot</h2>
+                            <ul id="parkingList" class="dv-list"></ul>
+                        </article>
+
+                    </div>
+
+                    <!--Middle: Journal-->
+                    <div class="dv-col">
+
+                        <article class="dv-card dv-soft">
+                            <h2>Journal</h2>
+                            <ul id="journalList" class="dv-list"></ul>
+                        </article>
+
+                    </div>
+
+                    <!--Right: Tasks completed-->
+                    <div class="dv-col">
+
+                        <article class="dv-card dv-tasks">
+                            <h2>Tasks completed</h2>
+                            <ul id="taskList" class="dv-list"></ul>
+                        </article>
+
+                        <article class="dv-card dv-stars">
+                            <h2>Stars earned <span id="starTotal"></span></h2>
+                            <ul id="starList" class="dv-list"></ul>
+                        </article>
+
+                    </div>
+
+                </section>
+            </div>
+        </main>
+
+        <!--JavaScript Links-->
+        <script src="../js/sidebar.js"></script>
+        <script src="../js/dayverse.js"></script>
+    </body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+        <title>Whimzyy - Wellness</title>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+
+        <link rel="stylesheet" href="../css/home.css">
+        <link rel="stylesheet" href="../css/wellness.css">
+        <link rel="stylesheet" href="../css/aboutus.css">
+        <link rel="stylesheet" href="../css/rewards.css"> 
+        <link rel="stylesheet" href="../css/responsive.css">
+        
+        <script src="../js/auth.js"></script>
+        <script src="../js/theme.js"></script>
+        <script src="../js/rewards.js"></script>
+
+        <link rel="icon" href="icons/icon-192.png">
+    </head>
+      
+    <script src="../js/pwa.js"></script>
+
+    <body>
+
+        <!--Top Navigation bar-->
+        <header class="topbar">
+
+            <!--Whimzyy Side bar-->
+            <a href="../index.html" class="brand" title="Back to the start">
+                <img src="../stickers/whimzyy.png" alt="Whimzyy" class="whimzyy-logo">
+            </a>
+
+            <!--Navigation bar-->
+            <nav class="top-nav">
+
+                <!--Work Space-->
+                <a href="work-space.html" class="work" title="LOCK IN!!">
+                    <img src="../stickers/nav-work.png" alt="Work Space" class="icon" id="work-space-icon">
+                    Work Space
+                </a>
+
+                <!--Home-->
+                <a href="../home.html" class="tab" title="Your daily welcome">
+                    <img src="../stickers/nav-home.png" alt="Home" class="icon">
+                    Home
+                </a>
+
+                <!--About Us-->
+                <a href="about-us.html" class="tab" title="The story behind Whimzyy">
+                    <img src="../stickers/nav-about.png" alt="About Us" class="icon">
+                    About Us
+                </a>
+
+            </nav>
+        </header>
+
+        <!--Side Navigation bar-->
+        <aside class="sidebar" id="sidebar">
+            <ul>
+
+                <!--My Day-->
+                <li>
+                    <a href="my-day.html" title="Plan your day and write your journal">
+                        <img src="../stickers/side-myday.png" alt="My Day" class="icon" id="my-day-icon">
+                        My Day
+                    </a>
+                </li>
+
+                <!--Focus-->
+                <li>
+                    <a href="focus.html" title="Timer, Stopwatch and Pomodoro">
+                        <img src="../stickers/side-focus.png" alt="Focus" class="icon">
+                        Focus
+                    </a>
+                </li>
+
+                <!--Detox-->
+                <li>
+                    <a href="detox.html" title="Screen Time Limit">
+                        <img src="../stickers/side-detox.png" alt="Detox" class="icon">
+                        Detox
+                    </a>
+                </li>
+
+                <!--Wellness-->
+                <li>
+                    <a href="wellness.html" title="Check in, stretch and drink water">
+                        <img src="../stickers/side-wellness.png" alt="Wellness" class="icon">
+                        Wellness
+                    </a>
+                </li>
+
+                <!--Productivity-->
+                <li>
+                    <a href="productivity.html" title="See your progress and patterns">
+                        <img src="../stickers/side-productivity.png" alt="Productivity" class="icon">
+                        Productivity
+                    </a>
+                </li>
+
+                <!--Dayverse-->
+                <li>
+                    <a href="dayverse.html" title="Your slice of life">
+                        <img src="../stickers/side-dayverse.png" alt="Dayverse" class="icon">
+                        Dayverse
+                    </a>
+                </li>
+
+                <!--Vibe-->
+                <li>
+                    <a href="vibe.html" title="Change themes, sounds and backgrounds">
+                        <img src="../stickers/side-vibe.png" alt="Vibe" class="icon">
+                        Vibe
+                    </a>
+                </li>
+
+            </ul>
+        </aside>
+
+        <!--Main content-->
+        <main class="content">
+            <div class="wellness-grid">
+
+                <!--Heading strip-->
+                <section class="well-head">
+                    <h1>Take a breathe</h1>
+                    <p>Small things, big difference.</p>
+                </section>
+
+                <!--Energy-->
+                <section class="card checkin-card">
+                    <h2>Energy</h2>
+
+                    <!--Energy (1 = drained, 5 = charged)-->
+                    <div class="energy-row" id="energyRow">
+                        <button type="button" class="energy-btn" data-energy="1" aria-pressed="false" title="Drained">Cooked</button>
+                        <button type="button" class="energy-btn" data-energy="2" aria-pressed="false" title="Low">Dry</button>
+                        <button type="button" class="energy-btn" data-energy="3" aria-pressed="false" title="Okay">Mid</button>
+                        <button type="button" class="energy-btn" data-energy="4" aria-pressed="false" title="Good">Chill</button>
+                        <button type="button" class="energy-btn" data-energy="5" aria-pressed="false" title="Charged">GOAT-ed</button>
+                    </div>
+
+                    <div class="energy-ends">
+                        <span>Drained</span>
+                        <span>Charged</span>
+                    </div>
+
+                    <p class="checkin-note" id="checkinNote" aria-live="polite">Pick what fits right now.</p>
+                </section>
+
+                <!--Water-->
+                <section class="card water-card">
+                    <h2>Water Intake</h2>
+
+                    <!--Eight glasses (JavaScript fills it)-->
+                    <div class="glasses" id="glasses"></div>
+
+                    <div class="water-bottom">
+                        <p class="water-count" id="waterCount">0 / 8</p>
+
+                        <div class="water-buttons">
+                            <button type="button" class="round-btn" id="waterMinus" aria-label="Remove a glass" title="Remove a glass">−</button>
+                            <button type="button" class="round-btn" id="waterPlus" aria-label="Add a glass" title="Add a glass">+</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!--Breathing-->
+                <section class="card breathing-card">
+                    <h2>Breathe</h2>
+
+                    <!--The circle that grows and shrinks-->
+                    <div class="breath-stage">
+                        <div class="breath-circle" id="breathCircle">
+                            <span class="breath-text" id="breathText">Ready when you are</span>
+                        </div>
+                    </div>
+
+                    <!--Pick a pattern-->
+                    <div class="chips" id="patternChips">
+                        <button type="button" class="chip active" data-pattern="calm" title="In for 4s, out for 6s (For relaxation)">Calm</button>
+                        <button type="button" class="chip" data-pattern="box" title="4s in, 4s hold, 4s out, 4s hold (For Focus)">Box</button>
+                        <button type="button" class="chip" data-pattern="quick" title="In for 3s, out for 3s (For Boost of Energy)">Quick</button>
+                    </div>
+
+                    <button type="button" class="soft-btn" id="breathBtn">Start</button>
+                </section>
+
+                <!--Stretch-->
+                <section class="card stretch-card">
+                    <h2>Stretch</h2>
+
+                    <!--The stretch you are doing now-->
+                    <div class="stretch-now">
+                        <span class="stretch-emoji" id="stretchEmoji"></span>
+
+                        <div>
+                            <h3 id="stretchName"></h3>
+                            <p id="stretchDesc"></p>
+                        </div>
+
+                        <p class="stretch-time" id="stretchTime">30s</p>
+                    </div>
+
+                    <div class="stretch-buttons">
+                        <button type="button" class="soft-btn" id="stretchStart">Start</button>
+                        <button type="button" class="ghost-btn" id="stretchNext">Next</button>
+                    </div>
+
+                    <!--The rest of the stretches (JavaScript fills it)-->
+                    <ul class="stretch-list" id="stretchList"></ul>
+                </section>
+
+                <!--Reminders-->
+                <section class="card reminder-card">
+                    <h2>Reminders</h2>
+
+                    <ul class="reminder-list">
+
+                        <li class="reminder-row">
+                            <label class="reminder-name">
+                                <input type="checkbox" id="remind-water" data-reminder="water">
+                                Water
+                            </label>
+                            <span class="reminder-left" id="left-water"></span>
+                            <select id="every-water" aria-label="Water reminder every">
+                                <option value="15">every 15 min</option>
+                                <option value="30">every 30 min</option>
+                                <option value="45">every 45 min</option>
+                                <option value="60">every 60 min</option>
+                            </select>
+                        </li>
+
+                        <li class="reminder-row">
+                            <label class="reminder-name">
+                                <input type="checkbox" id="remind-stretch" data-reminder="stretch">
+                                Stretch
+                            </label>
+                            <span class="reminder-left" id="left-stretch"></span>
+                            <select id="every-stretch" aria-label="Stretch reminder every">
+                                <option value="15">every 15 min</option>
+                                <option value="30">every 30 min</option>
+                                <option value="45">every 45 min</option>
+                                <option value="60">every 60 min</option>
+                            </select>
+                        </li>
+
+                        <li class="reminder-row">
+                            <label class="reminder-name">
+                                <input type="checkbox" id="remind-rest" data-reminder="rest">
+                                Rest your eyes
+                            </label>
+                            <span class="reminder-left" id="left-rest"></span>
+                            <select id="every-rest" aria-label="Rest reminder every">
+                                <option value="15">every 15 min</option>
+                                <option value="30">every 30 min</option>
+                                <option value="45">every 45 min</option>
+                                <option value="60">every 60 min</option>
+                            </select>
+                        </li>
+
+                    </ul>
+
+                    <p class="reminder-hint">Reminders pop up on any Whimzyy page while Chrome is open.</p>
+                    <p class="reminder-hint" id="permissionNote"></p>
+
+                    <div class="stretch-buttons">
+                        <button type="button" class="soft-btn" id="permissionBtn" hidden>Turn on pop-ups</button>
+                        <button type="button" class="ghost-btn" id="reminderTest">Send a test reminder</button>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+        <!--The little message that pops up when a reminder goes off-->
+        <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+        <!--JavaScript Links-->
+        <script src="../js/sidebar.js"></script>
+        <script src="../js/wellness.js"></script>
+    </body>
+</html>

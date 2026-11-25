@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+        <title>Whimzyy - Home</title>
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+
+        <link rel="stylesheet" href="css/home.css">
+        <link rel="stylesheet" href="css/rewards.css">
+        <link rel="stylesheet" href="css/responsive.css">
+
+        <script src="js/auth.js"></script>
+        <script src="js/theme.js"></script>
+        <script src="js/rewards.js"></script>
+        <script src="js/pagefx.js" defer></script>
+        
+        <link rel="icon" href="icons/icon-192.png">
+    </head>
+    
+    <script src="js/pwa.js"></script>
+
+    <body>
+
+        <!--Top Navigation bar-->
+        <header class="topbar">
+            
+            <!--Whimzyy-->
+            <a href="index.html" class="brand" title="Back to the start">
+                <img src="stickers/whimzyy.png" alt="Whimzyy" class="whimzyy-logo">
+            </a>
+
+            <!--Navigation bar-->
+            <nav class="top-nav">
+
+                <!--Work Space-->
+                <a href="html/work-space.html" class="work" title="LOCK IN!!">
+                    <img src="stickers/nav-work.png" alt="Work Space" class="icon" id="work-space-icon">
+                    Work Space
+                </a>
+
+                <!--Home-->
+                <a href="home.html" class="tab active" title="Your daily welcome">
+                    <img src="stickers/nav-home.png" alt="Home" class="icon">
+                    Home
+                </a>
+
+                <!--About Us-->
+                <a href="html/about-us.html" class="tab" title="The story behind Whimzyy">
+                    <img src="stickers/nav-about.png" alt="About Us" class="icon">
+                    About Us
+                </a>
+
+            </nav>
+        </header>
+
+        <!--Side Navigation bar-->
+        <aside class="sidebar" id="sidebar">
+            <ul>
+
+                <!--My Day-->
+                <li>
+                    <a href="html/my-day.html" title="Plan your day and write your journal">
+                        <img src="stickers/side-myday.png" alt="My Day" class="icon" id="my-day-icon">
+                        My Day
+                    </a>
+                </li>
+
+                <!--Focus-->
+                <li>
+                    <a href="html/focus.html" title="Timer, Stopwatch and Pomodoro">
+                        <img src="stickers/side-focus.png" alt="Focus" class="icon">
+                        Focus
+                    </a>
+                </li>
+
+                <!--Detox-->
+                <li>
+                    <a href="html/detox.html" title="Screen Time Limit">
+                        <img src="stickers/side-detox.png" alt="Detox" class="icon">
+                        Detox
+                    </a>
+                </li>
+
+                <!--Wellness-->
+                <li>
+                    <a href="html/wellness.html" title="Check in, stretch and drink water">
+                        <img src="stickers/side-wellness.png" alt="Wellness" class="icon">
+                        Wellness
+                    </a>
+                </li>
+
+                <!--Productivity-->
+                <li>
+                    <a href="html/productivity.html" title="See your progress and patterns">
+                        <img src="stickers/side-productivity.png" alt="Productivity" class="icon">
+                        Productivity
+                    </a>
+                </li>
+
+                <!--Dayverse-->
+                <li>
+                    <a href="html/dayverse.html" title="Your slice of life">
+                        <img src="stickers/side-dayverse.png" alt="Dayverse" class="icon">
+                        Dayverse
+                    </a>
+                </li>
+
+                <!--Vibe-->
+                <li>
+                    <a href="html/vibe.html" title="Change themes, sounds and backgrounds">
+                        <img src="stickers/side-vibe.png" alt="Vibe" class="icon">
+                        Vibe
+                    </a>
+                </li>
+
+            </ul>
+        </aside>
+
+        <!--Main content-->
+        <main class="content">
+
+            <!--Top row: time box and quotes sliders-->
+            <section class="top-row">
+
+                <!--Square time box-->
+                <section class="card time-card">
+                    <p class="clock">4:50 am</p>
+                    <p class="today-date">Wednesday, 28 October</p>
+                </section>
+
+                <!--Quotes slider-->
+                <section class="slider" aria-label="Quotes and gentle prompts">
+
+                    <!--Previous Slide button-->
+                    <button class="slider-arrow prev" aria-label="Previous quote" title="Previous">
+                        <img src="stickers/slider-left.png" alt="">
+                    </button>
+
+                    <div class="slides">
+                        <div class="slide active"><p>Romanticize the grind, then actually do it.</p></div>
+                        <div class="slide"><p>Delulu is the solulu, but only with a plan.</p></div>
+                        <div class="slide"><p>The grind doesn’t sleep, and neither do YOU. Allegedly.</p></div>
+                        <div class="slide"><p>Main character energy, villain work ethic.</p></div>
+                        <div class="slide"><p>Touch grass later. Touch greatness first.</p></div>
+                    </div>
+
+                    <!--Next Slide button-->
+                    <button class="slider-arrow next" aria-label="Next quote" title="Next">
+                        <img src="stickers/slider-right.png" alt="">
+                    </button>
+
+                    <div class="slider-dots">
+                        <button class="dot active" aria-label="Quote 1"></button>
+                        <button class="dot" aria-label="Quote 2"></button>
+                        <button class="dot" aria-label="Quote 3"></button>
+                        <button class="dot" aria-label="Quote 4"></button>
+                        <button class="dot" aria-label="Quote 5"></button>
+                    </div>
+                </section>
+            </section>
+
+            <!--Bottom row: two columns-->
+            <section class="bottom-row">
+            
+                <!--Left column: start button, then to-do list-->
+                <div class="left-col">
+            
+                    <!--Start a focus session-->
+                    <a href="html/focus.html" class="card start-card" title="Timer, Stopwatch and Pomodoro">
+                    Start a Focus Session
+                    <img src="stickers/sidebar-play.png" alt="" class="start-icon">
+                    </a>
+            
+                    <!--Stars: today, total, streak and daily goal-->
+                    <section class="card star-strip" id="starStrip" aria-label="Your stars"></section>
+
+                    <!--To-do list-->
+                    <section class="card todo-card">
+                        <h2>To-do list</h2>
+            
+                        <form class="todo-form" id="todoForm">
+                            <input type="text" id="todoInput" placeholder="Add a task..." aria-label="New task" maxlength="80">
+                            
+                            <button type="submit" class="save-btn">Add</button>
+                        </form>
+            
+                        <ul class="todo-list" id="todoList"></ul>
+                    </section>
+                </div>
+            
+                <!--Right column-->
+                <div class="right-col">
+            
+                    <!--How was your day-->
+                    <section class="card day-card">
+                        <h1>How was your day?</h1>
+                        <form id="dayForm">
+                            <textarea id="dayAnswer" rows="4" placeholder="This is a safe place, a line or two is plenty..." aria-label="Your answer to today's question"></textarea>
+                            <div class="day-actions">
+                                <button type="submit" class="save-btn">Save</button>
+                                <span class="save-note" id="saveNote" aria-live="polite"></span>
+                            </div>
+                        </form>
+                    </section>
+            
+                </div>
+            
+            </section>
+            
+        </main>
+        
+    <!--JavaScript Links-->
+        <script src="js/sidebar.js"></script>
+        <script src="js/tasks.js"></script>
+        <script src="js/home.js"></script>
+    </body>
+</html>

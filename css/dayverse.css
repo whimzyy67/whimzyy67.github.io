@@ -1,0 +1,403 @@
+/* ==========================================================
+   dayverse.css  (linked to dayverse.html, AFTER home.css)
+
+   NOTE: dayverse.html loads home.css FIRST, so the colors, the top bar,
+   the sidebar and the page font come from there. This file only holds
+   what is special to the Dayverse page. All colors are theme names,
+   so the Vibe themes repaint this page too.
+
+   THE ORDER BELOW IS THE ORDER OF THE BLOCKS IN dayverse.html:
+    1. Page basics
+    2. Top row (heading and date on the left, feeling and energy on the right)
+    3. Heading and date picker
+    4. Three columns
+    5. The shared look of the cards
+    6. Text inside the cards
+    7. Screen-size rules
+   ========================================================== */
+
+
+/* ---------- 1. Page basics ---------- */
+
+/* Anything with the "hidden" attribute disappears. */
+[hidden]{
+    display: none !important;
+}
+
+/* Like the Vibe page, this page scrolls normally instead of fitting the window.
+   These lines undo the "fit the window" rules from home.css. */
+.content{
+    height: auto;
+    min-height: 0;
+    display: block;
+}
+
+/* Holds everything: the top row and the three columns, with a gap between them. */
+.dv-page{
+    width: 100%;
+    max-width: var(--home-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--card-gap);
+}
+
+
+/* ---------- 2. Top row ---------- */
+
+/* Two equal halves: heading and date on the left, two cards on the right.
+   align-items: center keeps the heading in the middle of the right side's height. */
+.dv-top{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--card-gap);
+    align-items: center;
+}
+
+/* The right half: Feeling check-in with Energy check-up below it. */
+.dv-top-right{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--card-gap);
+    min-width: 0;
+}
+
+
+/* ---------- 3. Heading and date picker ---------- */
+
+.dv-header{
+    text-align: left;
+}
+
+.dv-header h1{
+    margin: 0;
+    font-size: 34px;
+    color: var(--soft-gold);
+}
+
+.dv-header p{
+    margin: 4px 0 16px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--peach);
+}
+
+/* The row: previous arrow, the date, next arrow, calendar. */
+.dv-datebar{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+/* The round ‹ and › buttons. */
+.dv-datebar button{
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid rgba(243, 231, 211, 0.35);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--warm-beige);
+    font-family: inherit;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.dv-datebar button:hover:not(:disabled){
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 12px rgba(201, 148, 26, 0.6);
+}
+
+/* Tomorrow does not exist yet, so the › button fades. */
+.dv-datebar button:disabled{
+    opacity: 0.35;
+    cursor: default;
+}
+
+#dateLabel{
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--warm-beige);
+}
+
+/* The calendar box: a beige pill, like the task box on Home. */
+.dv-datebar input[type="date"]{
+    padding: 8px 14px;
+    border: 1px solid rgba(243, 231, 211, 0.3);
+    border-radius: 999px;
+    background-color: var(--warm-beige);
+    color: var(--wine);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 15px;
+}
+.dv-datebar input[type="date"]:focus{
+    outline: none;
+    border-color: var(--bright-deep-yellow);
+    box-shadow: 0 0 12px rgba(201, 148, 26, 0.55);
+}
+
+
+/* ---------- 4. Three columns ---------- */
+
+/* Three equal columns. minmax(0, ...) stops long text from pushing a column wider.
+   align-items: start lets every card be only as tall as its own content,
+   so the Journal does not grow when the Stars card gets long. */
+.dv-cols{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--card-gap);
+    align-items: start;
+}
+
+/* One column: its cards stacked with a gap between them. */
+.dv-col{
+    display: flex;
+    flex-direction: column;
+    gap: var(--card-gap);
+    min-width: 0;
+}
+
+/* (A column with one card no longer stretches to the height of its neighbours.) */
+
+
+/* ---------- 5. The shared look of the cards ---------- */
+
+/* Same look as .card in home.css. */
+.dv-card{
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 20px;
+    border-radius: 24px;
+    background-color: var(--marron-red);
+    color: var(--warm-beige);
+    transition: box-shadow 0.3s ease;
+}
+.dv-card:hover{
+    box-shadow: 0 0 10px var(--butter);
+}
+
+.dv-card h2{
+    margin: 0 0 12px;
+    font-size: 22px;
+    color: var(--soft-gold);
+}
+
+/* The soft area (Journal): beige with wine-red text, like My Day. */
+.dv-soft{
+    background-color: var(--warm-beige);
+    color: var(--wine);
+}
+.dv-soft:hover{
+    box-shadow: 0 0 16px rgba(201, 148, 26, 0.6);
+}
+.dv-soft h2{
+    color: var(--wine);
+}
+
+/* Tasks completed: a fixed forest green. These are plain hex colors,
+   not theme names, so changing the Vibe theme does not affect them. */
+.dv-tasks{
+    background-color:var(--bright-deep-yellow);
+    color: #f4f1e4;
+    box-shadow: 0 0 14px var(--soft-gold);
+}
+.dv-tasks h2{
+    color: #ffe6a3;
+}
+.dv-tasks .dv-entry{
+    border-bottom-color: rgba(244, 241, 228, 0.28);
+}
+.dv-tasks .dv-time{
+    color: #ffe6a3;
+}
+
+
+/* ---------- 6. Text inside the cards ---------- */
+
+.dv-body,
+.dv-list{
+    font-family: "DM Sans", Arial, sans-serif;
+    font-weight: 400;
+}
+
+/* The lists: one entry per row. */
+.dv-list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+/* One entry: a thin dashed line under it. */
+.dv-entry{
+    padding-bottom: 10px;
+    border-bottom: 1px dashed rgba(243, 231, 211, 0.25);
+}
+.dv-entry:last-child{
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.dv-soft .dv-entry{
+    border-bottom-color: rgba(138, 42, 58, 0.28);
+}
+
+/* A task that is not done yet (today only). */
+.dv-entry.pending{
+    opacity: 0.55;
+}
+
+/* The text itself. It keeps the line breaks you typed. */
+.dv-text{
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* The time under an entry. */
+.dv-time{
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--peach);
+}
+.dv-soft .dv-time{
+    color: var(--wine-soft);
+}
+
+/* The big emoji in the feeling card. */
+.dv-big{
+    display: block;
+    margin-bottom: 4px;
+    font-size: 44px;
+    line-height: 1.1;
+}
+
+/* The big word in the energy card. */
+.dv-big-word{
+    display: block;
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--gold);
+}
+
+/* The message shown when nothing was saved. */
+.dv-empty{
+    margin: 0;
+    font-size: 15px;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+
+/* ---------- 7. Screen-size rules (these stay LAST so they can override the rules above) ---------- */
+
+/* Narrow screens (phones and small tablets): everything becomes one column. */
+@media (max-width: 900px){
+
+    .dv-top,
+    .dv-top-right,
+    .dv-cols{
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- 8. Fixed layout on laptops and tablets: the page fits the window ----------
+   The five cards (How was your day, Parking lot, Journal, Tasks completed, Stars earned)
+   keep a fixed size. Whatever is added to a card scrolls INSIDE it, with a thin scroll bar
+   on its right side. (On phones the cards stack and each list scrolls inside a limited height.) */
+
+@media (min-width: 901px){
+
+    /* the page is exactly as tall as the window, so the page itself never scrolls */
+    .content{
+        box-sizing: border-box;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 520px;
+        display: flex;
+        flex-direction: column;
+        padding: 88px 24px 24px;
+    }
+
+    .dv-page{
+        flex: 1;
+        min-height: 0;
+    }
+
+    /* the top row keeps its own height */
+    .dv-top{
+        flex-shrink: 0;
+    }
+
+    /* the three columns share ALL the height that is left */
+    .dv-cols{
+        flex: 1;
+        min-height: 0;
+        grid-template-rows: minmax(0, 1fr);
+        align-items: stretch;
+    }
+
+    .dv-col{
+        min-height: 0;
+    }
+
+    /* every card: a fixed share of its column. The heading stays put, the rest scrolls. */
+    .dv-col > .dv-card{
+        flex: 1 1 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .dv-col > .dv-card > h2{
+        flex-shrink: 0;
+    }
+    .dv-col > .dv-card > :not(h2){
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding-right: 6px;
+    }
+}
+
+/* short laptop windows: tighter spacing so everything still fits */
+@media (min-width: 901px) and (max-height: 700px){
+    .content{ padding: 76px 24px 16px; }
+    .dv-header h1{ font-size: 28px; }
+    .dv-header p{ margin-bottom: 8px; }
+    .dv-card{ padding: 14px 16px; }
+    .dv-card h2{ font-size: 19px; margin-bottom: 8px; }
+}
+
+/* phones and small tablets: cards stack; a long list scrolls inside its card instead of stretching it */
+@media (max-width: 900px){
+    .dv-col > .dv-card > :not(h2){
+        max-height: 320px;
+        overflow-y: auto;
+        padding-right: 6px;
+    }
+}
+
+/* a thin scroll bar in the page colours, for every scrolling card */
+.dv-card *{
+    scrollbar-width: thin;
+    scrollbar-color: rgba(243, 231, 211, 0.4) transparent;
+}
+.dv-card *::-webkit-scrollbar{ width: 8px; }
+.dv-card *::-webkit-scrollbar-track{ background: transparent; }
+.dv-card *::-webkit-scrollbar-thumb{
+    background: rgba(243, 231, 211, 0.35);
+    border-radius: 999px;
+}
+.dv-soft *::-webkit-scrollbar-thumb{ background: rgba(90, 15, 30, 0.35); }
+.dv-soft *{ scrollbar-color: rgba(90, 15, 30, 0.4) transparent; }

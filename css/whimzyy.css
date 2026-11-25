@@ -1,0 +1,166 @@
+/* ==========================================================
+   whimzyy.css  (linked to whimzyy.html, the first page)
+
+   THE ORDER BELOW IS THE ORDER OF THE BLOCKS IN whimzyy.html:
+
+    1. Colors
+    2. Body (the whole page)
+    3. Entry (the wrapper around everything)
+    4. The blurred oval (a glow behind the content)
+    5. Logo (the Whimzyy image)
+    6. Tagline
+    7. Brand pillars (Focus, Hustle, Heal)
+    8. Enter link ("Click here to enter")
+    9. Cursor image (sits on the enter link)
+    
+   ========================================================== */
+
+
+/* ---------- 1. Colors used ---------- */
+
+/* The color names for this page. Change a color here and it
+   updates everywhere that uses the name. */
+:root{
+    --bg: #2a070d;
+    --text: #f7e7a9;
+    --peach: #f8c9a0;
+    --candle: #e8b86d;
+    --butter: #E8C872;
+}
+
+
+/* ---------- 2. Body: the whole page ---------- */
+
+/* Dark wine background, butter-yellow text, and the page font.
+   margin: 0 removes the default gap around the page.
+   Every element below inherits the font and text color from here. */
+body{
+    background-color:var(--bg);
+    color:var(--text);
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-weight: 700;
+    margin:0;
+}
+
+
+/* ---------- 3. Entry: the wrapper around everything ---------- */
+
+/* A box at least as tall as the window that centers everything in it,
+   both across and down, in a stack.
+   position: relative anchors the oval; overflow: hidden stops the
+   oval's blur from making the page scroll sideways. */
+.entry{
+    position:relative;
+    overflow:hidden;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+
+/* ---------- 4. The blurred oval behind ---------- */
+
+/* A hidden extra element made by CSS: a large oval in the middle of the
+   page, softened with a blur so it looks like a glow.
+   z-index: -1 sends it behind the text and logo. */
+.entry::before{
+    content:"";
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:70vw;
+    height:70vh;
+    background-color:#6b1520;   /* was #000000 */
+    border-radius:50%;
+    filter:blur(90px);
+    z-index:-1;
+}
+
+
+/* ---------- 5. Logo: the Whimzyy image ---------- */
+
+/* The heading around the logo: no default space above and below. */
+h1{
+    margin:0;
+}
+
+/* The logo image: up to 780px wide, but never wider than 90% of the window.
+   display: block removes the small gap images leave beneath them. */
+.logo{
+    display:block;
+    width:780px;
+    max-width:90vw;
+}
+
+
+/* ---------- 6. Tagline ---------- */
+
+/* The line under the logo: a small gap above, none below, bigger text. */
+.tagline{
+    margin:8px 0 0;
+    font-size:28px;
+}
+
+
+/* ---------- 7. Brand pillars: Focus, Hustle, Heal ---------- */
+
+/* The three words in a row, peach-colored, with space between them.
+   list-style: none and padding: 0 remove the list's default bullets and indent. */
+.pillars{
+    color:var(--peach);
+    display:flex;
+    gap:60px;
+    list-style:none;
+    padding:0;
+    font-family:"DM Sans",Arial,sans-serif;
+    font-size:28px;
+}
+
+/* Tiny bullets: a small round dot drawn before each word.
+   currentColor makes the dot match the text color. */
+.pillars li::before{
+    content: "";
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: currentColor;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+
+/* ---------- 8. Enter link: "Click here to enter" ---------- */
+
+/* The link to the Home page: gold text, no underline, spaced below the pillars.
+   position: relative makes it the anchor for the cursor image. */
+.enter-link{
+    position:relative;
+    display:inline-block;
+    margin-top: 40px;
+    color:var(--candle);
+    text-decoration:none;
+    font-size:30px;
+    font-weight: 500;
+}
+
+/* The link glows when the mouse is over it. */
+.enter-link:hover{
+    text-shadow: 0 0 25px var(--butter);
+}
+
+
+/* ---------- 9. Cursor image ---------- */
+
+/* The small mouse-pointer picture, placed at the bottom-right corner of
+   the enter link (that is why the link needs position: relative). */
+.cursor {
+  position: absolute;
+  right: -40px;
+  bottom: -40px;
+  width:55px;
+}

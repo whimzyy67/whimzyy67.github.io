@@ -1,0 +1,725 @@
+/* ==========================================================
+   productivity.css  (linked to productivity.html)
+
+   NOTE: this file also relies on home.css, which gives it the colors,
+   the top bar, the sidebar and the shared .card look.
+   Load home.css FIRST, then this file.
+
+   THE ORDER BELOW IS THE ORDER OF THE BLOCKS IN productivity.html:
+    0. Page-only color and the hidden rule
+    1. Page wrapper
+    2. Heading, summary and the Today | Week | Month tabs
+    3. Four number cards
+    4. Bar chart card
+    5. Daily goal card
+    6. Three insight cards (the row)
+    7. Tools used card
+    8. Best time of day card
+    9. Top tasks card
+   10. Wide screens
+   11. Short windows
+   12. Medium and narrow screens
+   ========================================================== */
+
+
+/* ---------- 0. Page-only color and the hidden rule ---------- */
+
+/* One extra color that only this page uses (the dusty pink of the Stopwatch).
+   All the other colors come from home.css. */
+:root{
+    --rose: #BD8690;
+}
+
+/* The hidden attribute always wins, even over other display rules. */
+[hidden]{
+    display: none !important;
+}
+
+
+/* ---------- 1. Page wrapper ---------- */
+
+/* The column that holds every block on this page, centered and no wider
+   than the Home page. The gap between blocks comes from home.css. */
+.prod-wrap{
+    width: 100%;
+    max-width: var(--home-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--card-gap);
+}
+
+
+/* ---------- 2. Heading, summary and tabs ---------- */
+
+/* The top block: title and summary on the left, the tabs on the right.
+   On a narrow window the tabs drop under the title. */
+.prod-head{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px 20px;
+}
+
+/* The page title. */
+.prod-head h1{
+    margin: 0;
+    font-size: 34px;
+    color: var(--soft-gold);
+}
+
+/* The one-line summary under the title (JavaScript fills it). */
+.summary{
+    margin: 4px 0 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--peach);
+}
+
+/* The row of Today | Week | Month buttons. */
+.range-tabs{
+    display: flex;
+    gap: 8px;
+}
+
+/* One tab: an empty pill with a faint outline. */
+.range-tab{
+    padding: 8px 22px;
+    border: 1px solid rgba(243, 231, 211, 0.3);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--warm-beige);
+    font-family: inherit;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.range-tab:hover{
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* The tab you are on: a filled yellow pill with a glow. */
+.range-tab.active{
+    border-color: transparent;
+    background-color: var(--butter);
+    color: var(--bg);
+    box-shadow: 0 0 14px rgba(201, 148, 26, 0.6);
+}
+
+
+/* ---------- 3. Four number cards ---------- */
+
+/* Four equal columns: Focus time, Sessions, Tasks done, Day streak. */
+.stat-row{
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--card-gap);
+}
+
+/* One number card: a little tighter than the normal card. */
+.stat-card{
+    padding: 10px 16px;
+}
+
+/* The small uppercase name on top ("FOCUS TIME"). */
+.stat-label{
+    margin: 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--peach);
+}
+
+/* The big number in the middle. */
+.stat-value{
+    margin: 2px 0 0;
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+/* The change line under a number: "▲ 18% vs previous 7 days". */
+.delta{
+    margin: 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+}
+.delta.up{ color: var(--gold); }
+.delta.down{ color: var(--peach); }
+.delta.same{ opacity: 0.75; }
+
+/* The Focus time card (the first one) is beige, like the time box on Home.
+   These come after the rules above so they can recolor the label and the change line. */
+.focus-stat{
+    background-color: var(--warm-beige);
+    color: var(--wine);
+}
+.focus-stat .stat-label{ color: var(--wine-soft); }
+.focus-stat .delta.up{ color: var(--wine); }
+.focus-stat .delta.down{ color: var(--wine-soft); }
+
+
+/* ---------- 4. Bar chart card ---------- */
+
+/* The row holding the bar chart (wide) and the daily goal (narrow). */
+.chart-row{
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: var(--card-gap);
+}
+
+/* The chart card: darker red, and a column: title, bars, labels. */
+.chart-card{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--dark-red);
+}
+
+/* The card title. */
+.chart-card h2{
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+/* The area the bars grow in. It takes all the height left in the card. */
+.chart-plot{
+    position: relative;
+    flex: 1;
+    min-height: 200px;
+    margin-top: 8px;
+}
+
+/* The row of bars, stretched over the whole plot area. */
+.bars{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+/* One bar: a faint column with the gold fill growing from the bottom. */
+.bar-col{
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    border-radius: 6px 6px 0 0;
+    background-color: rgba(243, 231, 211, 0.07);
+}
+
+/* The colored part of the bar (JavaScript sets its height). */
+.bar-fill{
+    width: 100%;
+    border-radius: 6px 6px 0 0;
+    background-color: var(--gold);
+    transition: height 0.3s ease, filter 0.2s ease;
+}
+
+/* Today's bar (or this hour's bar) is peach. */
+.bar-fill.now{
+    background-color: var(--peach);
+}
+
+/* The bar gets a little brighter when the mouse is over it. */
+.bar-col:hover .bar-fill{
+    filter: brightness(1.15);
+}
+
+/* The dashed goal line across the bars. */
+.goal-line{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-top: 2px dashed rgba(248, 201, 160, 0.8);
+    pointer-events: none;
+}
+
+/* The little text sitting on the goal line. */
+.goal-line span{
+    position: absolute;
+    right: 0;
+    bottom: 2px;
+    padding: 0 6px;
+    border-radius: 6px;
+    background-color: var(--dark-red);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--peach);
+}
+
+/* The labels under the bars (days or hours). */
+.bar-labels{
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.bar-label{
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    white-space: nowrap;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+
+/* ---------- 5. Daily goal card ---------- */
+
+/* The goal card: darker red, a column, and its own ring size.
+   --goal-size is used by the ring and the numbers inside it. */
+.goal-card{
+    --goal-size: clamp(120px, 22vh, 190px);
+    display: flex;
+    flex-direction: column;
+    background-color: var(--dark-red);
+}
+
+/* The card title. */
+.goal-card h2{
+    margin: 0 0 8px;
+    font-size: 22px;
+}
+
+/* Ring on the left, text and goal box on the right. */
+.goal-body{
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* The square that holds the ring and the numbers on top of it. */
+.goal-dial{
+    position: relative;
+    width: var(--goal-size);
+    height: var(--goal-size);
+    flex-shrink: 0;
+}
+
+/* The ring picture, turned so it starts at the top. */
+.goal-svg{
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+/* The faint full circle behind. */
+.goal-track{
+    fill: none;
+    stroke: rgba(243, 231, 211, 0.15);
+    stroke-width: 10;
+}
+
+/* The gold part that fills up as you reach your goal. */
+.goal-ring{
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 10;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 6px rgba(242, 184, 61, 0.5));
+    transition: stroke-dashoffset 0.4s ease;
+}
+
+/* The numbers in the middle of the ring. */
+.goal-text{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* "45 min" (the size follows the ring size). */
+.goal-done{
+    margin: 0;
+    font-size: calc(var(--goal-size) * 0.15);
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+/* "of 120 min". */
+.goal-of{
+    margin: 2px 0 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: max(12px, calc(var(--goal-size) * 0.1));
+    font-weight: 500;
+    opacity: 0.85;
+}
+
+/* The text beside the ring. */
+.goal-side{
+    flex: 1;
+    min-width: 0;
+}
+
+.goal-note{
+    margin: 0 0 10px;
+    min-height: 1.2em;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--peach);
+}
+
+/* "Goal (min) [ 120 ]": the label and the small number box. */
+.goal-edit{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.goal-edit input{
+    width: 64px;
+    padding: 6px 8px;
+    border: 1px solid rgba(243, 231, 211, 0.3);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.12);
+    color: var(--warm-beige);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 15px;
+    text-align: center;
+}
+
+
+/* ---------- 6. Three insight cards (the row) ---------- */
+
+/* Three equal columns: Tools used, Best time of day, Top tasks. */
+.insight-row{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--card-gap);
+}
+
+/* The title of each of the three cards. */
+.insight-row h2{
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+
+/* ---------- 7. Tools used card ---------- */
+
+/* Ring on the left, legend on the right. --donut-size is the ring size. */
+.tools-card{
+    --donut-size: clamp(90px, 14vh, 130px);
+}
+
+.donut-wrap{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* The square that holds the ring and the total on top of it. */
+.donut{
+    position: relative;
+    width: var(--donut-size);
+    height: var(--donut-size);
+    flex-shrink: 0;
+}
+
+/* The ring picture, turned so it starts at the top. */
+.donut-svg{
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+/* The faint full circle behind. */
+.donut-track{
+    fill: none;
+    stroke: rgba(243, 231, 211, 0.12);
+    stroke-width: 22;
+}
+
+/* The three colored pieces of the ring (JavaScript sizes them). */
+.donut-seg{
+    fill: none;
+    stroke-width: 22;
+    transition: stroke-dasharray 0.4s ease, stroke-dashoffset 0.4s ease;
+}
+
+/* The three colors on the ring... */
+.donut-seg.seg-pomodoro{ stroke: var(--gold); }
+.donut-seg.seg-timer{ stroke: var(--peach); }
+.donut-seg.seg-stopwatch{ stroke: var(--rose); }
+
+/* The total in the middle of the ring. */
+.donut-total{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    font-size: calc(var(--donut-size) * 0.14);
+    font-weight: 800;
+    text-align: center;
+}
+
+/* The list of names and percentages on the right. */
+.legend{
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.legend li{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* The little colored dot before each name... */
+.swatch{
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ...in the same three colors as the ring. */
+.swatch.seg-pomodoro{ background-color: var(--gold); }
+.swatch.seg-timer{ background-color: var(--peach); }
+.swatch.seg-stopwatch{ background-color: var(--rose); }
+
+.legend-name{ flex: 1; }
+.legend-val{ opacity: 0.85; }
+
+
+/* ---------- 8. Best time of day card ---------- */
+
+/* Four rows (Morning, Afternoon, Evening, Night): name, bar, time. */
+.part-list{
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+}
+
+.part-row{
+    display: grid;
+    grid-template-columns: 86px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* The faint bar behind. */
+.part-track{
+    height: 12px;
+    border-radius: 999px;
+    background-color: rgba(243, 231, 211, 0.12);
+    overflow: hidden;
+}
+
+/* The peach part that grows (JavaScript sets its width). */
+.part-fill{
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: 999px;
+    background-color: var(--peach);
+    transition: width 0.4s ease;
+}
+
+/* The best part of the day turns gold. */
+.part-row.best .part-fill{ background-color: var(--gold); }
+.part-row.best .part-name{ color: var(--gold); font-weight: 700; }
+
+
+/* ---------- 9. Top tasks card ---------- */
+
+/* The numbered list of tasks (JavaScript fills it). */
+.top-tasks{
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+}
+
+/* The message shown while the list is empty. */
+.top-tasks:empty::before{
+    content: 'Pick a task under "Focusing on" in Pomodoro and it will show up here.';
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    opacity: 0.7;
+}
+
+/* One task: rank circle, name, time. */
+.top-tasks li{
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* The gold circle with the number 1, 2, 3. */
+.rank{
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--gold);
+    color: var(--bg);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+/* The task name: one line, with "..." if it is too long. */
+.task-name{
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.task-time{
+    opacity: 0.85;
+}
+
+
+/* ---------- 10-12. Screen-size rules (these stay LAST so they can override the rules above) ----------
+   Their order matters: wide, then short, then medium/narrow. */
+
+
+/* ---------- 10. Wide screens: everything fits the window, no scroll bars inside cards ---------- */
+@media (min-width: 1001px){
+
+    /* the page is at least 700px tall (below that the page itself scrolls) */
+    .content{
+        min-height: 700px;
+    }
+
+    /* rows: heading and number cards take what they need, the three insight cards
+       take what THEY need, and the chart row takes everything that is left */
+    .prod-wrap{
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr) auto;
+    }
+
+    .chart-row{
+        min-height: 0;
+        grid-template-rows: minmax(0, 1fr);
+    }
+
+    .chart-card{
+        min-height: 0;
+    }
+
+    .chart-plot{
+        min-height: 40px;
+    }
+}
+
+
+/* ---------- 11. Short windows (like a laptop with 150% display scaling): everything a little smaller ---------- */
+@media (min-width: 801px) and (max-height: 700px){
+
+    :root{
+        --card-gap: 12px;
+    }
+
+    .content{
+        min-height: 500px;
+        padding: 72px 24px 12px;
+    }
+
+    /* heading and summary */
+    .prod-head h1{ font-size: 26px; }
+    .summary{ font-size: 13px; margin-top: 2px; }
+
+    /* number cards */
+    .stat-card{ padding: 10px 14px; }
+    .stat-label{ font-size: 12px; }
+    .stat-value{ font-size: 24px; margin: 2px 0; }
+    .delta{ font-size: 12px; }
+
+    /* chart, goal and insight cards */
+    .chart-row .card,
+    .insight-row .card{
+        padding: 12px 16px;
+    }
+
+    .chart-card h2,
+    .goal-card h2,
+    .insight-row h2{
+        font-size: 18px;
+        margin-bottom: 6px;
+    }
+
+    /* smaller rings and tighter lists */
+    .goal-card{ --goal-size: 84px; }
+    .tools-card{ --donut-size: 84px; }
+
+    .legend{ gap: 6px; }
+    .part-list{ gap: 8px; margin-top: 4px; }
+    .part-track{ height: 10px; }
+    .top-tasks{ gap: 6px; }
+}
+
+
+/* ---------- 12. Medium and narrow screens: stacked ---------- */
+
+/* Medium windows: the page grows with its content instead of fitting the window. */
+@media (min-width: 801px) and (max-width: 1000px){
+
+    .content{
+        height: auto;
+    }
+}
+
+/* Medium and narrow windows: 2 number cards per row, other rows become one column. */
+@media (max-width: 1000px){
+
+    .stat-row{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .chart-row,
+    .insight-row{
+        grid-template-columns: 1fr;
+    }
+}
