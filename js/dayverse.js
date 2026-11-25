@@ -259,9 +259,41 @@ function render() {
 
 /* ===== 4. Moving between days ===== */
 
+// the cards slide out, the new day is drawn, then the cards slide in (direction: 1 = forward in time, -1 = back)
+let sliding = false;
+function slideDay(direction, change) {
+  const cards = Array.from(document.querySelectorAll(".dv-card"));
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce || sliding || cards.length === 0 || !cards[0].animate) {
+    change();
+    return;
+  }
+  sliding = true;
+  const away = -direction * 48;
+  const out = cards.map(function (card) {
+    return card.animate(
+      [{ transform: "translateX(0)", opacity: 1 }, { transform: "translateX(" + away + "px)", opacity: 0 }],
+      { duration: 150, easing: "ease-in", fill: "forwards" }
+    );
+  });
+  Promise.all(out.map(function (a) { return a.finished; })).catch(function () {}).then(function () {
+    change();
+    cards.forEach(function (card) {
+      card.getAnimations().forEach(function (a) { a.cancel(); });
+      card.animate(
+        [{ transform: "translateX(" + (-away) + "px)", opacity: 0 }, { transform: "translateX(0)", opacity: 1 }],
+        { duration: 220, easing: "ease-out" }
+      );
+    });
+    sliding = false;
+  });
+}
+
 function moveDay(n) {
-  viewDate.setDate(viewDate.getDate() + n);
-  render();
+  slideDay(n > 0 ? 1 : -1, function () {
+    viewDate.setDate(viewDate.getDate() + n);
+    render();
+  });
 }
 
 prevDay.addEventListener("click", function () {
@@ -284,8 +316,11 @@ datePicker.addEventListener("change", function () {
   const picked = new Date(parts[0], parts[1] - 1, parts[2]);
 
   // no days in the future
-  viewDate = picked > new Date() ? new Date() : picked;
-  render();
+  const target = picked > new Date() ? new Date() : picked;
+  slideDay(target >= viewDate ? 1 : -1, function () {
+    viewDate = target;
+    render();
+  });
 });
 
 // the picture card of the day being shown
