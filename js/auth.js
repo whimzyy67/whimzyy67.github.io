@@ -139,7 +139,7 @@
 
   /* ================= 2. ACCOUNT UI ================= */
   var cfg = window.WHIMZYY_SUPABASE;
-  var modal = null, btnLabel = null, current = null, gate = false;
+  var modal = null, btnLabel = null, current = null, gate = false, askName = false;
 
   // In the installed app (home-screen app / Play Store app) logging in, or choosing guest, is required.
   // The website itself stays open to everyone, and the entry page (index.html) never asks.
@@ -191,11 +191,18 @@
   function who(u) {
     if (!u) { return "Account"; }
     if (u.is_anonymous) { return (u.user_metadata && u.user_metadata.display_name) || "Guest"; }
-    return (u.email || "Account").split("@")[0];
+    var m = u.user_metadata || {};
+    return (m.name_set && m.display_name) || (u.email || "Account").split("@")[0];
+  }
+  // a person who logged in with an email but has not chosen a name yet
+  function needsName(u) {
+    return !!(u && !u.is_anonymous && !(u.user_metadata && u.user_metadata.name_set));
   }
   function setUser(u) {
     current = u;
-    if (u && gate) { gate = false; closeModal(); }
+    askName = needsName(u);
+    if (u && gate) { gate = false; if (!askName) { closeModal(); } }
+    if (askName) { openModal(); }
     if (!u && !gate && needsGate()) { gate = true; openModal(); }
     if (btnLabel) {
       btnLabel.textContent = who(u);
@@ -230,7 +237,7 @@
     modal.classList.add("open");
     render();
   }
-  function closeModal() { if (gate) { return; } if (modal) { modal.classList.remove("open"); } }
+  function closeModal() { if (gate || needsName(current)) { return; } askName = false; if (modal) { modal.classList.remove("open"); } }
 
   var mode = "choose";          // choose | login | signup
   var msg = { text: "", bad: false };
@@ -253,6 +260,32 @@
   function render() {
     modal.textContent = "";
     var card = el("div", "acct-card");
+    if (askName) {
+      card.appendChild(el("h2", "", "What should we call you?"));
+      card.appendChild(el("p", "acct-sub", "Pick any name you like. It shows on your account and goes with your saved stars, tasks and journal."));
+      var nf = field("text", "Your name", "e.g. Ami", "nickname");
+      nf.input.maxLength = 24;
+      nf.input.value = ((current.user_metadata && current.user_metadata.display_name) || "").trim();
+      var nm = el("p", "acct-msg", "");
+      var nsave = el("button", "acct-btn-main", "Save my name"); nsave.type = "submit";
+      var nform = el("form", "acct-form");
+      nform.appendChild(nf); nform.appendChild(nm); nform.appendChild(nsave);
+      nform.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        var name = nf.input.value.replace(/\s+/g, " ").trim();
+        if (name.length < 2) { nm.textContent = "Type a name with at least 2 letters."; nm.className = "acct-msg bad"; return; }
+        nsave.disabled = true; nsave.textContent = "Saving…";
+        var r = await client.auth.updateUser({ data: { display_name: name, name_set: true } });
+        if (r.error) { nm.textContent = r.error.message; nm.className = "acct-msg bad"; nsave.disabled = false; nsave.textContent = "Save my name"; return; }
+        askName = false;
+        setUser(r.data.user);
+        closeModal();
+      });
+      card.appendChild(nform);
+      modal.appendChild(card);
+      setTimeout(function () { nf.input.focus(); }, 50);
+      return;
+    }
     if (!gate) {
       var x = el("button", "acct-x", "✕"); x.type = "button"; x.setAttribute("aria-label", "Close");
       x.addEventListener("click", closeModal);
@@ -265,6 +298,9 @@
       card.appendChild(el("h2", "", "Hey, " + who(current)));
       card.appendChild(el("p", "acct-sub", current.email));
       card.appendChild(el("p", "acct-sync", ""));
+      var ren = el("button", "acct-link", "✏️ Change my name"); ren.type = "button";
+      ren.addEventListener("click", function () { askName = true; render(); });
+      card.appendChild(ren);
       var out = el("button", "acct-btn-main", "Log out"); out.type = "button";
       out.addEventListener("click", async function () {
         out.disabled = true; out.textContent = "Saving…";
