@@ -31,7 +31,7 @@
 }
 .dd-add b{ font-size: 22px; line-height: 1; }
 .dd-empty{ margin: auto 0; font-size: 13px; opacity: .8; align-self: center; }
-.dd-login{ margin: auto; padding: 8px 16px; border-radius: 99px; border: 0; cursor: pointer; font: 700 14px "DM Sans", Arial, sans-serif; background: var(--gold, #F2B83D); color: var(--bg, #1F0508); }
+.dd-login{ margin: 0; align-self: flex-start; padding: 6px 14px; border-radius: 99px; border: 0; cursor: pointer; font: 700 14px "DM Sans", Arial, sans-serif; background: var(--gold, #F2B83D); color: var(--bg, #1F0508); }
 .dd-note{ margin: 0; font-size: 12px; min-height: 0; }
 .dd-note:empty{ display: none; }
 .dd-note.bad, .dd-priv-text.bad{ color: #ffb4a8; }

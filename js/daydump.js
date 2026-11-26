@@ -345,5 +345,10 @@
   whenAuth(function (a) {
     auth = a; authReady = true;
     window.dispatchEvent(new CustomEvent("wz-dd-ready"));
+    // the login can settle a moment after the page: check again so a stale "Log in" button never stays
+    setTimeout(function () { window.dispatchEvent(new CustomEvent("wz-dd-ready")); }, 1500);
+  });
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && authReady) { window.dispatchEvent(new CustomEvent("wz-dd-ready")); }
   });
 })();
