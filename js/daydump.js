@@ -182,10 +182,13 @@
       if (!auth || !auth.client) { strip.textContent = ""; strip.appendChild(el("p", "dd-empty", "Cloud is not connected yet.")); return; }
       if (!loggedIn()) {
         strip.textContent = "";
-        var b = el("button", "dd-login", "Log in to save your day dump 📸"); b.type = "button";
+        var b = el("button", "dd-login", opts.loginSlot ? "Log in to save" : "Log in to save your day dump 📸"); b.type = "button"; b.title = "Log in to save your day dump";
         b.addEventListener("click", openLogin);
-        strip.appendChild(b); return;
+        if (opts.loginSlot) { opts.loginSlot.textContent = ""; opts.loginSlot.appendChild(b); opts.loginSlot.hidden = false; if (root.onCount) { root.onCount(null); } }
+        else { strip.appendChild(b); }
+        return;
       }
+      if (opts.loginSlot) { opts.loginSlot.textContent = ""; opts.loginSlot.hidden = true; }
       var uid = opts.userId(); if (!uid) { return; }
       try {
         var res = await fetchDay(uid, opts.getDay());
@@ -291,16 +294,19 @@
     titles.appendChild(el("p", "dd-date-line", new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" }) + " · the pics that made today"));
     top.appendChild(titles);
     var count = el("span", "dd-count", "0/" + MAX);
+    var slot = el("div", "dd-slot"); slot.hidden = true;
+    top.appendChild(slot);
     top.appendChild(count);
     box.appendChild(top);
 
     var strip = makeStrip({
+      loginSlot: slot,
       editable: true,
       userId: function () { return me() && me().id; },
       getDay: function () { return keyOf(new Date()); },
       emptyText: "Nothing yet. Add a pic or two."
     });
-    strip.onCount = function (n) { count.textContent = n + "/" + MAX; };
+    strip.onCount = function (n) { count.hidden = (n === null); if (n !== null) { count.textContent = n + "/" + MAX; } };
     box.appendChild(strip);
 
     var foot = el("div", "dd-foot");
@@ -323,8 +329,12 @@
     var picker = document.getElementById("datePicker");
     if (!col || !picker || col.querySelector(".dv-dump")) { return; }
     var art = el("article", "dv-card dv-dump");
-    art.appendChild(el("h2", "", "Day dump 📸"));
+    var head = el("div", "dd-dvhead"), slot = el("div", "dd-slot"); slot.hidden = true;
+    head.appendChild(el("h2", "", "Day dump 📸"));
+    head.appendChild(slot);
+    art.appendChild(head);
     var strip = makeStrip({
+      loginSlot: slot,
       editable: true,
       userId: function () { return me() && me().id; },
       getDay: function () { return picker.value || keyOf(new Date()); },

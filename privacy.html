@@ -18,7 +18,7 @@
       font:400 16px/1.65 "DM Sans",Arial,sans-serif; }
     header{ padding:18px 16px; border-bottom:1px solid var(--wine,#6C1828); }
     header a{ color:var(--gold,#E8B86D); text-decoration:none; font:700 15px "DM Sans",Arial,sans-serif; }
-    main{ max-width:760px; margin:0 auto; padding:32px 16px 72px; }
+    main{ width:100%; max-width:1500px; margin:0 auto; padding:24px clamp(16px,4vw,56px) 48px; }
     h1{ font:700 clamp(30px,6vw,44px)/1.15 "Bricolage Grotesque","DM Sans",Arial,sans-serif; color:var(--gold,#E8B86D); margin:0 0 6px; }
     .updated{ opacity:.7; margin:0 0 28px; font-size:14px; }
     .tldr{ background:var(--wine-soft,#7A1B2B); border:2px solid var(--gold,#E8B86D); border-radius:20px; padding:18px 22px; margin-bottom:34px; }
@@ -30,6 +30,14 @@
     table{ width:100%; border-collapse:collapse; margin:10px 0 14px; font-size:15px; }
     th, td{ text-align:left; padding:9px 10px; border-bottom:1px solid var(--wine,#6C1828); vertical-align:top; }
     th{ color:var(--candle,#E8B86D); }
+    .tldr ul{ column-count:2; column-gap:40px; margin-bottom:0; }
+    .tldr li{ break-inside:avoid; }
+    .cols{ column-count:2; column-gap:56px; }
+    .cols h2{ margin-top:22px; break-after:avoid; }
+    .cols h2:first-child{ margin-top:0; }
+    .cols p, .cols ul, .cols li{ break-inside:avoid; }
+    .cols .span{ column-span:all; }
+    @media (max-width:900px){ .cols, .tldr ul{ column-count:1; } }
     @media (max-width:560px){ table{ font-size:13.5px; } th, td{ padding:7px 6px; } }
   </style>
 </head>
@@ -49,11 +57,12 @@
       </ul>
     </section>
 
-    <h2>Who we are</h2>
-    <p>Whimzyy ("we", "us") is an independent project run by Amruzinggg. You can reach us at <a href="mailto:whimzyy67@gmail.com">whimzyy67@gmail.com</a>.</p>
+    <div class="cols">
+    <h2 class="span">Who we are</h2>
+    <p class="span">Whimzyy ("we", "us") is an independent project run by Amruzinggg. You can reach us at <a href="mailto:whimzyy67@gmail.com">whimzyy67@gmail.com</a>.</p>
 
-    <h2>What we collect</h2>
-    <table>
+    <h2 class="span">What we collect</h2>
+    <table class="span">
       <tr><th>What</th><th>Why</th></tr>
       <tr><td><b>Account details</b>: your email address and a password (we never see your password in plain text; it is stored securely by our login provider), or a random guest name like <i>user12345</i>.</td><td>To sign you in and keep your data tied to you.</td></tr>
       <tr><td><b>Your Whimzyy data</b>: tasks, journal entries, goals, focus sessions, moods, reminders, water and energy logs, stars, unlocked themes, chosen settings, and Detox limits and screen-time logs.</td><td>To run the features and sync them across your devices.</td></tr>
@@ -62,7 +71,7 @@
       <tr><td><b>Detox extension data</b> (only if you install the Whimzyy Detox Chrome extension): the websites you set limits for and the time spent on them.</td><td>To block distracting sites and show your screen time. This stays on your device and in your browser; it is not sent to us unless it is part of your synced Detox data above.</td></tr>
       <tr><td><b>Technical data</b>: standard server and network information such as IP address and browser type.</td><td>Handled by our hosting and login providers for security and to deliver the site.</td></tr>
     </table>
-    <p>We do <b>not</b> collect your location, contacts, payment details, or the content of the pages you visit.</p>
+    <p class="span">We do <b>not</b> collect your location, contacts, payment details, or the content of the pages you visit.</p>
 
     <h2>Where your data is stored</h2>
     <ul>
@@ -107,6 +116,7 @@
 
     <h2>Contact</h2>
     <p>Questions or requests? Email <a href="mailto:whimzyy67@gmail.com">whimzyy67@gmail.com</a>.</p>
+    </div>
   </main>
 </body>
 </html>

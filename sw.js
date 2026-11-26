@@ -1,6 +1,6 @@
 /* Whimzyy service worker. Keep this file in the SITE ROOT (next to index.html).
    Bump VERSION whenever you deploy new files so phones drop the old cache. */
-const VERSION = "whimzyy-v14";
+const VERSION = "whimzyy-v20";
 const CORE = ["./", "./index.html", "./home.html", "./pwa/offline.html", "./pwa/manifest.json",
   "./pwa/icons/icon-192.png", "./pwa/icons/icon-512.png"];
 
@@ -49,4 +49,33 @@ self.addEventListener("fetch", (e) => {
       return cached || fresh;
     })
   );
+});
+
+
+/* ---------- closed-app alerts (Web Push) ---------- */
+self.addEventListener("push", (e) => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (err) { d = {}; }
+  e.waitUntil((async () => {
+    // if Whimzyy is open and in front, the page already shows its own pop-up: do not double up
+    const wins = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+    if (wins.some((c) => c.visibilityState === "visible")) return;
+    await self.registration.showNotification(d.title || "Whimzyy", {
+      body: d.body || "",
+      tag: d.tag || "whimzyy",
+      icon: "./pwa/icons/icon-192.png",
+      badge: "./pwa/icons/icon-192.png",
+      data: { url: d.url || "./home.html" }
+    });
+  })());
+});
+
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const url = new URL((e.notification.data && e.notification.data.url) || "./home.html", self.registration.scope).href;
+  e.waitUntil((async () => {
+    const wins = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+    for (const c of wins) { if ("focus" in c) return c.focus(); }
+    return self.clients.openWindow(url);
+  })());
 });

@@ -3,6 +3,8 @@
    - Loaded automatically by rewards.js (so you do not add it to any page).
    - Uses "next reminder at" times saved in localStorage, so a reload, another page or a sleeping tab does not reset the clock.
    - Shows a pop-up inside the page, and a real desktop notification (when you allow it) so you also see it from other tabs.
+   - Closed-app alerts (Web Push): when you allow notifications and are logged in, your reminder settings are copied to the cloud
+     (table push_subscriptions) and a Supabase function sends the reminder even when Whimzyy is closed.
    - Settings are saved by wellness.js under "whimzyy-reminders" ({water:{on,every}, ...}). */
 (function () {
   "use strict";
@@ -156,6 +158,67 @@
       return next[name] ? Math.max(0, Math.round((next[name] - Date.now()) / 60000)) : null;
     }
   };
+
+
+  /* ---------- closed-app alerts (Web Push) ---------- */
+
+  var VAPID_PUBLIC = "BG7nJ_mMGrH1wMbiNl123qGa83S_tLr4eRQ3xAx9RzsIUjI6LwPLKroPNBGOUdiNDdJxO8Sy_QRB9bb4EbbDjPc";
+
+  function keyBytes(b64) {
+    var pad = "=".repeat((4 - b64.length % 4) % 4);
+    var raw = atob((b64 + pad).replace(/-/g, "+").replace(/_/g, "/"));
+    var out = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) { out[i] = raw.charCodeAt(i); }
+    return out;
+  }
+
+  function withTimeout(promise, ms) {
+    return Promise.race([promise, new Promise(function (resolve) { setTimeout(function () { resolve(null); }, ms); })]);
+  }
+
+  // copies your settings to the cloud so the server knows when to ping you
+  function syncPush() {
+    return (async function () {
+      try {
+        if (!("serviceWorker" in navigator) || !("PushManager" in window) || permission() !== "granted") { return; }
+        var A = window.WhimzyyAuth;
+        if (!A || !A.client || !A.user) { return; }
+        var reg = await withTimeout(navigator.serviceWorker.ready, 5000);
+        if (!reg) { return; }
+        var sub = await reg.pushManager.getSubscription();
+        if (!sub) { sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(VAPID_PUBLIC) }); }
+        var j = sub.toJSON(), s = settings(), db = A.client, uid = A.user.id, now = Date.now();
+        var old = await db.from("push_subscriptions").select("settings,next_at").eq("user_id", uid).eq("endpoint", j.endpoint).maybeSingle();
+        var prev = old && old.data, next = {};
+        NAMES.forEach(function (n) {
+          if (!s[n].on) { return; }
+          var p = prev && prev.settings && prev.settings[n];
+          var same = p && p.on && p.every === s[n].every && prev.next_at && prev.next_at[n];
+          next[n] = same ? prev.next_at[n] : now + s[n].every * 60000;     // only a changed reminder restarts its clock
+        });
+        var row = {
+          user_id: uid, endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth,
+          tz: (Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"), settings: s, next_at: next,
+          updated_at: new Date().toISOString()
+        };
+        var res = prev
+          ? await db.from("push_subscriptions").update(row).eq("user_id", uid).eq("endpoint", j.endpoint)
+          : await db.from("push_subscriptions").insert(row);
+        if (res && res.error) { console.warn("Whimzyy alerts:", res.error.message); }
+      } catch (e) { console.warn("Whimzyy alerts:", (e && e.message) || e); }
+    })();
+  }
+  var pushTimer = null;
+  function schedulePush() { clearTimeout(pushTimer); pushTimer = setTimeout(syncPush, 800); }
+
+  var baseAsk = window.Reminders.ask, baseRestart = window.Reminders.restart;
+  window.Reminders.ask = function () {
+    return baseAsk().then(function (p) { if (p === "granted") { schedulePush(); } return p; });
+  };
+  window.Reminders.restart = function (name) { baseRestart(name); schedulePush(); };
+  window.Reminders.syncPush = syncPush;
+  window.addEventListener("whimzyy-auth", schedulePush);
+  setTimeout(schedulePush, 3000);
 
   tick();
   setInterval(tick, 1000);
