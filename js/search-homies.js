@@ -78,7 +78,11 @@
   /* ---------- your account (bottom of the left side) ---------- */
   async function loadProfile() {
     var r = await db().from("profiles").select("*").eq("user_id", me.id).maybeSingle();
-    if (r.error) { note(accountBox, "Could not load your account. Run sql/growth.sql in Supabase first."); return false; }
+    if (r.error) {
+      console.warn("Whimzyy profiles error:", r.error);
+      note(accountBox, "Could not load your account. Run sql/growth.sql in Supabase first. (Supabase says: " + (r.error.message || r.error.code || "unknown error") + ")");
+      return false;
+    }
     profile = r.data || null;
     return true;
   }
