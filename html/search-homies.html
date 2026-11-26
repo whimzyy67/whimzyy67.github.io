@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+        <title>Whimzyy - Search Homies</title>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+
+        <link rel="stylesheet" href="../css/home.css">
+                <link rel="stylesheet" href="../css/aboutus.css">
+        <link rel="stylesheet" href="../css/rewards.css"> 
+        <link rel="stylesheet" href="../css/responsive.css">
+        <link rel="stylesheet" href="../css/growth.css">
+           
+        <script src="../js/auth.js"></script>
+        <script src="../js/theme.js"></script>
+        <script src="../js/rewards.js"></script>
+    </head>
+    <body>
+
+        <!--Top Navigation bar-->
+        <header class="topbar">
+
+            <!--Whimzyy Side bar-->
+            <a href="../index.html" class="brand" title="Back to the start">
+                <img src="../stickers/whimzyy.png" alt="Whimzyy" class="whimzyy-logo">
+            </a>
+
+            <!--Navigation bar-->
+            <nav class="top-nav">
+
+                <!--Work Space-->
+                <a href="work-space.html" class="work" title="LOCK IN!!">
+                    <img src="../stickers/nav-work.png" alt="Work Space" class="icon" id="work-space-icon">
+                    Work Space
+                </a>
+
+                <!--Home-->
+                <a href="../home.html" class="tab" title="Your daily welcome">
+                    <img src="../stickers/nav-home.png" alt="Home" class="icon">
+                    Home
+                </a>
+
+                <!--About Us-->
+                <a href="about-us.html" class="tab" title="The story behind Whimzyy">
+                    <img src="../stickers/nav-about.png" alt="About Us" class="icon">
+                    About Us
+                </a>
+
+            </nav>
+        </header>
+
+        <!--Side Navigation bar-->
+        <aside class="sidebar" id="sidebar">
+            <ul>
+
+                <!--My Day-->
+                <li>
+                    <a href="my-day.html" title="Plan your day and write your journal">
+                        <img src="../stickers/side-myday.png" alt="My Day" class="icon" id="my-day-icon">
+                        My Day
+                    </a>
+                </li>
+
+                <!--Focus-->
+                <li>
+                    <a href="focus.html" title="Timer, Stopwatch and Pomodoro">
+                        <img src="../stickers/side-focus.png" alt="Focus" class="icon">
+                        Focus
+                    </a>
+                </li>
+
+                <!--Detox-->
+                <li>
+                    <a href="detox.html" title="Screen Time Limit">
+                        <img src="../stickers/side-detox.png" alt="Detox" class="icon">
+                        Detox
+                    </a>
+                </li>
+
+                <!--Wellness-->
+                <li>
+                    <a href="wellness.html" title="Check in, stretch and drink water">
+                        <img src="../stickers/side-wellness.png" alt="Wellness" class="icon">
+                        Wellness
+                    </a>
+                </li>
+
+                <!--Productivity-->
+                <li>
+                    <a href="productivity.html" title="See your progress and patterns">
+                        <img src="../stickers/side-productivity.png" alt="Productivity" class="icon">
+                        Productivity
+                    </a>
+                </li>
+
+                <!--Dayverse-->
+                <li>
+                    <a href="dayverse.html" title="Your slice of life">
+                        <img src="../stickers/side-dayverse.png" alt="Dayverse" class="icon">
+                        Dayverse
+                    </a>
+                </li>
+
+                <!--Vibe-->
+                <li>
+                    <a href="vibe.html" title="Change themes, sounds and backgrounds">
+                        <img src="../stickers/side-vibe.png" alt="Vibe" class="icon">
+                        Vibe
+                    </a>
+                </li>
+
+            </ul>
+        </aside>
+
+        <!--Main content-->
+        <main class="content">
+            <div class="sh-page">
+
+                <!--Top: search-->
+                <form class="sh-search card" id="shSearchForm" role="search">
+                    <span class="sh-search-ico" aria-hidden="true">🔍</span>
+                    <input type="search" id="shSearch" placeholder="Search your homies by @username" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Search by username">
+                </form>
+
+                <!--Left 60%: search results above, your account below-->
+                <section class="sh-left">
+                    <div class="sh-results card" id="shResults" aria-live="polite">
+                        <p class="sh-hint">Type a username above to find your friends and follow them.</p>
+                    </div>
+                    <div class="sh-account card" id="shAccount"></div>
+                </section>
+
+                <!--Right 40%: friends you follow-->
+                <section class="sh-right card" aria-label="Friends">
+                    <div class="sh-tabs" role="tablist">
+                        <button type="button" class="sh-tab active" id="shTabFollowing" role="tab" aria-selected="true">Following</button>
+                        <button type="button" class="sh-tab" id="shTabFollowers" role="tab" aria-selected="false">Followers</button>
+                    </div>
+                    <ul class="sh-list" id="shList"></ul>
+                </section>
+
+            </div>
+        </main>
+
+        <!--JavaScript Links-->
+        <script src="../js/sidebar.js"></script>
+        <script src="../js/search-homies.js"></script>
+    </body>
+</html>

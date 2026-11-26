@@ -15,7 +15,7 @@
 
   var NAV_ORDER = ["work-space", "home", "about-us"];                     // top bar, left to right
   var TAB_ORDER = ["home", "detox", "focus", "work-space",                // footer bar, then the More sheet
-                   "my-day", "wellness", "productivity", "dayverse", "vibe", "about-us"];
+                   "my-day", "wellness", "growth", "productivity", "dayverse", "search-homies", "vibe", "about-us"];
   var KEY = "wz-slide-dir";
 
   // Things that must NOT slide.
@@ -52,10 +52,10 @@
 
   // slide OUT on click
   document.addEventListener("click", function (event) {
-    var link = event.target.closest && event.target.closest(".top-nav a, a.brand, .wz-tabbar a, .wz-more a");
+    var link = event.target.closest && event.target.closest(".top-nav a, a.brand, .wz-tabbar a, .wz-more a, a.gw-card, a.back-growth");
     if (!link || link.classList.contains("acct-btn") || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) { return; }
 
-    var order = link.closest(".wz-tabbar, .wz-more") ? TAB_ORDER : NAV_ORDER;
+    var order = link.closest(".wz-tabbar, .wz-more, .gw-card, .back-growth") || link.matches(".gw-card, .back-growth") ? TAB_ORDER : NAV_ORDER;
     var from = order.indexOf(nameOf(location.pathname));
     var to = order.indexOf(nameOf(link.getAttribute("href")));
     if (to === -1 || to === from) { return; }

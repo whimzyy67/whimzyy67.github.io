@@ -14,6 +14,7 @@
   var ROOT = src.replace(/js\/mobile-nav\.js.*$/, "");        // "" on home.html, "../" inside /html/
 
   var here = (location.pathname.split("/").pop() || "").replace(/\.html$/, "");
+  var lit = (here === "productivity" || here === "dayverse") ? "growth" : here;   // those two pages live inside Growth
   if (here === "" || here === "index" || here === "offline" || here === "privacy") { return; }
 
   // Set the class right away (before the page paints) so phones never flash the laptop layout,
@@ -33,8 +34,8 @@
   var MORE = [
     { id: "my-day",       label: "My Day",       sub: "Plan your day and write your journal", href: ROOT + "html/my-day.html",       icon: "stickers/side-myday.png" },
     { id: "wellness",     label: "Wellness",     sub: "Check in, stretch and drink water",    href: ROOT + "html/wellness.html",     icon: "stickers/side-wellness.png" },
-    { id: "productivity", label: "Productivity", sub: "See your progress and patterns",       href: ROOT + "html/productivity.html", icon: "stickers/side-productivity.png" },
-    { id: "dayverse",     label: "Dayverse",     sub: "Your slice of life",                   href: ROOT + "html/dayverse.html",     icon: "stickers/side-dayverse.png" },
+    { id: "growth",       label: "Growth",       sub: "Productivity, Dayverse and vision boards", href: ROOT + "html/growth.html",       icon: "stickers/side-growth.png" },
+    { id: "search-homies", label: "Search Homies", sub: "Find friends and follow their progress", href: ROOT + "html/search-homies.html", icon: "stickers/side-search.png" },
     { id: "vibe",         label: "Vibe",         sub: "Themes, sounds and backgrounds",       href: ROOT + "html/vibe.html",         icon: "stickers/side-vibe.png" },
     { id: "about-us",     label: "About Us",     sub: "The story behind Whimzyy",             href: ROOT + "html/about-us.html",     icon: "stickers/nav-about.png" }
   ];
@@ -53,7 +54,7 @@
 
   function build() {
     if (document.querySelector(".wz-tabbar")) { return; }
-    var inMore = MORE.some(function (m) { return m.id === here; });
+    var inMore = MORE.some(function (m) { return m.id === lit; });
 
     /* ---- the bar ---- */
     var bar = el("nav", "wz-tabbar");
@@ -64,7 +65,7 @@
       a.href = t.href;
       a.appendChild(img(t.icon));
       a.appendChild(el("span", "wz-lbl", t.label));
-      if (t.id === here) { a.classList.add("active"); a.setAttribute("aria-current", "page"); }
+      if (t.id === lit) { a.classList.add("active"); a.setAttribute("aria-current", "page"); }
       bar.appendChild(a);
     });
 
@@ -93,7 +94,7 @@
       txt.appendChild(el("span", "wz-row-name", m.label));
       txt.appendChild(el("span", "wz-row-sub", m.sub));
       a.appendChild(txt);
-      if (m.id === here) { a.classList.add("active"); a.setAttribute("aria-current", "page"); }
+      if (m.id === lit) { a.classList.add("active"); a.setAttribute("aria-current", "page"); }
       sheet.appendChild(a);
     });
 

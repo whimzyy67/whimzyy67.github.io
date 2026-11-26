@@ -178,8 +178,42 @@
     });
   }
 
+  /* ---- shared with the Growth and Search Homies pages ---- */
+  function readJson(k) { try { return JSON.parse(LS.getItem(k)); } catch (e) { return null; } }
+  function dayKey(ms) { return new Date(ms).toLocaleDateString("en-CA"); }
+  // Overall progress: for each day since you started (at most the last 30), the average of
+  //   focus time / your daily goal   and   tasks finished / 3     (each capped at 100%),
+  // then the average of those days. "today" is just today's score.
+  function computeProgress() {
+    var goal = (Number(LS.getItem("whimzyy-goal")) || 120) * 60;
+    var sessions = readJson("whimzyy-sessions") || [], tasks = readJson("whimzyy-tasks") || [];
+    var days = {};
+    function day(k) { return days[k] || (days[k] = { sec: 0, done: 0 }); }
+    sessions.forEach(function (x) { if (x && x.start) { day(dayKey(x.start)).sec += x.seconds || 0; } });
+    tasks.forEach(function (t) { if (t && t.done && t.doneAt) { day(dayKey(t.doneAt)).done += 1; } });
+    var keys = Object.keys(days).sort();
+    var todayKey = dayKey(Date.now());
+    if (!keys.length) { return { overall: 0, today: 0 }; }
+    function score(k) { var d = days[k] || { sec: 0, done: 0 }; return (Math.min(1, d.sec / goal) + Math.min(1, d.done / 3)) / 2; }
+    var first = new Date(keys[0] + "T00:00:00"), last30 = new Date(); last30.setDate(last30.getDate() - 29); last30.setHours(0, 0, 0, 0);
+    var from = first > last30 ? first : last30, total = 0, n = 0;
+    for (var d = new Date(from); dayKey(d.getTime()) <= todayKey; d.setDate(d.getDate() + 1)) { total += score(dayKey(d.getTime())); n += 1; }
+    return { overall: Math.round(total / Math.max(1, n) * 100), today: Math.round(score(todayKey) * 100) };
+  }
+  // keeps your row in "profiles" fresh so friends see your latest percentage (only if you picked a @username)
+  function publishProgress(force) {
+    if (!client || !current || !uid) { return; }
+    var last = Number(LS.getItem("whimzyy-ext-progress-at")) || 0;
+    if (!force && Date.now() - last < 10 * 60 * 1000) { return; }
+    var p = computeProgress();
+    LS.setItem("whimzyy-ext-progress-at", String(Date.now()));
+    client.from("profiles").update({ progress: p.overall, today: p.today, updated_at: new Date().toISOString() }).eq("user_id", uid).then(function () {}, function () {});
+  }
+  window.WhimzyyAuth = { client: null, user: null, loaded: false, computeProgress: computeProgress, publishProgress: publishProgress };
+
   function ready() {
     client = window.supabase.createClient(cfg.url, cfg.anonKey, { auth: { persistSession: true, autoRefreshToken: true } });
+    window.WhimzyyAuth.client = client;
     var onDom = function () {
       addButton();
       client.auth.getSession().then(function (r) { setUser(r.data && r.data.session ? r.data.session.user : null); });
@@ -200,6 +234,9 @@
   }
   function setUser(u) {
     current = u;
+    window.WhimzyyAuth.user = u; window.WhimzyyAuth.loaded = true;
+    try { window.dispatchEvent(new CustomEvent("whimzyy-auth", { detail: { user: u } })); } catch (e) { /* ignore */ }
+    if (u && client) { setTimeout(function () { publishProgress(false); }, 3000); }
     askName = needsName(u);
     if (u && gate) { gate = false; if (!askName) { closeModal(); } }
     if (askName) { openModal(); }

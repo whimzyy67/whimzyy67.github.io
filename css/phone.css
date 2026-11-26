@@ -15,7 +15,7 @@
 .wz-rot{ display: none; }
 .wz-rot.open{
     display: flex; align-items: center; justify-content: center;
-    position: fixed; inset: 0; z-index: 400; padding: 20px;
+    position: fixed; inset: 0; z-index: 1000; padding: 20px;
     background: rgba(0,0,0,.62);
     animation: wz-rot-fade .2s ease both;
 }
@@ -572,6 +572,61 @@ html.has-tabbar .widget input[type="text"]{ min-height: 0; height: 28px; font-si
 html.has-tabbar .widget textarea{ min-height: 0; height: 52px; font-size: 12px; }
 html.has-tabbar .widget .w-time{ line-height: 1.1; }
 
+
+/* ---------- 12. Growth, Search Homies, and the no-top-bar pages ---------- */
+html.has-tabbar body.no-chrome .content{ padding-top: var(--pad); }
+html.has-tabbar .back-growth{ margin: 0 0 6px; padding: 4px 14px; font-size: 14px; }
+
+html.has-tabbar .gw-page{
+    flex: 1; min-height: 0; height: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 27fr) minmax(0, 33fr) minmax(0, 40fr);
+    gap: var(--card-gap);
+}
+html.has-tabbar .gw-left{ grid-column: 1; grid-row: 1; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--card-gap); }
+html.has-tabbar .gw-vision{ grid-column: 1; grid-row: 2; gap: 6px; }
+html.has-tabbar .gw-boards{ grid-column: 1; grid-row: 3; display: flex; flex-direction: column; min-height: 0; }
+html.has-tabbar .gw-card{ gap: 4px; padding: 8px; }
+html.has-tabbar .gw-ico{ width: auto; height: 46%; max-height: 64px; }
+html.has-tabbar .gw-card h2, html.has-tabbar .gw-vision h2, html.has-tabbar .gw-boards h2{ font-size: 16px; }
+html.has-tabbar .gw-card p{ font-size: 11px; line-height: 1.25; }
+html.has-tabbar .gw-vision > p{ display: none; }
+html.has-tabbar .gw-create{ min-height: 38px; padding: 4px 16px; font-size: 14px; }
+html.has-tabbar .gw-strip{ flex: 1; min-height: 0; padding: 6px 2px 4px; }
+html.has-tabbar .gw-empty{ font-size: 13px; }
+html.has-tabbar .gw-board{ width: 150px; display: flex; flex-direction: column; padding: 6px; }
+html.has-tabbar .gw-board-grid{ flex: 1; height: auto; min-height: 0; }
+html.has-tabbar .gw-modal{ padding: 8px; align-items: flex-end; }
+html.has-tabbar .gw-sheet{ padding: 14px 14px 16px; border-radius: 20px; max-height: 94dvh; }
+html.has-tabbar .gw-sheet h2{ font-size: 20px; }
+html.has-tabbar .gw-tiles{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+html.has-tabbar .gw-tile img{ height: 96px; }
+html.has-tabbar .gw-add{ min-height: 130px; }
+
+html.has-tabbar .sh-page{
+    flex: 1; min-height: 0; height: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
+    gap: var(--card-gap);
+}
+html.has-tabbar .sh-search{ grid-row: 1; padding: 6px 10px; }
+html.has-tabbar .sh-search input{ min-height: 38px; font-size: 15px; }
+html.has-tabbar .sh-left{ grid-column: 1; grid-row: 2; gap: var(--card-gap); }
+html.has-tabbar .sh-right{ grid-column: 1; grid-row: 3; padding: 8px 10px; gap: 6px; }
+html.has-tabbar .sh-results{ flex: none; max-height: 30dvh; }
+html.has-tabbar .sh-results:has(> .sh-hint){ display: none; }
+html.has-tabbar .sh-account{ gap: 6px 12px; }
+html.has-tabbar .sh-avatar{ width: 46px; height: 46px; font-size: 20px; }
+html.has-tabbar .sh-ring{ width: 50px; height: 50px; }
+html.has-tabbar .sh-ring::before{ inset: 5px; }
+html.has-tabbar .sh-ring b{ font-size: 12px; }
+html.has-tabbar .sh-id h2{ font-size: 17px; }
+html.has-tabbar .sh-stats{ gap: 18px; }
+html.has-tabbar .sh-stat b{ font-size: 17px; }
+html.has-tabbar .sh-privacy{ font-size: 12px; }
+html.has-tabbar .sh-tab{ min-height: 32px; font-size: 13px; }
+html.has-tabbar .sh-row{ padding: 6px 8px; }
+
 }  /* end of the phone media query */
 
 
@@ -604,4 +659,5 @@ html.has-tabbar .widget .w-time{ line-height: 1.1; }
     html.has-tabbar .widget{ width: 120px; }
     html.has-tabbar .widget.widget-todo{ width: 160px; }
     html.has-tabbar .widget.widget-message{ width: 150px; }
+
 }
