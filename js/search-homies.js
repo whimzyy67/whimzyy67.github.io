@@ -37,6 +37,12 @@
   /* one person as a row: avatar, name, @username, and progress (or a lock) */
   function personRow(p, extra) {
     var row = el("li", "sh-row");
+    row.title = "Tap to see their Day Dump";
+    row.style.cursor = "pointer";
+    row.addEventListener("click", function (e) {
+      if (e.target.closest("button")) { return; }
+      if (window.WzDump) { window.WzDump.openGallery({ userId: p.user_id, name: p.display_name || p.username, isMe: false }); }
+    });
     row.appendChild(el("div", "sh-avatar small", (p.display_name || p.username || "?").charAt(0)));
     var id = el("div", "sh-id");
     id.appendChild(el("h2", "", p.display_name || p.username));
@@ -93,7 +99,7 @@
     form.appendChild(el("h2", "", "Choose your @username"));
     form.appendChild(el("p", "", "Friends find you with it. 3 to 20 letters, numbers, dots or underscores."));
     var row = el("div", "row");
-    var input = el("input"); input.placeholder = "e.g. amru.zing"; input.maxLength = 20; input.autocapitalize = "none"; input.spellcheck = false;
+    var input = el("input"); input.placeholder = "e.g. cool.homie"; input.maxLength = 20; input.autocapitalize = "none"; input.spellcheck = false;
     input.setAttribute("aria-label", "Username");
     var go = el("button", "sh-follow", "Save"); go.type = "submit";
     row.appendChild(input); row.appendChild(go);
@@ -144,6 +150,9 @@
     s1.addEventListener("click", function () { setTab("followers"); });
     s2.addEventListener("click", function () { setTab("following"); });
     stats.appendChild(s1); stats.appendChild(s2); stats.appendChild(s3);
+    var s4 = el("button", "sh-stat sh-dump"); s4.type = "button"; s4.appendChild(el("b", "", "📸")); s4.appendChild(el("span", "", "my day dump"));
+    s4.addEventListener("click", function () { if (window.WzDump) { window.WzDump.openGallery({ userId: me.id, isMe: true }); } });
+    stats.appendChild(s4);
     accountBox.appendChild(stats);
 
     var priv = el("div", "sh-privacy");

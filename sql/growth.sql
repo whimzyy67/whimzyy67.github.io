@@ -71,3 +71,10 @@ drop policy if exists "vision delete own" on storage.objects;
 create policy "vision read own"   on storage.objects for select using (bucket_id = 'vision' and (storage.foldername(name))[1] = auth.uid()::text);
 create policy "vision upload own" on storage.objects for insert with check (bucket_id = 'vision' and (storage.foldername(name))[1] = auth.uid()::text);
 create policy "vision delete own" on storage.objects for delete using (bucket_id = 'vision' and (storage.foldername(name))[1] = auth.uid()::text);
+
+-- ============ 4. Permissions (the "permission denied for table" fix) ============
+grant usage on schema public to anon, authenticated;
+grant select, insert, update, delete on public.profiles      to authenticated;
+grant select, insert, delete         on public.follows       to authenticated;
+grant select, insert, delete         on public.vision_boards to authenticated;
+grant select                         on public.public_profiles to authenticated;

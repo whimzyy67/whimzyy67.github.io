@@ -136,6 +136,7 @@ function render() {
     year: "numeric"
   });
   datePicker.value = key;
+  window.dispatchEvent(new CustomEvent("wz-dv-day", { detail: key }));
   datePicker.max = keyOf(new Date());
   nextDay.disabled = isToday();
 
