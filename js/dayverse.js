@@ -2,7 +2,8 @@
 
 const ANSWER_PREFIX = "whimzyy-answer-";      // home.js: "whimzyy-answer-2026-11-12" holds one text
 const ENERGY_PREFIX = "whimzyy-energy-";      // wellness.js: "whimzyy-energy-2026-11-12" holds "1" to "5"
-const MOODS_KEY = "whimzyy-moods";            // myday.js: { "2026-11-12": "slay" }
+const MOODS_KEY = "whimzyy-moods";            // wellness page: { "2026-11-12": "slay" }
+const MANIFEST_KEY = "whimzyy-manifest";      // my-day page: [{ id, text, created, target: "2026-12-01" }]
 const JOURNAL_KEY = "whimzyy-journal";        // myday.js: [{ id, text, created, edited }]
 const PARKING_KEY = "whimzyy-parking-notes";  // focus.js: [{ id, text, created, task }]
 const TASK_LIST_KEY = "whimzyy-tasks";        // tasks.js: [{ text, done, doneAt }]
@@ -193,22 +194,48 @@ function render() {
     addEmpty(taskList, "No tasks completed this day");
   }
 
-  /* --- Energy check-up (Wellness saves one number per day) --- */
-  const energy = ENERGY[localStorage.getItem(ENERGY_PREFIX + key)];
-  if (energy) {
+  /* --- Manifestation (written on My Day) --- */
+  const manifests = loadList(MANIFEST_KEY).filter(function (m) {
+    return m && m.text && (onViewedDay(m.created) || m.target === key);
+  }).sort(function (a, b) {
+    return b.created - a.created;   // newest first
+  });
+
+  if (manifests.length > 0) {
     energyBox.textContent = "";
+    const ul = document.createElement("ul");
+    ul.className = "dv-mf";
+    manifests.forEach(function (m) {
+      const li = document.createElement("li");
+      li.className = "dv-mf-item";
 
-    const word = document.createElement("span");
-    word.className = "dv-big-word";
-    word.textContent = energy.word;
+      const p = document.createElement("p");
+      p.className = "dv-text";
+      const forThisDay = m.target === key;
+      p.textContent = (forThisDay ? "🌙 " : "✨ ") + m.text;
+      li.appendChild(p);
 
-    const note = document.createElement("span");
-    note.className = "dv-time";
-    note.textContent = energy.note;
-
-    energyBox.append(word, note);
+      const small = document.createElement("span");
+      small.className = "dv-time";
+      if (forThisDay && !onViewedDay(m.created)) {
+        small.textContent = "written " + new Date(m.created).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+      } else {
+        const t = m.target.split("-").map(Number);
+        small.textContent = m.target === key ? "for this day" :
+          "for " + new Date(t[0], t[1] - 1, t[2]).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+      }
+      li.appendChild(small);
+      ul.appendChild(li);
+    });
+    energyBox.appendChild(ul);
+    if (manifests.length > 1) {
+      const more = document.createElement("span");
+      more.className = "dv-mf-more";
+      more.textContent = "+" + (manifests.length - 1) + " more";
+      energyBox.appendChild(more);
+    }
   } else {
-    showEmpty(energyBox, "No energy check-up this day");
+    showEmpty(energyBox, "Nothing manifested this day ✨");
   }
 
   /* --- Journal (oldest entry first, so the day reads like a story) --- */

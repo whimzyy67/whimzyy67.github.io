@@ -112,6 +112,57 @@
 
     document.body.appendChild(wrap);
     document.body.appendChild(bar);
+
+    /* ---- "turn your phone sideways" pop-up, shown when Work Space is tapped while holding the phone upright ---- */
+    var rot = null, rotLink = null;
+    function upright() {
+      return window.matchMedia("(orientation: portrait)").matches && window.innerWidth < 700;
+    }
+    function closeRot() {
+      if (rot) { rot.classList.remove("open"); }
+      rotLink = null;
+    }
+    function goWorkSpace() {
+      var link = rotLink;
+      closeRot();
+      if (link) { link.dataset.rotOk = "1"; link.click(); }
+    }
+    function openRot(link) {
+      if (!rot) {
+        rot = el("div", "wz-rot");
+        rot.setAttribute("role", "dialog");
+        rot.setAttribute("aria-label", "Rotate your screen");
+        var card = el("div", "wz-rot-card");
+        var ico = el("div", "wz-rot-ico", "📱");
+        card.appendChild(ico);
+        card.appendChild(el("h2", "", "Rotate your screen"));
+        card.appendChild(el("p", "", "Turn your phone sideways for a better view while using Work Space."));
+        var go = el("button", "wz-rot-go", "Open Work Space"); go.type = "button";
+        go.addEventListener("click", goWorkSpace);
+        var no = el("button", "wz-rot-no", "Not now"); no.type = "button";
+        no.addEventListener("click", closeRot);
+        card.appendChild(go); card.appendChild(no);
+        rot.appendChild(card);
+        rot.addEventListener("click", function (e) { if (e.target === rot) { closeRot(); } });
+        document.body.appendChild(rot);
+      }
+      rotLink = link;
+      rot.classList.add("open");
+    }
+    // capture phase, so this runs before the page-slide code
+    document.addEventListener("click", function (e) {
+      var link = e.target.closest && e.target.closest("a.wz-special");
+      if (!link || link.dataset.rotOk || here === "work-space" || !upright()) { return; }
+      e.preventDefault();
+      e.stopPropagation();
+      openRot(link);
+    }, true);
+    // if they turn the phone while the pop-up is open, carry on straight away
+    function turned() { if (rot && rot.classList.contains("open") && !upright()) { goWorkSpace(); } }
+    window.addEventListener("orientationchange", function () { setTimeout(turned, 150); });
+    window.addEventListener("resize", turned);
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") { closeRot(); } });
+    window.addEventListener("pageshow", function () { closeRot(); if (bar.querySelector(".wz-special")) { delete bar.querySelector(".wz-special").dataset.rotOk; } });
   }
 
   if (document.body) { build(); }

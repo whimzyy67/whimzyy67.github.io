@@ -1,6 +1,6 @@
 /* Whimzyy service worker. Keep this file in the SITE ROOT (next to index.html).
    Bump VERSION whenever you deploy new files so phones drop the old cache. */
-const VERSION = "whimzyy-v11";
+const VERSION = "whimzyy-v12";
 const CORE = ["./", "./index.html", "./home.html", "./pwa/offline.html", "./pwa/manifest.json",
   "./pwa/icons/icon-192.png", "./pwa/icons/icon-512.png"];
 

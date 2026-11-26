@@ -11,6 +11,48 @@
     4. My Day          8. The "View" dropdown cards
    ========================================================== */
 
+/* ---------- Pop-up: "Rotate your screen" (shown when Work Space is tapped upright) ---------- */
+.wz-rot{ display: none; }
+.wz-rot.open{
+    display: flex; align-items: center; justify-content: center;
+    position: fixed; inset: 0; z-index: 400; padding: 20px;
+    background: rgba(0,0,0,.62);
+    animation: wz-rot-fade .2s ease both;
+}
+.wz-rot-card{
+    width: min(340px, 100%); text-align: center;
+    padding: 22px 20px 18px; border-radius: 22px;
+    background: var(--bg, #2a0d14); color: var(--text, #f3e6d3);
+    border: 2px solid var(--gold, #e8b94a);
+    box-shadow: 0 18px 50px rgba(0,0,0,.5);
+    animation: wz-rot-pop .28s cubic-bezier(.2,.9,.3,1.2) both;
+}
+.wz-rot-ico{ font-size: 54px; line-height: 1; display: inline-block; animation: wz-rot-turn 1.8s ease-in-out infinite; }
+.wz-rot-card h2{ margin: 10px 0 6px; font: 800 20px "Bricolage Grotesque", "DM Sans", system-ui, sans-serif; color: var(--gold, #e8b94a); }
+.wz-rot-card p{ margin: 0 0 16px; font: 500 15px/1.4 "DM Sans", system-ui, sans-serif; }
+.wz-rot-go{
+    display: block; width: 100%; min-height: 46px; border: 0; border-radius: 999px;
+    background: var(--gold, #e8b94a); color: var(--bg, #2a0d14);
+    font: 800 16px "DM Sans", system-ui, sans-serif;
+}
+.wz-rot-no{
+    display: block; width: 100%; margin-top: 8px; min-height: 40px; border: 0; background: none;
+    color: inherit; font: 700 14px "DM Sans", system-ui, sans-serif; opacity: .8;
+}
+@keyframes wz-rot-fade{ from{ opacity: 0; } to{ opacity: 1; } }
+@keyframes wz-rot-pop{ from{ opacity: 0; transform: scale(.9) translateY(10px); } to{ opacity: 1; transform: none; } }
+@keyframes wz-rot-turn{ 0%,20%{ transform: rotate(0); } 55%,80%{ transform: rotate(-90deg); } 100%{ transform: rotate(0); } }
+
+/* ---------- Day Verse: the cards rise into place, like the cards on My Day ---------- */
+:where(.content .dv-card){ animation: wz-rise .45s cubic-bezier(.2,.8,.2,1) both; }
+.dv-top-right .dv-card:nth-child(2){ animation-delay: .06s; }
+.dv-col:nth-child(1) .dv-card:nth-child(1){ animation-delay: .10s; }
+.dv-col:nth-child(1) .dv-card:nth-child(2){ animation-delay: .16s; }
+.dv-col:nth-child(2) .dv-card:nth-child(1){ animation-delay: .20s; }
+.dv-col:nth-child(3) .dv-card:nth-child(1){ animation-delay: .26s; }
+.dv-col:nth-child(3) .dv-card:nth-child(2){ animation-delay: .32s; }
+@media (prefers-reduced-motion: reduce){ .wz-rot.open, .wz-rot-card, .wz-rot-ico, .content .dv-card{ animation: none !important; } }
+
 /* the dropdown buttons exist in the page on every device, but only show on phones */
 .wz-view, .wz-close{ display: none; }
 
@@ -215,7 +257,7 @@ html.has-tabbar .myday-grid{
     flex: 1; min-height: 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 20fr) minmax(0, 50fr) minmax(0, 30fr) auto;
+    grid-template-rows: minmax(0, 27fr) minmax(0, 43fr) minmax(0, 30fr) auto;
     gap: var(--card-gap);
 }
 html.has-tabbar .left-side,
@@ -230,6 +272,27 @@ html.has-tabbar .mood-btn{ min-height: 0; padding: 2px 4px; flex-direction: row;
 html.has-tabbar .mood-emoji{ font-size: 18px; }
 html.has-tabbar .mood-label{ font-size: 10.5px; line-height: 1.05; text-align: left; }
 html.has-tabbar .mood-note{ display: none; }
+
+/* Manifest card (My Day) and feeling card (Wellness) */
+html.has-tabbar .mf{ flex: 1; min-height: 0; gap: 6px; }
+html.has-tabbar .mf-title{ font-size: 16px; }
+html.has-tabbar .mf-text{ flex: 1; min-height: 0; padding: 6px 12px; font-size: 14px; border-radius: 14px; }
+html.has-tabbar .mf-row{ flex-wrap: nowrap; gap: 6px; }
+html.has-tabbar .mf-when, html.has-tabbar .mf-date{ flex: 1 1 0; min-height: 34px; font-size: 13px; padding: 2px 10px; }
+html.has-tabbar .mf-save{ min-height: 34px; padding: 2px 14px; font-size: 14px; }
+html.has-tabbar .mf-note{ font-size: 12px; min-height: 0; }
+html.has-tabbar .mf-note:empty{ display: none; }
+
+html.has-tabbar .wz-mood-title{ font-size: 16px; margin: 0 0 4px; }
+html.has-tabbar .wz-mood-row{ gap: 4px; }
+html.has-tabbar .wz-mood-btn{ min-height: 0; padding: 2px 6px; gap: 4px; font-size: 10.5px; border-radius: 14px; }
+html.has-tabbar .wz-mood-emoji{ font-size: 17px; }
+html.has-tabbar .wz-mood-note{ display: none; }
+
+/* Dayverse: the manifestation card shows the first one and "+N more" */
+html.has-tabbar .dv-mf-item:nth-child(n+2){ display: none; }
+html.has-tabbar .dv-mf-more{ display: block; font-size: 10px; opacity: .8; }
+html.has-tabbar .dv-mf-item .dv-text{ display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
 html.has-tabbar .myday-grid .todo-card .progress{ margin: 0 0 6px; }
 html.has-tabbar .myday-grid .progress-top{ display: flex; align-items: baseline; gap: 10px; margin: 0 0 4px; }
@@ -257,7 +320,7 @@ html.has-tabbar .wellness-grid{
     flex: 1; min-height: 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 40fr) minmax(0, 15fr) minmax(0, 15fr) minmax(0, 15fr) minmax(0, 15fr);
+    grid-template-rows: minmax(0, 35fr) minmax(0, 19fr) minmax(0, 15fr) minmax(0, 16fr) minmax(0, 15fr);
     grid-template-areas: "breathe" "checkin" "water" "stretch" "remind";
     gap: var(--card-gap);
 }
