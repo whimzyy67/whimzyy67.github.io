@@ -144,13 +144,11 @@
 /* ---------- 4. Three columns ---------- */
 
 /* Three equal columns. minmax(0, ...) stops long text from pushing a column wider.
-   align-items: start lets every card be only as tall as its own content,
-   so the Journal does not grow when the Stars card gets long. */
+   The columns all end at the same height (the default, "stretch"). */
 .dv-cols{
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--card-gap);
-    align-items: start;
 }
 
 /* One column: its cards stacked with a gap between them. */
@@ -161,7 +159,10 @@
     min-width: 0;
 }
 
-/* (A column with one card no longer stretches to the height of its neighbours.) */
+/* A column with only one card (Journal, Tasks): the card fills the column's height. */
+.dv-col > .dv-card:only-child{
+    flex: 1;
+}
 
 
 /* ---------- 5. The shared look of the cards ---------- */
@@ -311,93 +312,21 @@
     }
 }
 
-/* ---------- 8. Fixed layout on laptops and tablets: the page fits the window ----------
-   The five cards (How was your day, Parking lot, Journal, Tasks completed, Stars earned)
-   keep a fixed size. Whatever is added to a card scrolls INSIDE it, with a thin scroll bar
-   on its right side. (On phones the cards stack and each list scrolls inside a limited height.) */
-
-@media (min-width: 901px){
-
-    /* the page is exactly as tall as the window, so the page itself never scrolls */
-    .content{
-        box-sizing: border-box;
-        height: 100vh;
-        height: 100dvh;
-        min-height: 520px;
-        display: flex;
-        flex-direction: column;
-        padding: 88px 24px 24px;
-    }
-
-    .dv-page{
-        flex: 1;
-        min-height: 0;
-    }
-
-    /* the top row keeps its own height */
-    .dv-top{
-        flex-shrink: 0;
-    }
-
-    /* the three columns share ALL the height that is left */
-    .dv-cols{
-        flex: 1;
-        min-height: 0;
-        grid-template-rows: minmax(0, 1fr);
-        align-items: stretch;
-    }
-
-    .dv-col{
-        min-height: 0;
-    }
-
-    /* every card: a fixed share of its column. The heading stays put, the rest scrolls. */
-    .dv-col > .dv-card{
-        flex: 1 1 0;
-        min-height: 0;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
-    .dv-col > .dv-card > h2{
-        flex-shrink: 0;
-    }
-    .dv-col > .dv-card > :not(h2){
-        flex: 1;
-        min-height: 0;
-        overflow-y: auto;
-        padding-right: 6px;
-    }
+/* ---------- 8. Desktop: everything fits the window (no scrolling) ---------- */
+@media (min-width: 901px) and (not ((hover: none) and (pointer: coarse) and (max-width: 1100px))){
+    .content{ box-sizing: border-box; height: 100vh; min-height: 560px; display: flex; flex-direction: column; }
+    .dv-page{ flex: 1; min-height: 0; }
+    .dv-top{ flex: 0 0 auto; }
+    .dv-cols{ flex: 1; min-height: 0; }
+    .dv-col{ min-height: 0; }
+    .dv-col > .dv-card{ min-height: 0; overflow-y: auto; }
+    .dv-col > .dv-card:only-child{ flex: 1; }
+    .dv-col .dv-card:not(:only-child){ flex: 1 1 0; }
+    .dv-col:nth-child(1) .dv-day{ flex: 0 0 auto; }
+    .dv-col:nth-child(1) .dv-parking{ flex: 1 1 0; }
+    /* Stars earned: sits under Feeling + Manifestation, as wide as both together */
+    .dv-top-right .dv-stars{ grid-column: 1 / -1; padding: 12px 18px; }
+    .dv-top-right .dv-stars h2{ margin: 0 0 4px; font-size: 20px; }
+    .dv-top-right .dv-stars .dv-list{ max-height: 56px; overflow-y: auto; }
 }
-
-/* short laptop windows: tighter spacing so everything still fits */
-@media (min-width: 901px) and (max-height: 700px){
-    .content{ padding: 76px 24px 16px; }
-    .dv-header h1{ font-size: 28px; }
-    .dv-header p{ margin-bottom: 8px; }
-    .dv-card{ padding: 14px 16px; }
-    .dv-card h2{ font-size: 19px; margin-bottom: 8px; }
-}
-
-/* phones and small tablets: cards stack; a long list scrolls inside its card instead of stretching it */
-@media (max-width: 900px){
-    .dv-col > .dv-card > :not(h2){
-        max-height: 320px;
-        overflow-y: auto;
-        padding-right: 6px;
-    }
-}
-
-/* a thin scroll bar in the page colours, for every scrolling card */
-.dv-card *{
-    scrollbar-width: thin;
-    scrollbar-color: rgba(243, 231, 211, 0.4) transparent;
-}
-.dv-card *::-webkit-scrollbar{ width: 8px; }
-.dv-card *::-webkit-scrollbar-track{ background: transparent; }
-.dv-card *::-webkit-scrollbar-thumb{
-    background: rgba(243, 231, 211, 0.35);
-    border-radius: 999px;
-}
-.dv-soft *::-webkit-scrollbar-thumb{ background: rgba(90, 15, 30, 0.35); }
-.dv-soft *{ scrollbar-color: rgba(90, 15, 30, 0.4) transparent; }
+.dv-top-right .dv-stars{ grid-column: 1 / -1; }

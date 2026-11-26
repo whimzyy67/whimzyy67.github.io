@@ -319,7 +319,7 @@
 
   /* ---------- Dayverse: a card for the day you are looking at ---------- */
   function buildDayverse() {
-    var col = document.querySelector(".dv-col:nth-child(2)");
+    var col = document.querySelector(".dv-col:nth-child(3)");
     var picker = document.getElementById("datePicker");
     if (!col || !picker || col.querySelector(".dv-dump")) { return; }
     var art = el("article", "dv-card dv-dump");
