@@ -100,12 +100,6 @@
     if (r.error) { throw r.error; }
     return r.data ? { has: true, value: !!r.data.dump_public && !!r.data.progress_public } : { has: false, value: false };
   }
-  async function setPublic(v) {
-    var r = await db().from("profiles").update({ dump_public: v }).eq("user_id", me().id).select("user_id");
-    if (r.error) { throw r.error; }
-    if (!r.data || !r.data.length) { throw new Error("Pick your @username in Search Homies first, then you can go public."); }
-  }
-
   /* ---------- little UI pieces ---------- */
   function lightbox(src) {
     var o = el("div", "dd-light");
@@ -113,27 +107,6 @@
     o.appendChild(img);
     o.addEventListener("click", function () { o.remove(); });
     document.body.appendChild(o);
-  }
-
-  function makeSwitch(onLabel, offLabel) {
-    var wrap = el("div", "dd-priv"), sw = el("button", "dd-switch"), label = el("span", "dd-priv-text");
-    sw.type = "button"; sw.setAttribute("role", "switch"); sw.setAttribute("aria-checked", "false");
-    wrap.appendChild(sw); wrap.appendChild(label);
-    var state = { on: false, ready: false };
-    function paint() { sw.setAttribute("aria-checked", state.on ? "true" : "false"); label.textContent = state.on ? onLabel : offLabel; }
-    paint();
-    sw.addEventListener("click", async function () {
-      if (!loggedIn()) { openLogin(); return; }
-      var next = !state.on; sw.disabled = true;
-      try { await setPublic(next); state.on = next; paint(); wrap.dataset.err = ""; label.classList.remove("bad"); }
-      catch (e) { label.textContent = friendly(e); label.classList.add("bad"); }
-      sw.disabled = false;
-    });
-    wrap.load = async function () {
-      try { var p = await getPublic(); state.on = p.value; paint(); label.classList.remove("bad"); }
-      catch (e) { label.textContent = friendly(e); label.classList.add("bad"); }
-    };
-    return wrap;
   }
 
   /* read-only line: the ONE public/private switch lives in Search Homies (it covers progress and day dump) */

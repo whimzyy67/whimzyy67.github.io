@@ -474,3 +474,68 @@ body:has(.auth-btn.floating) .star-pill.floating{
     margin-right: auto;      /* pushes the nav links to the right edge */
     align-self: center;
 }
+
+
+/* ===== Manifest card (formerly css/manifest.css) ===== */
+/* manifest.css: the Manifest card on My Day, the feeling card on Wellness, and the manifestation entries on Dayverse. */
+
+/* the old card contents stay in the page (the old scripts need them) but are hidden */
+.wz-old{ display: none !important; }
+
+/* ---------- My Day: Manifest it ---------- */
+.mf{ display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.mf-title{ margin: 0; }
+.mf-text{
+    width: 100%; box-sizing: border-box; resize: none;
+    min-height: 64px; padding: 10px 14px;
+    border: 1px solid rgba(243, 231, 211, 0.3); border-radius: 16px;
+    background: rgba(255, 255, 255, 0.06); color: var(--warm-beige, #f3e7d3);
+    font: 500 15px/1.35 "DM Sans", Arial, sans-serif;
+}
+.mf-text::placeholder{ color: var(--warm-beige, #f3e7d3); opacity: .55; }
+.mf-text:focus-visible, .mf-when:focus-visible, .mf-date:focus-visible{ outline: 2px solid var(--butter, #f2b93b); outline-offset: 2px; }
+.mf-row{ display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.mf-when, .mf-date{
+    min-width: 0; min-height: 38px; padding: 4px 12px;
+    border: 1px solid rgba(243, 231, 211, 0.3); border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06); color: var(--warm-beige, #f3e7d3);
+    font: 600 14px "DM Sans", Arial, sans-serif; color-scheme: dark;
+}
+.mf-when{ flex: 1 1 130px; }
+.mf-date{ flex: 1 1 130px; }
+.mf-save{
+    flex: 0 0 auto; min-height: 38px; padding: 4px 18px; border: 0; border-radius: 999px;
+    background: var(--butter, #f2b93b); color: var(--bg, #2a0d14);
+    font: 800 15px "DM Sans", Arial, sans-serif; cursor: pointer;
+    box-shadow: 0 0 12px rgba(201, 148, 26, 0.45);
+}
+.mf-save:hover{ transform: translateY(-1px); }
+.mf-note{ margin: 0; min-height: 1.3em; font-size: 13px; color: var(--warm-beige, #f3e7d3); }
+.mf-note.bad{ color: #ffb4a8; }
+
+/* ---------- Wellness: How are you feeling? ---------- */
+.wz-mood{ min-height: 0; }
+.wz-mood-title{ margin: 0 0 8px; }
+.wz-mood-row{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.wz-mood-btn{
+    min-width: 0; display: flex; align-items: center; gap: 8px; justify-content: flex-start;
+    padding: 6px 12px; border: 1px solid rgba(243, 231, 211, 0.25); border-radius: 18px;
+    background: transparent; color: var(--warm-beige, #f3e7d3);
+    font: 500 13px/1.15 "DM Sans", Arial, sans-serif; text-align: left; cursor: pointer;
+    transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease;
+}
+.wz-mood-btn:hover{ transform: translateY(-2px); background-color: rgba(255, 255, 255, 0.08); }
+.wz-mood-btn:focus-visible{ outline: 2px solid var(--butter, #f2b93b); outline-offset: 2px; }
+.wz-mood-btn.selected{
+    border-color: transparent; background-color: var(--butter, #f2b93b); color: var(--bg, #2a0d14);
+    box-shadow: 0 0 14px rgba(201, 148, 26, 0.6);
+}
+.wz-mood-emoji{ font-size: 24px; line-height: 1; flex-shrink: 0; }
+.wz-mood-label{ min-width: 0; }
+.wz-mood-note{ margin: 8px 0 0; min-height: 1.3em; font-size: 13px; }
+
+/* ---------- Dayverse: manifestation entries ---------- */
+.dv-mf{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.dv-mf-item{ margin: 0; }
+.dv-mf-item .dv-text{ margin: 0; overflow-wrap: anywhere; }
+.dv-mf-more{ display: none; }

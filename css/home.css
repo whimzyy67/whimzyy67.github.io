@@ -9,8 +9,7 @@
     0. Colors and sizes
     1. Body (the whole page)
     2. Top bar (logo, Work Space, Home, About Us)
-    3. Side bar (the menu that slides in)
-    4. Side bar button (the arrow handle)
+    3. Side bar (an icon rail that opens to show names)
     5. Main content area
     6. The shared look of every card
     7. Top row (time box and slider side by side)
@@ -23,21 +22,6 @@
    14. Next focus session card
    15. Screen-size rules (narrow, wide, short windows)
    ========================================================== */
-
-/*Fonts*/   
-/*@font-face{
-    font-family: "Bricolage Grotesque";
-    src: url("../fonts/BricolageGrotesque.ttf") format("truetype");
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face{
-    font-family: "DM Sans";
-    src: url("../fonts/DMSans.ttf") format("truetype");
-    font-style: normal;
-    font-display: swap;
-}*/
 
 /* ---------- 0. Colors and sizes ---------- */
 
