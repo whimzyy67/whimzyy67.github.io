@@ -122,3 +122,13 @@
     html.has-tabbar .dd-add span{ font-size: 10px; }
     html.has-tabbar .dd-add b{ font-size: 20px; line-height: 1; }
 }
+
+/* phones: fixed-size thumbnails so the card is as tall as its content (no guessing) */
+@media (max-width: 820px), (hover: none) and (pointer: coarse) and (max-width: 1100px){
+    html.has-tabbar .dd-strip{ flex: 0 0 auto; height: 66px; }
+    html.has-tabbar .dd-strip-wrap{ flex: 0 0 auto; }
+    html.has-tabbar .greeting-card.dd-card .dd-thumb,
+    html.has-tabbar .greeting-card.dd-card .dd-add{ height: 64px; width: 64px; min-width: 64px; }
+    html.has-tabbar .greeting-card.dd-card{ padding: 8px 12px; }
+    html.has-tabbar .dd{ flex: 0 0 auto; gap: 4px; }
+}

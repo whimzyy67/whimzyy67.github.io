@@ -257,15 +257,16 @@ html.has-tabbar .myday-grid{
     flex: 1; min-height: 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 120fr) minmax(0, 128fr) minmax(0, 172fr) minmax(0, 140fr) auto;
+    grid-template-rows: auto auto minmax(0, 11fr) minmax(0, 9fr);
     gap: var(--card-gap);
 }
 html.has-tabbar .left-side,
 html.has-tabbar .right-side{ display: contents; }
-html.has-tabbar .myday-grid .mood-card{ grid-row: 2; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+html.has-tabbar .myday-grid .mood-card{ grid-row: 2; min-height: 0; overflow: visible; display: flex; flex-direction: column; }
 html.has-tabbar .myday-grid .todo-card{ grid-row: 3; min-height: 0; display: flex; flex-direction: column; }
 html.has-tabbar .myday-grid .journal-card{ grid-row: 4; min-height: 0; display: flex; flex-direction: column; }
-html.has-tabbar .myday-grid .history-card{ grid-row: 5; }
+/* "Previous entries" lives on Dayverse, so it is not repeated on phones */
+html.has-tabbar .myday-grid .history-card{ display: none !important; }
 
 html.has-tabbar .mood-row{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; flex: 1; min-height: 0; }
 html.has-tabbar .mood-btn{ min-height: 0; padding: 2px 4px; flex-direction: row; gap: 4px; justify-content: flex-start; font-size: 11px; }
@@ -275,6 +276,7 @@ html.has-tabbar .mood-note{ display: none; }
 
 /* Manifest card (My Day) and feeling card (Wellness) */
 html.has-tabbar .mf{ flex: 1; min-height: 0; gap: 6px; }
+html.has-tabbar .mood-card.wz-old-host, html.has-tabbar .myday-grid .mood-card{ justify-content: flex-start; }
 html.has-tabbar .mf-title{ font-size: 16px; }
 html.has-tabbar .mf-text{ flex: 1; min-height: 52px; padding: 6px 12px; font-size: 14px; border-radius: 14px; }
 html.has-tabbar .mf-row{ flex-wrap: nowrap; gap: 6px; }
