@@ -77,6 +77,10 @@
     html.has-tabbar .dd-all{ font-size: 12px; padding: 2px 0; white-space: nowrap; }
     html.has-tabbar .dv-dump{ order: 4; }
     html.has-tabbar .dv-dump .dd-thumb, html.has-tabbar .dv-dump .dd-add{ height: 70px; }
+    /* Dayverse on phones: the strip is exactly as tall as the pictures (nothing clipped, no empty gap under it) */
+    html.has-tabbar .dv-dump .dd-strip-wrap{ min-height: 0; }
+    html.has-tabbar .dv-dump .dd-strip{ height: auto; min-height: 0; padding: 3px 0; align-items: center; }
+    html.has-tabbar .dv-dump .dd-thumb, html.has-tabbar .dv-dump .dd-add{ flex: 0 0 auto; width: 70px; min-width: 70px; height: 70px; box-sizing: border-box; }
     .dd-modal-card .dd-thumb, .dd-modal-card .dd-add{ width: calc(50% - 4px); }
 }
 

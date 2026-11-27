@@ -994,6 +994,41 @@ html.has-tabbar .journal-card form{ flex: 1; display: flex; flex-direction: colu
 html.has-tabbar .journal-card textarea{ flex: 1; min-height: 0; resize: none; font-size: 16px; }
 html.has-tabbar .journal-actions{ margin-top: 4px; }
 
+/* My Day on phones: Day Dump and Journal side by side (50% / 50%), then Manifest, then the to-do list fills the rest */
+html.has-tabbar .myday-grid{
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
+}
+html.has-tabbar .myday-grid .greeting-card.dd-card{ grid-column: 1; grid-row: 1; min-width: 0; }
+html.has-tabbar .myday-grid .journal-card{ grid-column: 2; grid-row: 1; min-width: 0; padding: 8px 10px; overflow: hidden; position: relative; }
+html.has-tabbar .myday-grid .mood-card{ grid-column: 1 / -1; grid-row: 2; }
+html.has-tabbar .myday-grid .todo-card{ grid-column: 1 / -1; grid-row: 3; position: relative; }
+html.has-tabbar .myday-grid .journal-card h2{ font-size: 15px; margin: 0 0 4px; }
+html.has-tabbar .myday-grid .journal-card textarea{ min-height: 56px; font-size: 14px; padding: 2px 4px; }
+html.has-tabbar .myday-grid .journal-card .save-btn{ min-height: 30px; padding: 2px 12px; font-size: 13px; }
+html.has-tabbar .myday-grid .journal-card .save-note{ font-size: 11px; }
+html.has-tabbar .myday-grid .dd-foot{ flex-direction: column; align-items: flex-start; gap: 2px; }
+html.has-tabbar .myday-grid .dd-priv-link{ max-width: 100%; font-size: 10.5px; padding: 2px 8px; }
+html.has-tabbar .myday-grid .dd-all{ font-size: 11.5px; padding: 0; }
+
+/* "View" / "Close" for the to-do list and the journal */
+html.has-tabbar .wz-expbtn{
+    position: absolute; top: 7px; right: 9px; z-index: 2; border: 1px solid currentColor; border-radius: 999px;
+    background: transparent; color: var(--gold, #F2B83D); font: 700 11.5px "DM Sans", Arial, sans-serif; padding: 2px 10px; cursor: pointer;
+}
+html.has-tabbar .journal-card .wz-expbtn{ color: var(--wine, #5A0F1E); }
+html.has-tabbar .wz-backdrop{ position: fixed; inset: 0; z-index: 889; background: rgba(0,0,0,.6); }
+html.has-tabbar .wz-full{
+    position: fixed !important; grid-area: auto !important; z-index: 890; left: 8px; right: 8px; top: 62px; bottom: 84px;
+    margin: 0 !important; padding: 14px !important; overflow: hidden; display: flex !important; flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0,0,0,.6);
+}
+html.has-tabbar .wz-full h2{ font-size: 22px !important; }
+html.has-tabbar .wz-full.todo-card .todo-list{ flex: 1; min-height: 0; overflow-y: auto; }
+html.has-tabbar .wz-full.journal-card textarea{ font-size: 16px; min-height: 0; }
+html.has-tabbar .wz-full.journal-card .save-btn{ min-height: 40px; font-size: 15px; padding: 4px 18px; }
+html.has-tabbar .wz-holder{ visibility: hidden; }
+
 
 /* ---------- 5. Wellness ---------- */
 /* Breathe 40%, then Energy, Water, Stretch, Reminders 15% each. No heading line. */
@@ -1002,16 +1037,24 @@ html.has-tabbar .well-head{ display: none; }
 html.has-tabbar .wellness-grid{
     flex: 1; min-height: 0;
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 35fr) minmax(0, 19fr) minmax(0, 15fr) minmax(0, 16fr) minmax(0, 15fr);
-    grid-template-areas: "breathe" "checkin" "water" "stretch" "remind";
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 30fr) minmax(0, 19fr) minmax(0, 15fr) minmax(0, 18fr);
+    grid-template-areas: "breathe breathe" "checkin checkin" "water water" "stretch remind";
     gap: var(--card-gap);
 }
 html.has-tabbar .wellness-grid > .card{ min-height: 0; overflow: hidden; }
 
-html.has-tabbar .breathing-card{ display: flex; flex-direction: column; align-items: center; }
-html.has-tabbar .breath-stage{ flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
-html.has-tabbar .breath-circle{ width: min(26vw, 11dvh); height: min(26vw, 11dvh); min-width: 76px; min-height: 76px; }
+/* Breathe: the circle on the left, the pattern buttons and Start on the right */
+html.has-tabbar .breathing-card{
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 12px; align-items: center; justify-items: center;
+}
+html.has-tabbar .breathing-card h2{ grid-column: 1 / -1; grid-row: 1; justify-self: start; }
+html.has-tabbar .breath-stage{ grid-column: 1; grid-row: 2 / span 2; min-height: 0; display: flex; align-items: center; justify-content: center; }
+html.has-tabbar .breathing-card .chips{ grid-column: 2; grid-row: 2; align-self: end; justify-content: center; flex-wrap: wrap; }
+html.has-tabbar .breathing-card .soft-btn{ grid-column: 2; grid-row: 3; align-self: start; margin-top: 6px; }
+html.has-tabbar .breathing-card .chip{ padding: 4px 12px; font-size: 13px; }
+html.has-tabbar .breath-circle{ width: min(34vw, 17dvh); height: min(34vw, 17dvh); min-width: 84px; min-height: 84px; }
 html.has-tabbar .breath-text{ font-size: 11px; }
 html.has-tabbar .breathing-card .chips{ gap: 4px; margin-top: 4px; }
 html.has-tabbar .breathing-card .soft-btn{ min-height: 34px; padding: 4px 22px; font-size: 15px; }
@@ -1136,6 +1179,17 @@ html.has-tabbar .dv-page .wz-coll.wz-open{ align-self: stretch; min-height: 0; m
 /* Wellness cards must keep their rows when collapsed */
 html.has-tabbar .wellness-grid .wz-coll:not(.wz-open){ overflow: hidden; }
 html.has-tabbar .wellness-grid .wz-coll.wz-open{ overflow-y: auto; }
+
+/* Stretch and Reminders sit side by side (50% / 50%); heading and button stacked inside each */
+html.has-tabbar .wellness-grid .wz-coll:not(.wz-open){ flex-direction: column; justify-content: center; align-items: flex-start; gap: 6px; padding: 8px 12px; }
+html.has-tabbar .wellness-grid .wz-coll:not(.wz-open) .wz-heading{ font-size: 18px; padding-right: 0; }
+html.has-tabbar .wellness-grid .wz-coll:not(.wz-open) .wz-view{ min-height: 30px; padding: 2px 16px; }
+/* "Open" shows the card in the middle of the screen, over a dimmed page */
+html.has-tabbar .wellness-grid .wz-coll.wz-open{
+    position: fixed; grid-area: auto; left: 8px; right: 8px; top: 62px; bottom: auto; z-index: 890;
+    align-self: auto; min-height: 0; max-height: calc(100dvh - 146px); margin: 0; padding: 14px;
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, .62), 0 10px 40px rgba(0, 0, 0, .6);
+}
 
 
 /* ---------- 9. Vibe ---------- */

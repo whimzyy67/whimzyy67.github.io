@@ -274,3 +274,81 @@
 
   if (document.body) { build(); } else { document.addEventListener("DOMContentLoaded", build); }
 })();
+
+/* ===== My Day on phones: "View" / "Close" for the to-do list and the journal (the journal also opens while you write) ===== */
+(function () {
+  "use strict";
+  if (!/\/my-day(\.html)?$/.test(location.pathname)) { return; }
+  var PHONE = "(max-width: 820px), (hover: none) and (pointer: coarse) and (max-width: 1100px)";
+  var open = null;   // { card, holder, back, btn }
+
+  function fit() {                                   // keeps the big card above the on-screen keyboard
+    if (!open) { return; }
+    var vv = window.visualViewport, card = open.card;
+    if (!vv) { return; }
+    var kb = window.innerHeight - vv.height - vv.offsetTop;
+    card.style.top = (vv.offsetTop + 62) + "px";
+    card.style.bottom = (kb > 100 ? kb + 8 : 84) + "px";
+  }
+
+  function expand(card, btn) {
+    if (open) { collapse(); }
+    var cs = getComputedStyle(card);
+    var holder = document.createElement("div");      // keeps the card's place so the page does not jump
+    holder.className = "wz-holder";
+    holder.style.gridColumn = cs.gridColumn; holder.style.gridRow = cs.gridRow;
+    card.parentNode.insertBefore(holder, card);
+    var back = document.createElement("div");
+    back.className = "wz-backdrop";
+    back.addEventListener("click", collapse);
+    card.parentNode.insertBefore(back, card);        // next to the card, so both sit in the same layer
+    card.classList.add("wz-full");
+    btn.textContent = "✕ Close";
+    open = { card: card, holder: holder, back: back, btn: btn };
+    fit();
+  }
+
+  function collapse() {
+    if (!open) { return; }
+    var o = open; open = null;
+    o.card.classList.remove("wz-full");
+    o.card.style.top = ""; o.card.style.bottom = "";
+    o.btn.textContent = "⤢ View";
+    o.holder.remove(); o.back.remove();
+    if (document.activeElement && document.activeElement.blur && o.card.contains(document.activeElement)) { document.activeElement.blur(); }
+  }
+
+  function add(card) {
+    if (!card || card.querySelector(":scope > .wz-expbtn")) { return; }
+    var btn = document.createElement("button");
+    btn.type = "button"; btn.className = "wz-expbtn"; btn.textContent = "⤢ View";
+    btn.addEventListener("click", function () { if (open && open.card === card) { collapse(); } else { expand(card, btn); } });
+    card.appendChild(btn);
+    return btn;
+  }
+  function showButtons() {                           // the buttons exist only in the phone layout
+    var on = window.matchMedia(PHONE).matches;
+    Array.prototype.forEach.call(document.querySelectorAll(".wz-expbtn"), function (b) { b.style.display = on ? "" : "none"; });
+  }
+
+  function init() {
+    var todo = document.querySelector(".todo-card"), journal = document.querySelector(".journal-card");
+    if (!todo || !journal) { return; }
+    add(todo); var jb = add(journal);
+    showButtons();
+    window.addEventListener("resize", showButtons);
+    // the journal grows while you write in it
+    var input = document.getElementById("journalInput");
+    if (input) {
+      input.addEventListener("focus", function () {
+        if (window.matchMedia(PHONE).matches && !(open && open.card === journal)) { expand(journal, jb); }
+      });
+    }
+    var form = document.getElementById("journalForm");
+    if (form) { form.addEventListener("submit", function () { setTimeout(collapse, 60); }); }
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") { collapse(); } });
+    if (window.visualViewport) { window.visualViewport.addEventListener("resize", fit); window.visualViewport.addEventListener("scroll", fit); }
+    window.addEventListener("resize", function () { if (!window.matchMedia(PHONE).matches) { collapse(); } });
+  }
+  if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", init); } else { init(); }
+})();
