@@ -1,7 +1,7 @@
 /* background.js: counts screen time, enforces limits, opens the "time's up" page.
    Plain JavaScript, no libraries. Everything is stored in chrome.storage.local on this computer. */
 
-const WHIMZYY_URL = "https://whimzyy-555.netlify.app/html/detox.html";   // change if you get your own domain
+const WHIMZYY_URL = "https://whimzyy67.github.io/html/detox.html";   // change if you get your own domain
 const IDLE_SECONDS = 300;      // no mouse/keyboard for 5 min = not counted (playing audio/video still counts)
 const MAX_GAP = 120;           // never add more than 2 minutes for one gap (the worker may have been asleep)
 const KEEP_DAYS = 45;

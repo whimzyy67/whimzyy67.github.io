@@ -1,4 +1,4 @@
-const WHIMZYY_URL = "https://whimzyy-555.netlify.app/html/detox.html";   // same address as in background.js
+const WHIMZYY_URL = "https://whimzyy67.github.io/html/detox.html";   // same address as in background.js
 
 const q = new URLSearchParams(location.search);
 const why = q.get("why"), id = q.get("id"), app = q.get("app") || "this site", back = q.get("back");

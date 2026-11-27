@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Whimzyy Detox",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Hides Instagram Reels and YouTube Shorts, tracks screen time and enforces the limits you set on the Whimzyy Detox page.",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0P7yguIlv4NICIBcROde1hfp+YaG7MMGWpIe5qr8ldlNmi4/y8Jo1qzCXH/b2nBczqaiRi4Y8WOeAkk1OrAa8pnGzKeXc8CdxKDfetuAbJ4AuvEyo8ClrsCv5jcHbKG3KRoUyfMJjuC2l07NZqZeIamopm8t5s+9GrHvJb+enBia+Ze2pvwVTmbJnW8q0wAhh8mMGQZyxRh9Oif9tPrfqhZGlZHgUdmFB4pGJrBpVl9f2fh5vNJ5OKPINDrKUMhd2sGPvKRf1mSXjrcQsgUnt9avNOXeSrb4aRT2Yu0AsMVysZm+2SFB2V13D54M2YnNcNOS49z4fp1CaMIl/0BHqQIDAQAB",
   "permissions": [
@@ -39,7 +39,8 @@
       "matches": [
         "https://*.netlify.app/*",
         "http://localhost/*",
-        "http://127.0.0.1/*"
+        "http://127.0.0.1/*",
+        "https://whimzyy67.github.io/*"
       ],
       "js": [
         "bridge.js"
@@ -55,7 +56,8 @@
     "matches": [
       "https://*.netlify.app/*",
       "http://localhost/*",
-      "http://127.0.0.1/*"
+      "http://127.0.0.1/*",
+      "https://whimzyy67.github.io/*"
     ]
   }
 }
