@@ -24,7 +24,7 @@ self.addEventListener("fetch", (e) => {
   // Pages: network first (always fresh), fall back to cache, then the offline page.
   if (req.mode === "navigate") {
     e.respondWith(
-      fetch(req)
+      fetch(req, { cache: "no-cache" })   // always ask the server first, so GitHub's 10-minute browser cache cannot serve an old page
         .then((res) => { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(req, copy)); return res; })
         .catch(() => caches.match(req).then((r) => r || caches.match("./pwa/offline.html")))
     );
@@ -39,7 +39,7 @@ self.addEventListener("fetch", (e) => {
 
   e.respondWith(
     caches.match(req).then((cached) => {
-      const fresh = fetch(req).then((res) => {
+      const fresh = fetch(req, { cache: "no-cache" }).then((res) => {   // revalidate every time (a cheap "has it changed?" check)
         if (res && (res.ok || res.type === "opaque")) {
           const copy = res.clone();
           caches.open(VERSION).then((c) => c.put(req, copy));
