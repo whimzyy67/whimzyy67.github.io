@@ -25,7 +25,7 @@ body.no-chrome .back-growth{ display: flex; width: max-content; margin-left: max
     gap: var(--card-gap, 16px);
     flex: 1; height: auto; min-height: 0;
 }
-.gw-left{ grid-column: 1; grid-row: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--card-gap, 16px); min-height: 0; }
+.gw-left{ grid-column: 1; grid-row: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--card-gap, 16px); min-height: 0; }
 .gw-vision{ grid-column: 2; grid-row: 1; display: flex; flex-direction: column; gap: 10px; min-height: 0; }
 .gw-boards{ grid-column: 1 / -1; grid-row: 2; }
 
@@ -263,3 +263,12 @@ body.no-chrome .back-growth{ display: flex; width: max-content; margin-left: max
 .sh-search{ background: color-mix(in srgb, var(--peach, #f8c9a0) 18%, var(--marron-red, #4A0E17)); }
 .sh-right.card{ background: color-mix(in srgb, var(--gold, #F2B83D) 10%, var(--marron-red, #4A0E17)); }
 .sh-row .sh-id h2{ color: var(--text, #f7e7a9); }
+
+/* third card: Habits */
+.gw-left .gw-card:nth-of-type(3){
+    background: linear-gradient(150deg, color-mix(in srgb, var(--candle, #E8B86D) 28%, var(--marron-red, #4A0E17)), var(--dark-red, #6B1520) 80%);
+    border: 2px solid var(--peach, #f8c9a0);
+    box-shadow: 0 0 18px color-mix(in srgb, var(--candle, #E8B86D) 26%, transparent);
+}
+.gw-left .gw-card h2{ font-size: 24px; }
+.gw-left .gw-card p{ font-size: 14px; }

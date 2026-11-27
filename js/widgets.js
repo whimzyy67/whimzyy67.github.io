@@ -45,7 +45,7 @@ function placeWidget(name, widget) {
       saved.y * (window.innerHeight - widget.offsetHeight));
   } else {
     const k = Math.max(0, document.querySelectorAll(".widget:not([hidden])").length - 1);
-    setPx(widget, 24 + k * 28, 92 + k * 28);
+    setPx(widget, 88 + k * 28, 92 + k * 28);
   }
 }
 
@@ -217,3 +217,19 @@ setupTodo(
   document.getElementById("wTodoForm"),
   document.getElementById("wTodoInput")
 );
+
+/* ----- When the side rail opens it pushes the widgets along, so it never covers them ----- */
+(function () {
+  function railGrow() { return window.matchMedia("(max-width: 800px)").matches ? 144 : 176; } // 240-64 (200-56 on small screens)
+  function shiftWidgets() {
+    var open = document.body.classList.contains("sidebar-open");
+    document.querySelectorAll(".widget").forEach(function (w) {
+      if (!open) { w.style.transform = ""; return; }
+      var room = window.innerWidth - (w.offsetLeft + w.offsetWidth) - 8;
+      var dx = Math.max(0, Math.min(railGrow(), room));
+      w.style.transform = "translateX(" + dx + "px)";
+    });
+  }
+  document.querySelectorAll(".widget").forEach(function (w) { w.style.transition = "transform .6s ease"; });
+  new MutationObserver(shiftWidgets).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+})();

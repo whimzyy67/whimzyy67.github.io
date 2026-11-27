@@ -87,7 +87,9 @@
       { id: "sp_cobalt", name: "Cobalt Crashout", cost: 160, special: true },
       { id: "sp_villain", name: "Villain Arc Neon", cost: 180, special: true },
       { id: "sp_sigma", name: "Sigma Forest", cost: 180, special: true },
-      { id: "sp_mauve", name: "Mauve Mafia", cost: 180, special: true }
+      { id: "sp_mauve", name: "Mauve Mafia", cost: 180, special: true },
+      { id: "sp_sunkissed", name: "Sun-Kissed Slay", cost: 150, special: true },
+      { id: "sp_sakura", name: "Sakura Szn Kawaii", cost: 150, special: true }
     ],
     bg: [
       { id: "0", name: "Thunder Woods", cost: 0 },

@@ -15,7 +15,7 @@
 
   var NAV_ORDER = ["work-space", "home", "about-us"];                     // top bar, left to right
   var TAB_ORDER = ["home", "detox", "focus", "work-space",                // footer bar, then the More sheet
-                   "my-day", "wellness", "growth", "productivity", "dayverse", "search-homies", "vibe", "about-us"];
+                   "my-day", "wellness", "growth", "productivity", "dayverse", "habits", "search-homies", "vibe", "about-us"];
   var KEY = "wz-slide-dir";
 
   // Things that must NOT slide.

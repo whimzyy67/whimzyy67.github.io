@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+        <title>Whimzyy - Habits</title>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+
+        <link rel="stylesheet" href="../css/home.css">
+        <link rel="stylesheet" href="../css/aboutus.css">
+        <link rel="stylesheet" href="../css/rewards.css"> 
+        <link rel="stylesheet" href="../css/responsive.css">
+        <link rel="stylesheet" href="../css/growth.css">
+        <link rel="stylesheet" href="../css/habits.css">
+           
+        <script src="../js/auth.js"></script>
+        <script src="../js/theme.js"></script>
+        <script src="../js/rewards.js"></script>
+    </head>
+    <body class="no-chrome hb-body">
+
+        <!--Top Navigation bar-->
+        <header class="topbar">
+
+            <!--Whimzyy Side bar-->
+            <a href="../index.html" class="brand" title="Back to the start">
+                <img src="../stickers/whimzyy.png" alt="Whimzyy" class="whimzyy-logo">
+            </a>
+
+            <!--Navigation bar-->
+            <nav class="top-nav">
+
+                <!--Work Space-->
+                <a href="work-space.html" class="work" title="LOCK IN!!">
+                    <img src="../stickers/nav-work.png" alt="Work Space" class="icon" id="work-space-icon">
+                    Work Space
+                </a>
+
+                <!--Home-->
+                <a href="../home.html" class="tab" title="Your daily welcome">
+                    <img src="../stickers/nav-home.png" alt="Home" class="icon">
+                    Home
+                </a>
+
+                <!--About Us-->
+                <a href="about-us.html" class="tab" title="The story behind Whimzyy">
+                    <img src="../stickers/nav-about.png" alt="About Us" class="icon">
+                    About Us
+                </a>
+
+            </nav>
+        </header>
+
+        <!--Side Navigation bar-->
+        <aside class="sidebar" id="sidebar">
+            <ul>
+
+                <!--My Day-->
+                <li>
+                    <a href="my-day.html" title="Plan your day and write your journal">
+                        <img src="../stickers/side-myday.png" alt="My Day" class="icon" id="my-day-icon">
+                        My Day
+                    </a>
+                </li>
+
+                <!--Focus-->
+                <li>
+                    <a href="focus.html" title="Timer, Stopwatch and Pomodoro">
+                        <img src="../stickers/side-focus.png" alt="Focus" class="icon">
+                        Focus
+                    </a>
+                </li>
+
+                <!--Detox-->
+                <li>
+                    <a href="detox.html" title="Screen Time Limit">
+                        <img src="../stickers/side-detox.png" alt="Detox" class="icon">
+                        Detox
+                    </a>
+                </li>
+
+                <!--Wellness-->
+                <li>
+                    <a href="wellness.html" title="Check in, stretch and drink water">
+                        <img src="../stickers/side-wellness.png" alt="Wellness" class="icon">
+                        Wellness
+                    </a>
+                </li>
+
+                <!--Productivity-->
+                <li>
+                    <a href="productivity.html" title="See your progress and patterns">
+                        <img src="../stickers/side-productivity.png" alt="Productivity" class="icon">
+                        Productivity
+                    </a>
+                </li>
+
+                <!--Dayverse-->
+                <li>
+                    <a href="dayverse.html" title="Your slice of life">
+                        <img src="../stickers/side-dayverse.png" alt="Dayverse" class="icon">
+                        Dayverse
+                    </a>
+                </li>
+
+                <!--Vibe-->
+                <li>
+                    <a href="vibe.html" title="Change themes, sounds and backgrounds">
+                        <img src="../stickers/side-vibe.png" alt="Vibe" class="icon">
+                        Vibe
+                    </a>
+                </li>
+
+            </ul>
+        </aside>
+
+        <!--Main content-->
+        <main class="content">
+            <a class="back-growth" href="growth.html" title="Back to Growth">‹ Growth</a>
+
+            <div class="hb-page" id="hbPage">
+
+                <!--Sidebar: add habits, your list, and the donut report (open by default)-->
+                <aside class="hb-side card" id="hbSide" aria-label="Your habits">
+                    <div class="hb-side-head">
+                        <h2>Habits</h2>
+                        <button type="button" class="hb-hide" id="hbHide" aria-expanded="true" aria-controls="hbSide">‹ Hide</button>
+                    </div>
+
+                    <form class="hb-form" id="hbForm" autocomplete="off">
+                        <input type="text" id="hbInput" maxlength="40" placeholder="Add a habit (e.g. Drink water)" aria-label="New habit">
+                        <button type="submit" class="hb-add">Add</button>
+                    </form>
+                    <p class="hb-msg" id="hbMsg" role="status"></p>
+
+                    <ul class="hb-list" id="hbList"></ul>
+
+                    <div class="hb-report">
+                        <h3 id="hbReportTitle">Report</h3>
+                        <div class="hb-report-body">
+                            <div class="hb-donut" id="hbDonut" role="img" aria-label="Habit report"></div>
+                            <ul class="hb-legend" id="hbLegend"></ul>
+                        </div>
+                    </div>
+                </aside>
+
+                <!--Main page: month, a tab for each week, and the checkboxes-->
+                <section class="hb-main card" aria-label="Habit tracker">
+                    <div class="hb-top">
+                        <button type="button" class="hb-show" id="hbShow" hidden>☰ Habits</button>
+                        <div class="hb-month">
+                            <button type="button" class="hb-nav" id="hbPrev" aria-label="Previous month">‹</button>
+                            <h1 id="hbTitle">Month</h1>
+                            <button type="button" class="hb-nav" id="hbNext" aria-label="Next month">›</button>
+                        </div>
+                        <button type="button" class="hb-today" id="hbToday">Today</button>
+                    </div>
+
+                    <div class="hb-tabs" id="hbTabs" role="tablist" aria-label="Weeks"></div>
+
+                    <div class="hb-table-wrap" id="hbTableWrap">
+                        <table class="hb-table" id="hbTable"></table>
+                        <p class="hb-empty" id="hbEmpty">Add your first habit in the sidebar, then tick it off here every day.</p>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+        <!--JavaScript Links-->
+        <script src="../js/sidebar.js"></script>
+        <script src="../js/habits.js"></script>
+    </body>
+</html>

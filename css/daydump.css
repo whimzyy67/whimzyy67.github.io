@@ -132,3 +132,15 @@
     html.has-tabbar .greeting-card.dd-card{ padding: 8px 12px; }
     html.has-tabbar .dd{ flex: 0 0 auto; gap: 4px; }
 }
+
+.dd-priv-link{ display: inline-flex; align-items: center; font-size: 13px; font-weight: 700; color: var(--gold, #F2B83D); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; max-width: 100%;
+    padding: 6px 12px; border-radius: 999px; border: 1px solid var(--gold, #F2B83D); background: rgba(0,0,0,.2); }
+.dd-priv-link:hover{ background: var(--gold, #F2B83D); color: var(--bg, #1F0508); }
+@media (max-width: 820px), (hover: none) and (pointer: coarse) and (max-width: 1100px){
+    html.has-tabbar .dd-priv-link{ font-size: 11px; padding: 4px 9px; }
+}
+
+/* the "Log in to save" button must never be squeezed out of the card */
+.dd-slot{ flex: 0 0 auto; margin-left: auto; }
+.dd-top > :first-child, .dd-dvhead > :first-child{ min-width: 0; flex: 1 1 auto; }
+.dd-slot .dd-login{ white-space: nowrap; max-width: 100%; }

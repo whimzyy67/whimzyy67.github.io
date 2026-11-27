@@ -96,9 +96,9 @@
     if (r.error) { throw r.error; }
   }
   async function getPublic() {
-    var r = await db().from("profiles").select("dump_public").eq("user_id", me().id).maybeSingle();
+    var r = await db().from("profiles").select("dump_public,progress_public").eq("user_id", me().id).maybeSingle();
     if (r.error) { throw r.error; }
-    return r.data ? { has: true, value: !!r.data.dump_public } : { has: false, value: false };
+    return r.data ? { has: true, value: !!r.data.dump_public && !!r.data.progress_public } : { has: false, value: false };
   }
   async function setPublic(v) {
     var r = await db().from("profiles").update({ dump_public: v }).eq("user_id", me().id).select("user_id");
@@ -134,6 +134,18 @@
       catch (e) { label.textContent = friendly(e); label.classList.add("bad"); }
     };
     return wrap;
+  }
+
+  /* read-only line: the ONE public/private switch lives in Search Homies (it covers progress and day dump) */
+  function makeStatus() {
+    var a = el("a", "dd-priv-link", "🔒 Private: just me · change");
+    a.href = (location.pathname.indexOf("/html/") >= 0 ? "" : "html/") + "search-homies.html";
+    a.title = "Opens Search Homies, where the one public/private switch is";
+    a.load = async function () {
+      try { var p = await getPublic(); a.textContent = p.value ? "🌍 Public: followers can see · change" : "🔒 Private: just me · change"; }
+      catch (e) { /* keep the default text */ }
+    };
+    return a;
   }
 
   /* a row of pictures for ONE day. opts: { getDay(), userId(), editable, onChange } */
@@ -246,11 +258,6 @@
       onChange: loadChips
     });
     card.appendChild(strip);
-    var sw = null;
-    if (o.isMe) {
-      sw = makeSwitch("Public: people who follow me can see my day dumps", "Private: only I can see my day dumps");
-      card.appendChild(sw); sw.load();
-    }
     document.body.appendChild(overlay);
 
     function select(day) {
@@ -310,7 +317,7 @@
     box.appendChild(strip);
 
     var foot = el("div", "dd-foot");
-    var sw = makeSwitch("Public: followers can see", "Private: just me");
+    var sw = makeStatus();
     var all = el("button", "dd-all", "All my days →"); all.type = "button";
     all.addEventListener("click", function () { if (!loggedIn()) { openLogin(); return; } openGallery({ userId: me().id, isMe: true }); });
     foot.appendChild(sw); foot.appendChild(all);

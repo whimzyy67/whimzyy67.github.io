@@ -181,6 +181,24 @@ const THEMES = {
       "bright-deep-yellow": "#B59E9C", "butter": "#B59E9C", "candle": "#EFDAD8", "gold": "#E8CBC8", "soft-gold": "#D4BBBE",
       "text": "#FEFDFC", "peach": "#F3DAD3", "warm-beige": "#FBE7DC"
     }
+  },
+  sp_sunkissed: {
+    name: "Sun-Kissed Slay", special: true,
+    colors: {
+      "bg": "#4A2A00", "dark-cherry-red": "#6B3F00", "marron-red": "#8A5300",
+      "wine": "#A36400", "dark-red": "#BD7600", "wine-soft": "#D98E00",
+      "bright-deep-yellow": "#FFD21F", "butter": "#FFD21F", "candle": "#FFE680", "gold": "#FFE14D", "soft-gold": "#FFD24A",
+      "text": "#FFFBE0", "peach": "#FFC266", "warm-beige": "#FFF6CF"
+    }
+  },
+  sp_sakura: {
+    name: "Sakura Szn Kawaii", special: true,
+    colors: {
+      "bg": "#2E0F1F", "dark-cherry-red": "#471830", "marron-red": "#632443",
+      "wine": "#7D3156", "dark-red": "#964068", "wine-soft": "#B25681",
+      "bright-deep-yellow": "#F4A261", "butter": "#F4A261", "candle": "#F7B98A", "gold": "#FFB7D0", "soft-gold": "#F29CB9",
+      "text": "#FFEFF4", "peach": "#FFC9A8", "warm-beige": "#FFF1F5"
+    }
   }
 };
 

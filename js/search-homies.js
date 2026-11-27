@@ -111,7 +111,7 @@
       if (!/^[a-z0-9_.]{3,20}$/.test(name)) { msg.textContent = "Use 3 to 20 letters, numbers, dots or underscores."; msg.className = "sh-msg bad"; return; }
       go.disabled = true;
       var p = auth.computeProgress();
-      var r = await db().from("profiles").insert({ user_id: me.id, username: name, display_name: firstName(me), progress: p.overall, today: p.today, progress_public: true });
+      var r = await db().from("profiles").insert({ user_id: me.id, username: name, display_name: firstName(me), progress: p.overall, today: p.today, progress_public: false, dump_public: false });
       go.disabled = false;
       if (r.error) {
         msg.textContent = (r.error.code === "23505" || /duplicate|unique/i.test(r.error.message || "")) ? "That username is taken. Try another." : r.error.message;
@@ -157,17 +157,24 @@
 
     var priv = el("div", "sh-privacy");
     var sw = el("button", "sh-switch"); sw.type = "button"; sw.setAttribute("role", "switch");
-    sw.setAttribute("aria-checked", profile.progress_public ? "true" : "false");
-    var label = el("span", "", profile.progress_public ? "Progress is public: friends can see it" : "Progress is private: only you see it");
+    // ONE switch for everything (progress + day dump). Public only if both are on, so mixed old settings count as private.
+    var isPub = !!profile.progress_public && !!profile.dump_public;
+    var ON = "Public: followers can see my progress and day dump", OFF = "Private: only you see them";
+    if (!isPub && (profile.progress_public || profile.dump_public)) {   // mixed old settings: make both private so the switch tells the truth
+      profile.progress_public = false; profile.dump_public = false;
+      db().from("profiles").update({ progress_public: false, dump_public: false }).eq("user_id", me.id).then(function () {}, function () {});
+    }
+    sw.setAttribute("aria-checked", isPub ? "true" : "false");
+    var label = el("span", "", isPub ? ON : OFF);
     sw.addEventListener("click", async function () {
-      var next = !profile.progress_public;
+      var next = !isPub;
       sw.disabled = true;
-      var r = await db().from("profiles").update({ progress_public: next }).eq("user_id", me.id);
+      var r = await db().from("profiles").update({ progress_public: next, dump_public: next }).eq("user_id", me.id);
       sw.disabled = false;
-      if (r.error) { return; }
-      profile.progress_public = next;
+      if (r.error) { label.textContent = "Could not save: " + (r.error.message || "try again"); return; }
+      isPub = next; profile.progress_public = next; profile.dump_public = next;
       sw.setAttribute("aria-checked", next ? "true" : "false");
-      label.textContent = next ? "Progress is public: friends can see it" : "Progress is private: only you see it";
+      label.textContent = next ? ON : OFF;
     });
     priv.appendChild(sw); priv.appendChild(label);
     accountBox.appendChild(priv);

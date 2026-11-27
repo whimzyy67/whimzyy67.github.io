@@ -14,7 +14,7 @@
   var ROOT = src.replace(/js\/mobile-nav\.js.*$/, "");        // "" on home.html, "../" inside /html/
 
   var here = (location.pathname.split("/").pop() || "").replace(/\.html$/, "");
-  var lit = (here === "productivity" || here === "dayverse") ? "growth" : here;   // those two pages live inside Growth
+  var lit = (here === "productivity" || here === "dayverse" || here === "habits") ? "growth" : here;   // those two pages live inside Growth
   if (here === "" || here === "index" || here === "offline" || here === "privacy") { return; }
 
   // Set the class right away (before the page paints) so phones never flash the laptop layout,

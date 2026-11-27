@@ -74,7 +74,7 @@ document.addEventListener("keydown", function (event) {
 /* Highlight the sidebar link for the page you are on */
 document.querySelectorAll("#sidebar a").forEach(function (link) {
   var here = window.location.pathname;
-  if (/\/(productivity|dayverse)\.html$/.test(here)) { here = here.replace(/[^/]+$/, "growth.html"); }
+  if (/\/(productivity|dayverse|habits)\.html$/.test(here)) { here = here.replace(/[^/]+$/, "growth.html"); }
   if (link.pathname === here) {
     link.classList.add("active");
     link.setAttribute("aria-current", "page");
