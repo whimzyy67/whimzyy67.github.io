@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Whimzyy Detox</title>
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+  <header class="panel-top">
+    <h1>Whimzyy Detox 🌿</h1>
+    <a href="https://whimzyy-555.netlify.app/home.html" target="_blank" rel="noopener">Open Whimzyy ✨</a>
+  </header>
+  <main class="content">
+            <div class="detox-grid">
+
+                <!--1. Today's screen time-->
+                <section class="card dx-today">
+                    <div class="dx-ring-wrap">
+                        <svg class="dx-ring" viewBox="0 0 120 120" aria-hidden="true">
+                            <circle class="dx-ring-track" cx="60" cy="60" r="52"></circle>
+                            <circle class="dx-ring-fill" id="ringFill" cx="60" cy="60" r="52"></circle>
+                        </svg>
+                        <div class="dx-ring-text">
+                            <b id="ringUsed">0 min</b>
+                            <span id="ringOf">of 2 h</span>
+                        </div>
+                    </div>
+
+                    <div class="dx-today-info">
+                        <h2>Screen time today</h2>
+                        <p id="leftLine">Plugging in…</p>
+
+                        <label class="dx-row">
+                            <span>Daily limit</span>
+                            <select id="dailySel"></select>
+                        </label>
+
+                        <label class="dx-row">
+                            <span>Detox mode</span>
+                            <button type="button" class="dx-switch" id="masterOn" role="switch" aria-checked="true" aria-label="Detox mode"></button>
+                        </label>
+                    </div>
+                </section>
+
+                <!--2. Blockers-->
+                <section class="card dx-blockers">
+                    <h2>Doomscroll blockers</h2>
+
+                    <div class="dx-block">
+                        <div>
+                            <b>Reels blocker</b>
+                            <p>No more "just one reel" lies</p>
+                        </div>
+                        <button type="button" class="dx-switch" id="reelsOn" role="switch" aria-checked="true" aria-label="Reels blocker"></button>
+                    </div>
+
+                    <div class="dx-block">
+                        <div>
+                            <b>Shorts blocker</b>
+                            <p>Normal videos only, zero brainrot</p>
+                        </div>
+                        <button type="button" class="dx-switch" id="shortsOn" role="switch" aria-checked="true" aria-label="YouTube Shorts blocker"></button>
+                    </div>
+
+                    <fieldset class="dx-mode">
+                        <legend>If I sneak in</legend>
+                        <label><input type="radio" name="mode" value="hide"> Yeet me out</label>
+                        <label><input type="radio" name="mode" value="message"> Roast me gently</label>
+                    </fieldset>
+                </section>
+
+                <!--3. App limits-->
+                <section class="card dx-apps">
+                    <h2>App limits</h2>
+                    <div id="appList"></div>
+
+                    <form class="dx-add" id="addForm">
+                        <input type="text" id="addName" placeholder="Name (Netflix)" maxlength="24" required>
+                        <input type="text" id="addHost" placeholder="netflix.com" maxlength="60" required>
+                        <button type="submit" class="dx-btn">+ Add</button>
+                    </form>
+                </section>
+
+                <!--4. This week (with the star streak)-->
+                <section class="card dx-week">
+                    <h2>Your week</h2>
+                    <div class="dx-chart" id="weekChart"></div>
+                    <p id="weekLine"></p>
+                    <p class="dx-streak">🔥 Detox streak: <b id="streak">0</b> days &nbsp;·&nbsp; +5 ⭐ every day you stay under your limit</p>
+                </section>
+
+                <!--5. Quiet hours-->
+                <section class="card dx-quiet">
+                    <h2>Quiet hours 🌙</h2>
+                    <p class="dx-note">Lock your list at night. Sleep is the real main character.</p>
+                    <div class="dx-row">
+                        <span>Lock it</span>
+                        <button type="button" class="dx-switch" id="quietOn" role="switch" aria-checked="false" aria-label="Quiet hours"></button>
+                    </div>
+                    <div class="dx-row dx-times">
+                        <label>From <input type="time" id="quietFrom"></label>
+                        <label>To <input type="time" id="quietTo"></label>
+                    </div>
+                </section>
+
+            </div>
+  </main>
+  <script src="panel.js"></script>
+</body>
+</html>
