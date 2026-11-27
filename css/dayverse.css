@@ -319,14 +319,47 @@
     .dv-top{ flex: 0 0 auto; }
     .dv-cols{ flex: 1; min-height: 0; }
     .dv-col{ min-height: 0; }
-    .dv-col > .dv-card{ min-height: 0; overflow-y: auto; }
+    .dv-col > .dv-card{ min-height: 0; overflow: hidden; }
     .dv-col > .dv-card:only-child{ flex: 1; }
     .dv-col .dv-card:not(:only-child){ flex: 1 1 0; }
     .dv-col:nth-child(1) .dv-day{ flex: 0 0 auto; }
     .dv-col:nth-child(1) .dv-parking{ flex: 1 1 0; }
     /* Stars earned: sits under Feeling + Manifestation, as wide as both together */
+    /* Feeling and Manifestation: a fixed row height, so neither one grows when the other has more content */
+    .dv-top-right{ grid-template-rows: clamp(170px, 30vh, 270px) auto; }
+    .dv-top-right > .dv-card:not(.dv-stars){ min-height: 0; overflow: hidden; }
     .dv-top-right .dv-stars{ grid-column: 1 / -1; padding: 12px 18px; }
     .dv-top-right .dv-stars h2{ margin: 0 0 4px; font-size: 20px; }
-    .dv-top-right .dv-stars .dv-list{ max-height: 56px; overflow-y: auto; }
+    .dv-top-right .dv-stars .dv-list{ max-height: 56px; overflow: hidden; }
 }
 .dv-top-right .dv-stars{ grid-column: 1 / -1; }
+
+
+/* ---------- 9. Fixed-size cards: "View more" opens one card, "Close" puts it back ---------- */
+.dv-card{ position: relative; }
+.dv-card > .dv-more{
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; border: 0; cursor: pointer;
+    padding: 18px 12px 7px; border-radius: 0 0 24px 24px;
+    background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--bg, #1F0508) 80%, transparent) 70%);
+    color: var(--gold, #F2B83D); font: 800 13px "DM Sans", Arial, sans-serif; text-align: center;
+}
+.dv-card > .dv-more:hover{ text-decoration: underline; }
+.dv-card > .dv-more[hidden]{ display: none; }
+.dv-backdrop{ position: fixed; inset: 0; z-index: 90; background: rgba(0,0,0,.6); }
+.dv-card.dv-expanded{
+    position: fixed !important; z-index: 100; inset: 8vh max(4vw, calc(50vw - 380px)) !important;
+    width: auto !important; height: auto !important; max-height: none !important; overflow-y: auto !important;
+    padding: 24px 28px 28px; background-color: var(--marron-red); box-shadow: 0 0 40px rgba(0,0,0,.6), 0 0 0 2px var(--gold, #F2B83D);
+    animation: none !important;
+}
+.dv-card.dv-expanded .dv-list, .dv-card.dv-expanded .dv-body, .dv-card.dv-expanded .dd-strip{ max-height: none !important; overflow: visible; }
+.dv-card.dv-expanded .dd-strip{ flex-wrap: wrap; }
+.dv-close{
+    position: sticky; float: right; top: 0; margin: -8px -10px 8px 8px; z-index: 3; border: 0; cursor: pointer;
+    padding: 7px 16px; border-radius: 999px; background: var(--gold, #F2B83D); color: var(--bg, #1F0508);
+    font: 800 14px "DM Sans", Arial, sans-serif;
+}
+.dv-holder{ visibility: hidden; }
+
+.dv-card.dv-has-more{ padding-bottom: 30px; }
+.dv-card.dv-has-more.dv-expanded{ padding-bottom: 28px; }

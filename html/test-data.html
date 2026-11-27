@@ -34,7 +34,7 @@
   function build(){
     var data={}, i;
     var owned={};
-    var ids={theme:["wine","plum","moss","navy","rose","sp_mint","sp_grape","sp_matcha","sp_latte","sp_sunset","sp_oldmoney","sp_stealth","sp_honey","sp_pookie","sp_goblin","sp_cobalt","sp_villain","sp_sigma","sp_mauve"],
+    var ids={theme:["wine","plum","moss","navy","rose","sp_mint","sp_grape","sp_matcha","sp_latte","sp_sunset","sp_oldmoney","sp_stealth","sp_honey","sp_pookie","sp_goblin","sp_cobalt","sp_villain","sp_sigma","sp_mauve","sp_sunkissed","sp_autumn"],
              bg:["0","1","2","3","4","5","6","7","8","9"],
              title:["Absolute Workaholic","Focus Freak","Grind Lord","Efforlessly Elite","Unhinged Icon","Ruthless Beast","Ultimate Rizzler","The GOAT-ed"]};
     Object.keys(ids).forEach(function(k){ids[k].forEach(function(id){owned[k+":"+id]=1;});});
@@ -60,13 +60,17 @@
       {id:"m2",text:"I stay consistent all week",created:Date.now()-1000,target:iso(wk)},
       {id:"m3",text:"I get calm, strong and focused",created:Date.now()-2000,target:iso(mo)},
       {id:"m4",text:"I build the life I imagine",created:Date.now()-3000,target:iso(yr)}]);
+    // Habits: 3 habits that started on the 1st of this month, with a mix of done and missed days
+    var first=new Date();first.setDate(1);var hl=[{id:"h1",name:"Drink water",start:iso(first)},{id:"h2",name:"Read 10 pages",start:iso(first)},{id:"h3",name:"Stretch",start:iso(first)}], hlog={};
+    for(i=0;i<t.getDate()-1;i++){var dd=new Date();dd.setDate(t.getDate()-1-i);var ids2=[];if(i%5!==0){ids2.push("h1");}if(i%3!==0){ids2.push("h2");}if(i%2===0){ids2.push("h3");}if(ids2.length){hlog[iso(dd)]=ids2;}}
+    data["whimzyy-habits"]=JSON.stringify({v:1,list:hl,log:hlog});
     return data;
   }
   document.getElementById("fill").onclick=function(){
     try{
       if(!LS.getItem(BK)){var b={};keysOf().forEach(function(k){b[k]=LS.getItem(k);});LS.setItem(BK,JSON.stringify(b));}
       var d=build();Object.keys(d).forEach(function(k){LS.setItem(k,d[k]);});
-      say("Done. 5000 stars, every theme, background and title unlocked, plus 14 days of data. Open the shop or any page and reopen once if something looks old.");
+      say("Done. 5000 stars, every theme, background and title unlocked, plus 14 days of data and 3 habits for this month. Open the shop or any page and reopen once if something looks old.");
     }catch(e){say("Could not fill: "+e.message);}
   };
   document.getElementById("undo").onclick=function(){

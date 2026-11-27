@@ -191,13 +191,13 @@ const THEMES = {
       "text": "#FFFBE0", "peach": "#FFC266", "warm-beige": "#FFF6CF"
     }
   },
-  sp_sakura: {
-    name: "Sakura Szn Kawaii", special: true,
+  sp_autumn: {
+    name: "Pumpkin Spice Szn", special: true,
     colors: {
-      "bg": "#2E0F1F", "dark-cherry-red": "#471830", "marron-red": "#632443",
-      "wine": "#7D3156", "dark-red": "#964068", "wine-soft": "#B25681",
-      "bright-deep-yellow": "#F4A261", "butter": "#F4A261", "candle": "#F7B98A", "gold": "#FFB7D0", "soft-gold": "#F29CB9",
-      "text": "#FFEFF4", "peach": "#FFC9A8", "warm-beige": "#FFF1F5"
+      "bg": "#3B1500", "dark-cherry-red": "#5C2300", "marron-red": "#7E3100",
+      "wine": "#A24200", "dark-red": "#C45400", "wine-soft": "#E26A0A",
+      "bright-deep-yellow": "#FFA733", "butter": "#FFA733", "candle": "#FFC27A", "gold": "#FFB44D", "soft-gold": "#F29A3A",
+      "text": "#FFF1DE", "peach": "#FFB98A", "warm-beige": "#FFEFDD"
     }
   }
 };
