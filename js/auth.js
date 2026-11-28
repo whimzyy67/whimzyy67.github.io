@@ -408,6 +408,15 @@
     closeModal();
   }
 
+  // turns Supabase's technical messages into something a person can act on
+  function friendly(err) {
+    var m = (err && err.message) || "";
+    if (/rate limit|too many|over_email_send_rate_limit|security purposes/i.test(m + " " + ((err && err.code) || ""))) {
+      return "Too many sign-up emails were sent just now. Please wait a few minutes and try again, or tap \"Continue as guest\" to start right away.";
+    }
+    return m || "Something went wrong. Please try again.";
+  }
+
   async function submit(signup, email, password, btn) {
     if (!email || password.length < 6) { say("Enter an email and a password of at least 6 characters.", true); return; }
     btn.disabled = true; say("");
@@ -422,7 +431,7 @@
       } else {
         r = await client.auth.signInWithPassword({ email: email, password: password });
       }
-      if (r.error) { say(r.error.message, true); btn.disabled = false; return; }
+      if (r.error) { say(friendly(r.error), true); btn.disabled = false; return; }
       closeModal();
     } catch (e) { say("Something went wrong. Check your connection.", true); btn.disabled = false; }
   }

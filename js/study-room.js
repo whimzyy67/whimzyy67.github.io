@@ -48,6 +48,8 @@
   }
   function show(id) {
     ["stLobby", "stJoin", "stRoom"].forEach(function (x) { $(x).hidden = (x !== id); });
+    if (typeof needLandscape === "function") { needLandscape(id !== "stLobby"); }
+    scene(id !== "stLobby");
   }
   var toastTimer = null;
   function toast(text) {
@@ -130,6 +132,7 @@
       me.name = n;
       enterRoom();
     });
+    $("stJoinBack").addEventListener("click", function () { stopCamera(); location.href = account ? "search-homies.html" : "study.html"; });
     paint();
     tryCam();
   }
@@ -324,6 +327,7 @@
     $("stInfo").classList.toggle("duo", mode === "duo");
     $("stCopyCode").hidden = mode === "duo"; $("stCopyLink").hidden = mode === "duo";
     $("stInviteBtn").hidden = !(mode === "group" && account && window.WzStudy);
+    if (mode === "group") { initVibes(); }                 // ambience, music and widgets are for group rooms only
 
     myTile = makeTile("me", me.name + " (you)", true);
     paintMine(); paintTiles();
@@ -357,6 +361,7 @@
     if (left) { return; } left = true;
     window.__wzInStudyRoom = false;
     clearInterval(timerTick);
+    stopSounds();
     Object.keys(peers).forEach(dropPeer);
     stopCamera();
     try { if (ch) { ch.untrack(); client.removeChannel(ch); } } catch (e) { /* ignore */ }
@@ -386,6 +391,13 @@
     $("stChatBtn").addEventListener("click", function () { setChat(!chatOpen); });
     $("stChatClose").addEventListener("click", function () { setChat(false); });
     $("stLeave").addEventListener("click", function () { leave(); });
+    if (document.documentElement.requestFullscreen) {
+      $("stFull").hidden = false;
+      $("stFull").addEventListener("click", function () {
+        if (document.fullscreenElement) { document.exitFullscreen(); } else { document.documentElement.requestFullscreen().catch(function () { toast("Full screen is not available here."); }); }
+      });
+      document.addEventListener("fullscreenchange", function () { $("stFullLbl").textContent = document.fullscreenElement ? "Exit full screen" : "Full screen"; });
+    }
     $("stCopyCode").addEventListener("click", function () { copy(roomCode, "Room code copied"); });
     $("stCopyLink").addEventListener("click", function () { copy(linkFor(roomCode), "Link copied. Send it to anyone, they do not need an account."); });
     $("stSend").addEventListener("submit", function (e) {
@@ -430,6 +442,129 @@
         li.appendChild(who); li.appendChild(b); box.appendChild(li);
       });
     }, function () { box.textContent = ""; box.appendChild(el("li", "st-empty", "Could not load your homies.")); });
+  }
+
+
+  /* ---------- Vibes (group rooms only): ambience, music and widgets, just like Work Space ---------- */
+  var sounds = [];
+  function makeSound(list, group, optsBox, volEl, noteEl) {
+    var audio = new Audio(); audio.loop = true;
+    function apply() { audio.volume = (Number(volEl.value) / 100) * (loadVolumes().master / 100); }
+    volEl.value = loadVolumes()[group]; apply();
+    volEl.addEventListener("input", function () { apply(); saveVolume(group, Number(volEl.value)); });
+    [{ name: "None", src: "" }].concat(list).forEach(function (c, i) {
+      var label = el("label", "st-opt"), r = el("input"); r.type = "radio"; r.name = "st-" + group; r.checked = (i === 0);
+      r.addEventListener("change", function () {
+        noteEl.textContent = "";
+        if (!c.src) { audio.pause(); audio.removeAttribute("src"); audio.load(); return; }
+        audio.src = c.src;
+        var pr = audio.play();
+        if (pr && pr.catch) { pr.catch(function (e) { if (e.name !== "AbortError") { noteEl.textContent = "Couldn't play this one."; } }); }
+      });
+      label.appendChild(r); label.appendChild(el("span", "", c.name)); optsBox.appendChild(label);
+    });
+    sounds.push(audio);
+  }
+  function stopSounds() { sounds.forEach(function (a) { try { a.pause(); a.removeAttribute("src"); a.load(); } catch (e) { /* ignore */ } }); }
+
+  var WID_KEY = "whimzyy-study-widgets", widOn = { clock: false, message: false, todo: false };
+  function startOfToday() { var d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); }
+  function readTasks() { try { return JSON.parse(localStorage.getItem("whimzyy-tasks")) || []; } catch (e) { return []; } }
+  function writeTasks(t) { try { localStorage.setItem("whimzyy-tasks", JSON.stringify(t)); } catch (e) { /* ignore */ } }
+
+  function paintWidgets() {
+    var box = $("stWidgets"); box.textContent = "";
+    var any = widOn.clock || widOn.message || widOn.todo; box.hidden = !any;
+    if (widOn.clock) {
+      var c = el("div", "st-w"), t = el("p", "st-w-time"), d = el("p", "st-w-date");
+      function tick() { var n = new Date(); t.textContent = n.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }); d.textContent = n.toLocaleDateString([], { weekday: "long", day: "numeric", month: "long" }); }
+      tick(); c.appendChild(t); c.appendChild(d); box.appendChild(c);
+    }
+    if (widOn.message) {
+      var m = el("div", "st-w"), saved = ""; try { saved = localStorage.getItem("whimzyy-message") || ""; } catch (e) { /* ignore */ }
+      var ta = el("textarea", "st-w-msg"); ta.rows = 2; ta.maxLength = 140; ta.value = saved; ta.placeholder = "Write something that keeps you motivated…"; ta.setAttribute("aria-label", "Your personal message");
+      ta.addEventListener("change", function () { try { localStorage.setItem("whimzyy-message", ta.value.trim()); } catch (e) { /* ignore */ } });
+      m.appendChild(ta); box.appendChild(m);
+    }
+    if (widOn.todo) {
+      var w = el("div", "st-w"), ul = el("ul", "st-w-list"), f = el("form", "st-w-form"), inp = el("input", "st-w-in");
+      inp.maxLength = 80; inp.placeholder = "Add a task…"; inp.setAttribute("aria-label", "New task");
+      var go = el("button", "st-chip", "Add"); go.type = "submit"; f.appendChild(inp); f.appendChild(go);
+      function draw() {
+        ul.textContent = "";
+        readTasks().forEach(function (task, i) {
+          if (task && task.done && (!task.doneAt || task.doneAt < startOfToday())) { return; }   // yesterday's finished tasks stay hidden, like on My Day
+          var li = el("li"), lab = el("label"), cb = el("input"); cb.type = "checkbox"; cb.checked = !!task.done;
+          cb.addEventListener("change", function () { var all = readTasks(); if (all[i]) { all[i].done = cb.checked; all[i].doneAt = cb.checked ? Date.now() : null; writeTasks(all); draw(); } });
+          lab.appendChild(cb); lab.appendChild(el("span", task.done ? "done" : "", String(task.text || ""))); li.appendChild(lab); ul.appendChild(li);
+        });
+        if (!ul.children.length) { ul.appendChild(el("li", "st-w-empty", "No tasks yet.")); }
+      }
+      f.addEventListener("submit", function (e) { e.preventDefault(); var v = inp.value.trim(); if (!v) { return; } var all = readTasks(); all.push({ text: v, done: false }); writeTasks(all); inp.value = ""; draw(); });
+      draw(); w.appendChild(el("p", "st-w-title", "To-do")); w.appendChild(ul); w.appendChild(f); box.appendChild(w);
+    }
+  }
+  function initVibes() {
+    if (typeof ambienceList === "undefined" || typeof loadVolumes === "undefined") { return; }       // media.js did not load: no vibes
+    $("stVibesBtn").hidden = false;
+    $("stBgPrev").addEventListener("click", function () { stepScene(-1); });
+    $("stBgNext").addEventListener("click", function () { stepScene(1); });
+    paintScene();
+    makeSound(ambienceList, "ambience", $("stAmbOpts"), $("stAmbVol"), $("stAmbNote"));
+    makeSound(musicList, "music", $("stMusOpts"), $("stMusVol"), $("stMusNote"));
+    try { widOn = Object.assign(widOn, JSON.parse(localStorage.getItem(WID_KEY)) || {}); } catch (e) { /* ignore */ }
+    [["clock", "Date and time"], ["message", "Personal message"], ["todo", "To-do list"]].forEach(function (x) {
+      var label = el("label", "st-opt"), cb = el("input"); cb.type = "checkbox"; cb.checked = !!widOn[x[0]];
+      cb.addEventListener("change", function () { widOn[x[0]] = cb.checked; try { localStorage.setItem(WID_KEY, JSON.stringify(widOn)); } catch (e) { /* ignore */ } paintWidgets(); });
+      label.appendChild(cb); label.appendChild(el("span", "", x[1])); $("stWidOpts").appendChild(label);
+    });
+    paintWidgets();
+    $("stVibesBtn").addEventListener("click", function () { $("stVibes").hidden = false; });
+    $("stVibesClose").addEventListener("click", function () { $("stVibes").hidden = true; });
+    $("stVibes").addEventListener("click", function (e) { if (e.target === $("stVibes")) { $("stVibes").hidden = true; } });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") { $("stVibes").hidden = true; } });
+  }
+
+  /* ---------- the scene: full-screen background video like Work Space (same video you chose there) ---------- */
+  var sceneIndex = 0;
+  function dataSaver() { return !!(navigator.connection && navigator.connection.saveData) || window.matchMedia("(prefers-reduced-motion: reduce)").matches; }
+  function paintScene() {
+    var bg = $("stBg");
+    if (typeof videos === "undefined" || !videos.length || dataSaver()) { bg.hidden = true; return; }
+    var v = videos[sceneIndex];
+    if (bg.getAttribute("data-i") !== String(sceneIndex)) { bg.setAttribute("data-i", String(sceneIndex)); bg.src = v.src; }
+    bg.hidden = false;
+    var p = bg.play(); if (p && p.catch) { p.catch(function () { /* some phones wait for a tap */ }); }
+    if ($("stBgName")) { $("stBgName").textContent = v.title; }
+  }
+  function scene(on) {
+    document.body.classList.toggle("st-immersive", !!on);
+    $("stShade").hidden = !on;
+    if (!on) { $("stBg").hidden = true; $("stBg").pause(); return; }
+    if (typeof videos !== "undefined" && videos.length) {
+      var saved = 0; try { saved = Number(localStorage.getItem("whimzyy-video")) || 0; } catch (e) { /* ignore */ }
+      sceneIndex = ((saved % videos.length) + videos.length) % videos.length;
+    }
+    paintScene();
+  }
+  function stepScene(d) {
+    if (typeof videos === "undefined" || !videos.length) { return; }
+    sceneIndex = (sceneIndex + d + videos.length) % videos.length;
+    try { localStorage.setItem("whimzyy-video", String(sceneIndex)); } catch (e) { /* ignore */ }
+    paintScene();
+  }
+  document.addEventListener("visibilitychange", function () {
+    var bg = $("stBg"); if (!bg || bg.hidden) { return; }
+    if (document.hidden) { bg.pause(); } else { var p = bg.play(); if (p && p.catch) { p.catch(function () {}); } }
+  });
+
+  /* ---------- phones: hold it sideways ---------- */
+  function isPhone() {
+    return window.matchMedia("(hover: none) and (pointer: coarse)").matches && Math.min(screen.width, screen.height) < 600;
+  }
+  function needLandscape(on) {
+    document.body.classList.toggle("st-need-land", !!on && isPhone());
+    if (on && isPhone() && screen.orientation && screen.orientation.lock) { screen.orientation.lock("landscape").catch(function () { /* only works in some browsers: the rotate message covers the rest */ }); }
   }
 
   /* ---------- start ---------- */
