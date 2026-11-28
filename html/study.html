@@ -78,20 +78,22 @@
                     <button type="button" class="st-chip" id="stCopyLink">Copy link</button>
                     <button type="button" class="st-chip" id="stInviteBtn">Invite homies</button>
                 </div>
-                <div class="st-timer" id="stTimerBox">
-                    <span class="st-time" id="stTime" aria-live="off">--:--</span>
-                    <span class="st-timer-btns" id="stTimerBtns">
-                        <button type="button" class="st-chip" data-min="25">25 min</button>
-                        <button type="button" class="st-chip" data-min="45">45 min</button>
-                        <button type="button" class="st-chip" data-min="60">60 min</button>
-                        <button type="button" class="st-chip" id="stTimerStop" hidden>Stop</button>
-                    </span>
-                </div>
             </div>
 
             <div class="st-stage">
                 <div class="st-left">
-                    <div class="st-widgets" id="stWidgets" hidden></div>
+                    <div class="st-widgets" id="stWidgets" hidden>
+                        <div class="st-w st-w-timer" id="stTimerW" data-wkey="timer" hidden>
+                            <p class="st-w-title">Focus timer (shared)</p>
+                            <span class="st-time" id="stTime" aria-live="off">--:--</span>
+                            <span class="st-timer-btns" id="stTimerBtns">
+                                <button type="button" class="st-chip" data-min="25">25 min</button>
+                                <button type="button" class="st-chip" data-min="45">45 min</button>
+                                <button type="button" class="st-chip" data-min="60">60 min</button>
+                                <button type="button" class="st-chip" id="stTimerStop" hidden>Stop</button>
+                            </span>
+                        </div>
+                    </div>
                     <div class="st-videos" id="stVideos" aria-label="Everyone studying"></div>
                 </div>
 
@@ -109,7 +111,6 @@
             <aside class="st-side" id="stSide" aria-label="Room tools">
                 <button type="button" class="st-sbtn" id="stSideVibes" hidden title="Vibes: background, ambience, music, widgets"><span aria-hidden="true">🎵</span><small>Vibes</small></button>
                 <button type="button" class="st-sbtn" id="stSideChat" title="Chat"><span aria-hidden="true">💬</span><small>Chat</small><i class="st-dot" id="stSideDot" hidden></i></button>
-                <button type="button" class="st-sbtn" id="stSideAlign" title="Move or resize the friends panel"><span aria-hidden="true">✥</span><small>Friends</small></button>
                 <button type="button" class="st-sbtn close" id="stSideClose" title="Close sidebar"><span aria-hidden="true">»</span><small>Hide</small></button>
             </aside>
             <button type="button" class="st-sopen" id="stSideOpen" title="Open sidebar" aria-label="Open sidebar" hidden>«</button>

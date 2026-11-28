@@ -310,3 +310,23 @@ body.st-side-closed .st-side{ display:none; }
 .st-videos.floating .st-wait{ display:none; }
 .st-videos.floating[data-count="1"]{ grid-template-rows:minmax(0,1fr); }
 .st-wait{ align-self:start; }
+
+
+/* ---------- movable widgets + the focus timer widget + hover move button ---------- */
+.st-widgets{ display:block; }
+.st-w{ position:fixed; z-index:25; flex:none; }
+.st-w.aligning{ outline:2px dashed var(--st-gold); outline-offset:3px; }
+.st-w-timer{ width:230px; max-width:calc(100vw - 100px); }
+.st-w-timer .st-time{ display:block; margin:2px 0 8px; font-size:30px; text-align:left; background:none !important; padding:0 !important; min-width:0; border-radius:0 !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important; }
+.st-w-timer .st-timer-btns{ display:flex; flex-wrap:wrap; gap:6px; }
+.st-w-timer .st-chip{ padding:4px 10px; font-size:12px; }
+.st-mv{ all:unset; position:absolute; top:6px; right:6px; z-index:3; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;
+  background:var(--st-wine); border:2px solid var(--st-gold); color:var(--st-gold); font-size:14px; opacity:0; transition:opacity .15s; }
+.st-w:hover .st-mv,.st-tile:hover .st-mv,.st-mv:focus-visible{ opacity:1; }
+.st-w.aligning .st-mv,.st-videos.aligning .st-mv{ display:none; }
+@media (hover:none){ .st-mv{ opacity:.85; } }
+@media (orientation: landscape) and (max-height: 520px){
+  .st-widgets .st-w{ max-height:none; padding:6px 10px; flex:none; }
+  .st-w-timer{ width:190px; }
+  .st-w-timer .st-time{ font-size:22px; margin-bottom:4px; }
+}

@@ -149,6 +149,9 @@
     t.appendChild(el("div", "st-conn", "Connecting…"));
     t.appendChild(el("div", "st-name", name));
     t.dataset.id = id;
+    var mv = el("button", "st-mv", "✥"); mv.type = "button"; mv.title = "Move or resize the friends panel"; mv.setAttribute("aria-label", "Move or resize the friends panel");
+    mv.addEventListener("click", function () { startAlign(); });
+    t.appendChild(mv);
     $("stVideos").appendChild(t);
     return t;
   }
@@ -297,6 +300,7 @@
   var fpos = null;                       // { x, y, w, h }  shares of the window (so it fits other screens)
   try { fpos = JSON.parse(localStorage.getItem(FPOS) || "null"); } catch (e) { fpos = null; }
   function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+  var target = null;                     // what is being moved: { node, key, kind: "f" (friends panel) or "w" (a widget) }
   function friends() { return $("stVideos"); }
   function applyFriends() {
     var f = friends();
@@ -315,8 +319,8 @@
     try { localStorage.setItem(FPOS, JSON.stringify(fpos)); } catch (e) { /* ignore */ }
   }
   function placeBar() {
-    var f = friends(), b = $("stAlignBar"); if (b.hidden) { return; }
-    var r = f.getBoundingClientRect();
+    var b = $("stAlignBar"); if (b.hidden || !target) { return; }
+    var r = target.node.getBoundingClientRect();
     b.style.left = clamp(r.left, 4, Math.max(4, window.innerWidth - b.offsetWidth - 4)) + "px";
     b.style.top = (r.top > 44 ? r.top - 40 : r.bottom + 6) + "px";
   }
@@ -326,10 +330,49 @@
       var vw = window.innerWidth, vh = window.innerHeight, w = Math.max(240, r.width), h = Math.max(160, Math.min(r.height || 240, vh * 0.6));
       fpos = { x: vw > w ? clamp(r.left, 0, vw - w) / (vw - w) : 0, y: vh > h ? clamp(r.top, 0, vh - h) / (vh - h) : 0, w: w / vw, h: h / vh };
     }
-    applyFriends(); f.classList.add("aligning"); $("stAlignBar").hidden = false; placeBar();
+    endAlign();
+    target = { node: f, key: "friends", kind: "f" };
+    applyFriends(); f.classList.add("aligning"); showBar(true);
     setChat(false); $("stVibes").hidden = true;
   }
-  function endAlign() { friends().classList.remove("aligning"); $("stAlignBar").hidden = true; saveFriends(); }
+  function showBar(sizing) {
+    $("stAlignBar").hidden = false; $("stSizeUp").hidden = !sizing; $("stSizeDown").hidden = !sizing; placeBar();
+  }
+  function endAlign() {
+    var t = target; target = null; $("stAlignBar").hidden = true;
+    if (!t) { return; }
+    t.node.classList.remove("aligning");
+    if (t.kind === "f") { saveFriends(); } else { saveWidget(t.node); }
+  }
+
+  /* widgets (clock, message, to-do, focus timer) float anywhere too; each remembers its spot */
+  var WPOS = "whimzyy-study-wpos", wpos = {};
+  try { wpos = JSON.parse(localStorage.getItem(WPOS) || "{}") || {}; } catch (e) { wpos = {}; }
+  function widgetNodes() { return Array.prototype.slice.call(document.querySelectorAll("#stWidgets .st-w:not([hidden])")); }
+  function placeWidgets() {
+    var vw = window.innerWidth, vh = window.innerHeight, y = 84;           // widgets without a saved spot stack down the left side
+    widgetNodes().forEach(function (n) {
+      var w = n.offsetWidth, h = n.offsetHeight, sv = wpos[n.dataset.wkey], l, t;
+      if (sv) { l = sv.x * Math.max(0, vw - w); t = sv.y * Math.max(0, vh - h); }
+      else { l = 24; t = y; y += h + 10; }
+      n.style.left = clamp(l, 0, Math.max(0, vw - w)) + "px"; n.style.top = clamp(t, 0, Math.max(0, vh - h)) + "px";
+    });
+    placeBar();
+  }
+  function saveWidget(n) {
+    var vw = window.innerWidth, vh = window.innerHeight, w = n.offsetWidth, h = n.offsetHeight;
+    wpos[n.dataset.wkey] = { x: vw > w ? n.offsetLeft / (vw - w) : 0, y: vh > h ? n.offsetTop / (vh - h) : 0 };
+    try { localStorage.setItem(WPOS, JSON.stringify(wpos)); } catch (e) { /* ignore */ }
+  }
+  function moveButton(n) {
+    if (n.querySelector(".st-mv")) { return; }
+    var mv = el("button", "st-mv", "✥"); mv.type = "button"; mv.title = "Move this widget"; mv.setAttribute("aria-label", "Move this widget");
+    mv.addEventListener("click", function () {
+      endAlign(); target = { node: n, key: n.dataset.wkey, kind: "w" };
+      n.classList.add("aligning"); showBar(false); setChat(false); $("stVibes").hidden = true;
+    });
+    n.appendChild(mv);
+  }
   function setSide(open) {
     document.body.classList.toggle("st-side-closed", !open);
     $("stSideOpen").hidden = open;
@@ -346,13 +389,16 @@
       if (!$("stVibes").hidden) { $("stVibes").hidden = true; return; }
       setChat(false); $("stVibesBtn").click();
     });
-    $("stSideAlign").addEventListener("click", startAlign);
     $("stSideClose").addEventListener("click", function () { setSide(false); });
     $("stSideOpen").addEventListener("click", function () { setSide(true); });
     $("stAlignDone").addEventListener("click", endAlign);
-    $("stAlignReset").addEventListener("click", function () { fpos = null; try { localStorage.removeItem(FPOS); } catch (e) { /* ignore */ } friends().classList.remove("aligning"); $("stAlignBar").hidden = true; applyFriends(); });
+    $("stAlignReset").addEventListener("click", function () {
+      var t = target; if (!t) { return; }
+      if (t.kind === "f") { fpos = null; try { localStorage.removeItem(FPOS); } catch (e) { /* ignore */ } t.node.classList.remove("aligning"); target = null; $("stAlignBar").hidden = true; applyFriends(); }
+      else { delete wpos[t.key]; try { localStorage.setItem(WPOS, JSON.stringify(wpos)); } catch (e) { /* ignore */ } t.node.classList.remove("aligning"); target = null; $("stAlignBar").hidden = true; placeWidgets(); }
+    });
     function scale(k) {
-      var vw = window.innerWidth, vh = window.innerHeight; if (!fpos) { return; }
+      var vw = window.innerWidth, vh = window.innerHeight; if (!fpos || !target || target.kind !== "f") { return; }
       var w = clamp(fpos.w * k, 160 / vw, 1), h = clamp(fpos.h * k, 110 / vh, 1);
       fpos.w = w; fpos.h = h; applyFriends();
     }
@@ -361,17 +407,18 @@
     var grab = $("stAlignGrab");
     grab.addEventListener("pointerdown", function (e) {
       e.preventDefault();
-      var f = friends(), box = f.getBoundingClientRect(), ox = e.clientX - box.left, oy = e.clientY - box.top;
+      if (!target) { return; }
+      var f = target.node, box = f.getBoundingClientRect(), ox = e.clientX - box.left, oy = e.clientY - box.top;
       grab.setPointerCapture(e.pointerId);
       function move(ev) {
         f.style.left = clamp(ev.clientX - ox, 0, Math.max(0, window.innerWidth - f.offsetWidth)) + "px";
         f.style.top = clamp(ev.clientY - oy, 0, Math.max(0, window.innerHeight - f.offsetHeight)) + "px";
         placeBar();
       }
-      function stop() { grab.removeEventListener("pointermove", move); grab.removeEventListener("pointerup", stop); saveFriends(); }
+      function stop() { grab.removeEventListener("pointermove", move); grab.removeEventListener("pointerup", stop); if (target) { if (target.kind === "f") { saveFriends(); } else { saveWidget(target.node); } } }
       grab.addEventListener("pointermove", move); grab.addEventListener("pointerup", stop);
     });
-    window.addEventListener("resize", function () { if (fpos) { applyFriends(); } });
+    window.addEventListener("resize", function () { if (fpos) { applyFriends(); } placeWidgets(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") { setChat(false); } });
     applyFriends();
   }
@@ -553,24 +600,26 @@
   }
   function stopSounds() { sounds.forEach(function (a) { try { a.pause(); a.removeAttribute("src"); a.load(); } catch (e) { /* ignore */ } }); }
 
-  var WID_KEY = "whimzyy-study-widgets", widOn = { clock: false, message: false, todo: false };
+  var WID_KEY = "whimzyy-study-widgets", widOn = { timer: true, clock: false, message: false, todo: false };
   function startOfToday() { var d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); }
   function readTasks() { try { return JSON.parse(localStorage.getItem("whimzyy-tasks")) || []; } catch (e) { return []; } }
   function writeTasks(t) { try { localStorage.setItem("whimzyy-tasks", JSON.stringify(t)); } catch (e) { /* ignore */ } }
 
   function paintWidgets() {
-    var box = $("stWidgets"); box.textContent = "";
-    var any = widOn.clock || widOn.message || widOn.todo; box.hidden = !any;
+    var box = $("stWidgets");
+    Array.prototype.slice.call(box.children).forEach(function (n) { if (n.id !== "stTimerW") { n.remove(); } });
+    var tw = $("stTimerW"); tw.hidden = !widOn.timer; moveButton(tw);
+    var any = widOn.timer || widOn.clock || widOn.message || widOn.todo; box.hidden = !any;
     if (widOn.clock) {
       var c = el("div", "st-w"), t = el("p", "st-w-time"), d = el("p", "st-w-date");
       function tick() { var n = new Date(); t.textContent = n.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }); d.textContent = n.toLocaleDateString([], { weekday: "long", day: "numeric", month: "long" }); }
-      tick(); c.appendChild(t); c.appendChild(d); box.appendChild(c);
+      tick(); c.dataset.wkey = "clock"; c.appendChild(t); c.appendChild(d); box.appendChild(c);
     }
     if (widOn.message) {
       var m = el("div", "st-w"), saved = ""; try { saved = localStorage.getItem("whimzyy-message") || ""; } catch (e) { /* ignore */ }
       var ta = el("textarea", "st-w-msg"); ta.rows = 2; ta.maxLength = 140; ta.value = saved; ta.placeholder = "Write something that keeps you motivated…"; ta.setAttribute("aria-label", "Your personal message");
       ta.addEventListener("change", function () { try { localStorage.setItem("whimzyy-message", ta.value.trim()); } catch (e) { /* ignore */ } });
-      m.appendChild(ta); box.appendChild(m);
+      m.dataset.wkey = "message"; m.appendChild(ta); box.appendChild(m);
     }
     if (widOn.todo) {
       var w = el("div", "st-w"), ul = el("ul", "st-w-list"), f = el("form", "st-w-form"), inp = el("input", "st-w-in");
@@ -587,11 +636,13 @@
         if (!ul.children.length) { ul.appendChild(el("li", "st-w-empty", "No tasks yet.")); }
       }
       f.addEventListener("submit", function (e) { e.preventDefault(); var v = inp.value.trim(); if (!v) { return; } var all = readTasks(); all.push({ text: v, done: false }); writeTasks(all); inp.value = ""; draw(); });
-      draw(); w.appendChild(el("p", "st-w-title", "To-do")); w.appendChild(ul); w.appendChild(f); box.appendChild(w);
+      draw(); w.dataset.wkey = "todo"; w.appendChild(el("p", "st-w-title", "To-do")); w.appendChild(ul); w.appendChild(f); box.appendChild(w);
     }
+    Array.prototype.slice.call(box.querySelectorAll(".st-w")).forEach(moveButton);
+    placeWidgets();
   }
   function initVibes() {
-    if (typeof ambienceList === "undefined" || typeof loadVolumes === "undefined") { return; }       // media.js did not load: no vibes
+    if (typeof ambienceList === "undefined" || typeof loadVolumes === "undefined") { paintWidgets(); return; }       // media.js did not load: no vibes, but the timer still shows
     $("stVibesBtn").hidden = false;
     $("stBgPrev").addEventListener("click", function () { stepScene(-1); });
     $("stBgNext").addEventListener("click", function () { stepScene(1); });
@@ -599,7 +650,7 @@
     makeSound(ambienceList, "ambience", $("stAmbOpts"), $("stAmbVol"), $("stAmbNote"));
     makeSound(musicList, "music", $("stMusOpts"), $("stMusVol"), $("stMusNote"));
     try { widOn = Object.assign(widOn, JSON.parse(localStorage.getItem(WID_KEY)) || {}); } catch (e) { /* ignore */ }
-    [["clock", "Date and time"], ["message", "Personal message"], ["todo", "To-do list"]].forEach(function (x) {
+    [["timer", "Focus timer"], ["clock", "Date and time"], ["message", "Personal message"], ["todo", "To-do list"]].forEach(function (x) {
       var label = el("label", "st-opt"), cb = el("input"); cb.type = "checkbox"; cb.checked = !!widOn[x[0]];
       cb.addEventListener("change", function () { widOn[x[0]] = cb.checked; try { localStorage.setItem(WID_KEY, JSON.stringify(widOn)); } catch (e) { /* ignore */ } paintWidgets(); });
       label.appendChild(cb); label.appendChild(el("span", "", x[1])); $("stWidOpts").appendChild(label);
