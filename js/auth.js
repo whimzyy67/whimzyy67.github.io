@@ -141,13 +141,9 @@
   var cfg = window.WHIMZYY_SUPABASE;
   var modal = null, btnLabel = null, current = null, gate = false, askName = false;
 
-  // In the installed app (home-screen app / Play Store app) logging in, or choosing guest, is required.
-  // The website itself stays open to everyone, and the entry page (index.html) never asks.
-  function standalone() {
-    return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-  }
+  // Logging in is required everywhere (website and installed app). There are no guest accounts.
+  // Only the entry page (index.html), the privacy policy and the offline page stay open without logging in.
   function needsGate() {
-    if (!standalone()) { return false; }
     var file = location.pathname.split("/").pop();
     return !(file === "" || file === "index.html" || file === "privacy.html" || file === "offline.html");
   }
@@ -233,6 +229,10 @@
     return !!(u && !u.is_anonymous && !(u.user_metadata && u.user_metadata.name_set));
   }
   function setUser(u) {
+    if (u && u.is_anonymous) {            // guest accounts no longer exist: an old guest session is ended and must log in
+      if (client) { client.auth.signOut().then(function () { clearLocal(); location.reload(); }, function () {}); }
+      u = null;
+    }
     current = u;
     window.WhimzyyAuth.user = u; window.WhimzyyAuth.loaded = true;
     try { window.dispatchEvent(new CustomEvent("whimzyy-auth", { detail: { user: u } })); } catch (e) { /* ignore */ }
@@ -244,7 +244,7 @@
     if (btnLabel) {
       btnLabel.textContent = who(u);
       var b = document.getElementById("acctBtn");
-      if (b) { b.title = u ? who(u) : "Log in or continue as guest"; b.setAttribute("aria-label", b.title); }
+      if (b) { b.title = u ? who(u) : "Log in"; b.setAttribute("aria-label", b.title); }
     }
     if (u) { startSync(client, u); } else { stopSync(); }
     if (modal && modal.classList.contains("open")) { render(); }
@@ -353,16 +353,14 @@
         card.appendChild(el("p", "acct-sync", ""));
         isGuestBox = true;
       } else if (mode === "choose") {
-        card.appendChild(el("p", "acct-sub", gate ? "Log in, or jump in as a guest, to start. Your stars and progress stay with you on every device." : "Log in to keep everything synced across your devices."));
+        card.appendChild(el("p", "acct-sub", gate ? "Log in or create an account to start. Your stars and progress stay with you on every device." : "Log in to keep everything synced across your devices."));
       }
       if (!current && mode === "choose") {
-        var g = el("button", "acct-guest", "✨ Continue as guest"); g.type = "button";
-        g.addEventListener("click", guestIn);
         var l = el("button", "acct-btn-main", "Log in"); l.type = "button";
         l.addEventListener("click", function () { mode = "login"; say(""); render(); });
         var s = el("button", "acct-btn-alt", "Create account"); s.type = "button";
         s.addEventListener("click", function () { mode = "signup"; say(""); render(); });
-        card.appendChild(g); card.appendChild(l); card.appendChild(s);
+        card.appendChild(l); card.appendChild(s);
       } else {
         var signup = isGuest ? mode !== "login" : mode === "signup";
         if (isGuest) { card.appendChild(el("h3", "", "Save my progress")); }
@@ -387,32 +385,15 @@
         }
       }
     }
-    if (isGuest) {
-      var gout = el("button", "acct-link", "Log out of guest mode"); gout.type = "button";
-      gout.addEventListener("click", async function () {
-        if (!window.confirm("Log out of guest mode? Your guest progress will be lost unless you saved it with an email first.")) { return; }
-        gout.textContent = "Logging out…";
-        await client.auth.signOut();
-        clearLocal(); location.reload();
-      });
-      card.appendChild(gout);
-    }
     modal.appendChild(card);
     paintStatus();
-  }
-
-  async function guestIn() {
-    var name = "user" + (10000 + Math.floor(Math.random() * 90000));
-    var r = await client.auth.signInAnonymously({ options: { data: { display_name: name } } });
-    if (r.error) { say("Guest mode isn't switched on yet: " + r.error.message, true); render(); return; }
-    closeModal();
   }
 
   // turns Supabase's technical messages into something a person can act on
   function friendly(err) {
     var m = (err && err.message) || "";
     if (/rate limit|too many|over_email_send_rate_limit|security purposes/i.test(m + " " + ((err && err.code) || ""))) {
-      return "Too many sign-up emails were sent just now. Please wait a few minutes and try again, or tap \"Continue as guest\" to start right away.";
+      return "Too many sign-up emails were sent just now. Please wait a few minutes and try again.";
     }
     return m || "Something went wrong. Please try again.";
   }

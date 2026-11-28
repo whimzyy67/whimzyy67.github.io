@@ -572,6 +572,14 @@
     auth = a; client = a && a.client;
     var u = a && a.user;
     account = !!u && !u.is_anonymous;
+    if (!account) {
+      // Study Together needs a login (the login window opens by itself). Once they log in, start again.
+      window.addEventListener("whimzyy-auth", function () {
+        var nu = window.WhimzyyAuth && window.WhimzyyAuth.user;
+        if (nu && !nu.is_anonymous) { location.reload(); }
+      });
+      return;
+    }
     me.id = u ? u.id : guestId();
     me.name = u ? (window.WzStudy ? window.WzStudy.nameOf(u) : "Homie") : "";
     $("stBack").setAttribute("href", account ? "search-homies.html" : "study.html");
