@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Whimzyy - Study Together</title>
+    <link rel="icon" href="../pwa/icons/icon-192.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="../css/study.css">
+    <script src="../js/auth.js"></script>
+    <script src="../js/theme.js"></script>
+</head>
+<body class="st-body">
+
+    <header class="st-top">
+        <a class="st-back" id="stBack" href="search-homies.html">&larr; Back</a>
+        <h1>Study Together 📚</h1>
+        <nav class="top-nav" aria-label="Account"></nav>
+    </header>
+
+    <main class="st-main">
+
+        <!-- 1. No room yet: create one or join with a code -->
+        <section id="stLobby" class="st-card st-lobby" hidden>
+            <h2>Study with your homies</h2>
+            <p class="st-sub">Video and chat only, no voice. Everyone studies quietly together with a shared timer.</p>
+
+            <div class="st-lobby-grid">
+                <div class="st-box">
+                    <h3>Create a group room</h3>
+                    <p>Up to 4 people. You get a <b>code</b> for your homies and a <b>link</b> for friends who do not have Whimzyy.</p>
+                    <button type="button" class="st-btn" id="stCreate">Create room</button>
+                </div>
+                <form class="st-box" id="stJoinForm">
+                    <h3>Join with a code</h3>
+                    <p>Got a code from a homie? Type it here.</p>
+                    <input id="stCodeIn" class="st-input" maxlength="8" placeholder="e.g. K7PQ2M" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Room code">
+                    <button type="submit" class="st-btn">Join</button>
+                    <p class="st-status" id="stLobbyMsg" role="status"></p>
+                </form>
+            </div>
+            <p class="st-note">Want to study with just one homie? Open <a href="search-homies.html">Search Homies</a> and tap <b>Study</b> next to their name.</p>
+        </section>
+
+        <!-- 2. Before joining: name + camera check -->
+        <section id="stJoin" class="st-card st-join" hidden>
+            <h2 id="stJoinTitle">Ready to study?</h2>
+            <p class="st-sub" id="stJoinSub"></p>
+            <div class="st-preview"><video id="stPreview" autoplay playsinline muted></video><div class="st-nocam" id="stPreviewOff">Camera is off</div></div>
+            <label class="st-field" id="stNameWrap">Your name
+                <input id="stName" class="st-input" maxlength="24" placeholder="What should we call you?" autocomplete="nickname">
+            </label>
+            <div class="st-row">
+                <button type="button" class="st-btn" id="stJoinBtn">Join room</button>
+                <button type="button" class="st-btn alt" id="stCamToggle">Turn camera on</button>
+            </div>
+            <p class="st-status" id="stJoinMsg" role="status"></p>
+            <p class="st-note">Your camera is shared only with people in this room. There is no voice: your microphone is never used.</p>
+        </section>
+
+        <!-- 3. The room -->
+        <section id="stRoom" class="st-room" hidden>
+            <div class="st-bar">
+                <div class="st-bar-left" id="stInfo">
+                    <span class="st-code" id="stCodeShow" title="Room code"></span>
+                    <button type="button" class="st-chip" id="stCopyCode">Copy code</button>
+                    <button type="button" class="st-chip" id="stCopyLink">Copy link</button>
+                    <button type="button" class="st-chip" id="stInviteBtn">Invite homies</button>
+                </div>
+                <div class="st-timer" id="stTimerBox">
+                    <span class="st-time" id="stTime" aria-live="off">--:--</span>
+                    <span class="st-timer-btns" id="stTimerBtns">
+                        <button type="button" class="st-chip" data-min="25">25 min</button>
+                        <button type="button" class="st-chip" data-min="45">45 min</button>
+                        <button type="button" class="st-chip" data-min="60">60 min</button>
+                        <button type="button" class="st-chip" id="stTimerStop" hidden>Stop</button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="st-stage">
+                <div class="st-videos" id="stVideos" aria-label="Everyone studying"></div>
+
+                <aside class="st-chat" id="stChat" aria-label="Chat">
+                    <div class="st-chat-head"><b>Chat</b><button type="button" class="st-x" id="stChatClose" aria-label="Close chat">&times;</button></div>
+                    <ul class="st-msgs" id="stMsgs" aria-live="polite"></ul>
+                    <form class="st-send" id="stSend">
+                        <input id="stText" class="st-input" maxlength="500" placeholder="Type a message" autocomplete="off" aria-label="Message">
+                        <button type="submit" class="st-btn small">Send</button>
+                    </form>
+                </aside>
+            </div>
+
+            <div class="st-controls">
+                <button type="button" class="st-ctl" id="stCam"><span aria-hidden="true">📷</span><span id="stCamLbl">Camera on</span></button>
+                <button type="button" class="st-ctl" id="stChatBtn"><span aria-hidden="true">💬</span><span>Chat</span><i class="st-dot" id="stDot" hidden></i></button>
+                <button type="button" class="st-ctl leave" id="stLeave"><span aria-hidden="true">🚪</span><span>Leave</span></button>
+            </div>
+        </section>
+
+        <!-- Invite homies (group rooms) -->
+        <div class="st-veil" id="stInvite" hidden>
+            <div class="st-modal" role="dialog" aria-modal="true" aria-label="Invite homies">
+                <div class="st-chat-head"><b>Invite homies</b><button type="button" class="st-x" id="stInviteClose" aria-label="Close">&times;</button></div>
+                <p class="st-sub">Homies you follow. They get a "Join" prompt if they have Whimzyy open.</p>
+                <ul class="st-invite-list" id="stInviteList"></ul>
+            </div>
+        </div>
+
+        <div class="st-toast" id="stToast" role="status" aria-live="polite" hidden></div>
+    </main>
+
+    <script src="../js/study.js"></script>
+    <script src="../js/study-room.js"></script>
+</body>
+</html>

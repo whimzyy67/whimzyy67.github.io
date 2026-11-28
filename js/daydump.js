@@ -205,6 +205,11 @@
     var head = el("div", "dd-modal-head");
     head.appendChild(el("h2", "", o.isMe ? "My Day Dump 📸" : (o.name || "Their") + "'s Day Dump 📸"));
     var close = el("button", "dd-modal-x", "✕"); close.type = "button"; close.setAttribute("aria-label", "Close");
+    if (!o.isMe && o.userId && window.WzStudy) {
+      var sb = el("button", "wz-study-btn", "📚 Study together"); sb.type = "button";
+      sb.addEventListener("click", function () { window.WzStudy.invite({ user_id: o.userId, display_name: o.name }); });
+      head.appendChild(sb);
+    }
     head.appendChild(close); card.appendChild(head);
     function shut() { overlay.remove(); document.removeEventListener("keydown", onKey); }
     function onKey(e) { if (e.key === "Escape") { shut(); } }

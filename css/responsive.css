@@ -519,7 +519,7 @@ html{ scroll-behavior: smooth; }
 
 
 /* ---------- 11. Footer bar for phones and tablets (js/mobile-nav.js builds it) ----------
-   Home | Detox | Focus | Work Space (special) | More.   No hover: every item shows its name.
+   Home | My Day | Focus | Work Space (special) | More.   No hover: every item shows its name.
    Laptops and desktops never see it. */
 
 :root{ --tabbar-h: 64px; }

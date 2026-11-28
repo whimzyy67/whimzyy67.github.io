@@ -1,6 +1,7 @@
 /* mobile-nav.js  -  the footer bar for phones and tablets.
-   Home | Detox | Focus | Work Space (special) | More
-   "More" opens a sheet: My Day, Wellness, Productivity, Dayverse, Vibe, About Us.
+   Home | My Day | Focus | Work Space (special) | More
+   "More" opens a sheet: Wellness, Growth, Search Homies, Vibe, About Us.
+   Detox needs the Chrome extension, so it is not offered on phones and tablets (opening it there goes to My Day).
    No hover anywhere: every item shows its name, and everything works by tap.
    The little "View / Hide" dropdowns for phone cards (formerly phone-ui.js) are at the bottom of this file.
 
@@ -22,14 +23,19 @@
   // (The phone layout rules now live at the bottom of css/responsive.css.)
   document.documentElement.classList.add("has-tabbar");
 
+  // Detox is for computers (it needs the Chrome extension). On phones and tablets, send people to My Day instead.
+  if (here === "detox" && window.matchMedia("(max-width: 820px), (hover: none) and (pointer: coarse) and (max-width: 1100px)").matches) {
+    location.replace(ROOT + "html/my-day.html");
+    return;
+  }
+
   var TABS = [
     { id: "home",       label: "Home",       href: ROOT + "home.html",          icon: "stickers/nav-home.png" },
-    { id: "detox",      label: "Detox",      href: ROOT + "html/detox.html",    icon: "stickers/side-detox.png" },
+    { id: "my-day",     label: "My Day",     href: ROOT + "html/my-day.html",   icon: "stickers/side-myday.png" },
     { id: "focus",      label: "Focus",      href: ROOT + "html/focus.html",    icon: "stickers/side-focus.png" },
     { id: "work-space", label: "Work Space", href: ROOT + "html/work-space.html", icon: "stickers/nav-work.png", special: true }
   ];
   var MORE = [
-    { id: "my-day",       label: "My Day",       sub: "Plan your day and write your journal", href: ROOT + "html/my-day.html",       icon: "stickers/side-myday.png" },
     { id: "wellness",     label: "Wellness",     sub: "Check in, stretch and drink water",    href: ROOT + "html/wellness.html",     icon: "stickers/side-wellness.png" },
     { id: "growth",       label: "Growth",       sub: "Productivity, Dayverse and vision boards", href: ROOT + "html/growth.html",       icon: "stickers/side-growth.png" },
     { id: "search-homies", label: "Search Homies", sub: "Find friends and follow their progress", href: ROOT + "html/search-homies.html", icon: "stickers/side-search.png" },

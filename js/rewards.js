@@ -38,12 +38,12 @@
     }
   })();
 
-  // pagefx.js (the slide between pages) and mobile-nav.js (the footer bar on phones) are loaded from here too,
+  // pagefx.js (the slide between pages), mobile-nav.js (the footer bar on phones) and study.js (study invites) are loaded from here too,
   // so every page gets them without editing each page. Each one only runs once, even if a page also has its own tag.
   (function () {
     var me = document.currentScript && document.currentScript.src;
     if (!me) { return; }
-    ["pagefx.js", "mobile-nav.js"].forEach(function (name) {
+    ["pagefx.js", "mobile-nav.js", "study.js"].forEach(function (name) {
       var url = me.replace(/rewards\.js(\?.*)?$/, name);
       var attr = document.currentScript.getAttribute("src").replace(/rewards\.js(\?.*)?$/, name);
       try { document.write('<script src="' + attr + '"><\/script>'); }

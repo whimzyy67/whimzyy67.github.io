@@ -48,7 +48,14 @@
     id.appendChild(el("h2", "", p.display_name || p.username));
     id.appendChild(el("p", "", "@" + p.username));
     row.appendChild(id);
-    if (extra) { row.appendChild(extra); } else { row.appendChild(el("span")); }
+    if (extra && window.WzStudy && following[p.user_id]) {
+      // homies you follow get a "Study" button beside Follow: it rings them for a 1-to-1 study session
+      var acts = el("div", "sh-actions");
+      var sb = el("button", "wz-study-btn", "📚 Study"); sb.type = "button"; sb.title = "Study together with " + (p.display_name || p.username);
+      sb.addEventListener("click", function () { window.WzStudy.invite(p); });
+      acts.appendChild(sb); acts.appendChild(extra);
+      row.appendChild(acts);
+    } else if (extra) { row.appendChild(extra); } else { row.appendChild(el("span")); }
     var bar = el("div", "sh-bar");
     if (p.progress == null) {
       bar.appendChild(el("span", "", "🔒 Progress is private"));
@@ -154,6 +161,13 @@
     s4.addEventListener("click", function () { if (window.WzDump) { window.WzDump.openGallery({ userId: me.id, isMe: true }); } });
     stats.appendChild(s4);
     accountBox.appendChild(stats);
+
+    if (window.WzStudy) {
+      var st = el("button", "wz-study-btn", "📚 Study together · create or join a group room"); st.type = "button";
+      st.style.alignSelf = "center"; st.style.margin = "8px 0 2px";
+      st.addEventListener("click", function () { location.href = window.WzStudy.lobbyUrl; });
+      accountBox.appendChild(st);
+    }
 
     var priv = el("div", "sh-privacy");
     var sw = el("button", "sh-switch"); sw.type = "button"; sw.setAttribute("role", "switch");
