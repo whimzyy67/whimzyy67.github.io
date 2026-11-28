@@ -246,6 +246,15 @@
   /* ---------- start ---------- */
   async function boot() {
     if (!(await loadProfile())) { return; }
+    if (!profile) {
+      // your login username IS your homie @username, so there is nothing to choose
+      var login = String((me && me.email) || "").replace(/@.*$/, "").toLowerCase();
+      if (/^[a-z0-9_.]{3,20}$/.test(login)) {
+        var pr = auth.computeProgress();
+        var ins = await db().from("profiles").insert({ user_id: me.id, username: login, display_name: login, progress: pr.overall, today: pr.today, progress_public: false, dump_public: false });
+        if (!ins.error) { await loadProfile(); }
+      }
+    }
     if (!profile) { usernameForm(); listBox.textContent = ""; return; }
     await loadFollowing();
     await paintAccount();
