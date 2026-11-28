@@ -283,12 +283,97 @@
     var box = $("stMsgs"); box.appendChild(li);
     while (box.children.length > 120) { box.removeChild(box.firstChild); }
     box.scrollTop = box.scrollHeight;
-    if (!mine && !sys && !chatOpen && window.matchMedia("(max-width: 820px)").matches) { unread += 1; $("stDot").hidden = false; }
+    if (!mine && !sys && !chatOpen) { unread += 1; $("stDot").hidden = false; if ($("stSideDot")) { $("stSideDot").hidden = false; } }
   }
   function setChat(open) {
     chatOpen = open;
     $("stChat").classList.toggle("open", open);
-    if (open) { unread = 0; $("stDot").hidden = true; setTimeout(function () { $("stText").focus(); }, 50); }
+    if ($("stSideChat")) { $("stSideChat").classList.toggle("on", open); }
+    if (open) { unread = 0; $("stDot").hidden = true; if ($("stSideDot")) { $("stSideDot").hidden = true; } $("stVibes").hidden = true; setTimeout(function () { $("stText").focus(); }, 50); }
+  }
+
+  /* ---------- the room sidebar and the movable friends panel ---------- */
+  var sideReady = false, FPOS = "whimzyy-study-friends", SIDE = "whimzyy-study-side";
+  var fpos = null;                       // { x, y, w, h }  shares of the window (so it fits other screens)
+  try { fpos = JSON.parse(localStorage.getItem(FPOS) || "null"); } catch (e) { fpos = null; }
+  function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+  function friends() { return $("stVideos"); }
+  function applyFriends() {
+    var f = friends();
+    if (!fpos) { f.classList.remove("floating"); f.style.cssText = ""; return; }
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var w = clamp(fpos.w * vw, 160, vw), h = clamp(fpos.h * vh, 110, vh);
+    f.classList.add("floating");
+    f.style.width = w + "px"; f.style.height = h + "px";
+    f.style.left = clamp(fpos.x * (vw - w), 0, Math.max(0, vw - w)) + "px";
+    f.style.top = clamp(fpos.y * (vh - h), 0, Math.max(0, vh - h)) + "px";
+    placeBar();
+  }
+  function saveFriends() {
+    var f = friends(), vw = window.innerWidth, vh = window.innerHeight, w = f.offsetWidth, h = f.offsetHeight;
+    fpos = { x: vw > w ? f.offsetLeft / (vw - w) : 0, y: vh > h ? f.offsetTop / (vh - h) : 0, w: w / vw, h: h / vh };
+    try { localStorage.setItem(FPOS, JSON.stringify(fpos)); } catch (e) { /* ignore */ }
+  }
+  function placeBar() {
+    var f = friends(), b = $("stAlignBar"); if (b.hidden) { return; }
+    var r = f.getBoundingClientRect();
+    b.style.left = clamp(r.left, 4, Math.max(4, window.innerWidth - b.offsetWidth - 4)) + "px";
+    b.style.top = (r.top > 44 ? r.top - 40 : r.bottom + 6) + "px";
+  }
+  function startAlign() {
+    var f = friends(), r = f.getBoundingClientRect();
+    if (!fpos) {                      // lift it out of the page exactly where it is now
+      var vw = window.innerWidth, vh = window.innerHeight, w = Math.max(240, r.width), h = Math.max(160, Math.min(r.height || 240, vh * 0.6));
+      fpos = { x: vw > w ? clamp(r.left, 0, vw - w) / (vw - w) : 0, y: vh > h ? clamp(r.top, 0, vh - h) / (vh - h) : 0, w: w / vw, h: h / vh };
+    }
+    applyFriends(); f.classList.add("aligning"); $("stAlignBar").hidden = false; placeBar();
+    setChat(false); $("stVibes").hidden = true;
+  }
+  function endAlign() { friends().classList.remove("aligning"); $("stAlignBar").hidden = true; saveFriends(); }
+  function setSide(open) {
+    document.body.classList.toggle("st-side-closed", !open);
+    $("stSideOpen").hidden = open;
+    if (!open) { setChat(false); $("stVibes").hidden = true; }
+    try { localStorage.setItem(SIDE, open ? "1" : "0"); } catch (e) { /* ignore */ }
+  }
+  function sideSetup() {
+    $("stSideVibes").hidden = false;
+    if (sideReady) { return; } sideReady = true;
+    var closed = false; try { closed = localStorage.getItem(SIDE) === "0"; } catch (e) { /* ignore */ }
+    setSide(!closed);
+    $("stSideChat").addEventListener("click", function () { setChat(!chatOpen); });
+    $("stSideVibes").addEventListener("click", function () {
+      if (!$("stVibes").hidden) { $("stVibes").hidden = true; return; }
+      setChat(false); $("stVibesBtn").click();
+    });
+    $("stSideAlign").addEventListener("click", startAlign);
+    $("stSideClose").addEventListener("click", function () { setSide(false); });
+    $("stSideOpen").addEventListener("click", function () { setSide(true); });
+    $("stAlignDone").addEventListener("click", endAlign);
+    $("stAlignReset").addEventListener("click", function () { fpos = null; try { localStorage.removeItem(FPOS); } catch (e) { /* ignore */ } friends().classList.remove("aligning"); $("stAlignBar").hidden = true; applyFriends(); });
+    function scale(k) {
+      var vw = window.innerWidth, vh = window.innerHeight; if (!fpos) { return; }
+      var w = clamp(fpos.w * k, 160 / vw, 1), h = clamp(fpos.h * k, 110 / vh, 1);
+      fpos.w = w; fpos.h = h; applyFriends();
+    }
+    $("stSizeUp").addEventListener("click", function () { scale(1.15); });
+    $("stSizeDown").addEventListener("click", function () { scale(0.87); });
+    var grab = $("stAlignGrab");
+    grab.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      var f = friends(), box = f.getBoundingClientRect(), ox = e.clientX - box.left, oy = e.clientY - box.top;
+      grab.setPointerCapture(e.pointerId);
+      function move(ev) {
+        f.style.left = clamp(ev.clientX - ox, 0, Math.max(0, window.innerWidth - f.offsetWidth)) + "px";
+        f.style.top = clamp(ev.clientY - oy, 0, Math.max(0, window.innerHeight - f.offsetHeight)) + "px";
+        placeBar();
+      }
+      function stop() { grab.removeEventListener("pointermove", move); grab.removeEventListener("pointerup", stop); saveFriends(); }
+      grab.addEventListener("pointermove", move); grab.addEventListener("pointerup", stop);
+    });
+    window.addEventListener("resize", function () { if (fpos) { applyFriends(); } });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") { setChat(false); } });
+    applyFriends();
   }
 
   /* ---------- the shared timer ---------- */
@@ -327,7 +412,8 @@
     $("stInfo").classList.toggle("duo", mode === "duo");
     $("stCopyCode").hidden = mode === "duo"; $("stCopyLink").hidden = mode === "duo";
     $("stInviteBtn").hidden = !(mode === "group" && account && window.WzStudy);
-    if (mode === "group") { initVibes(); }                 // ambience, music and widgets are for group rooms only
+    initVibes();                 // ambience, music and widgets: everyone sets their own, in 1-to-1 and group rooms
+    sideSetup();
 
     myTile = makeTile("me", me.name + " (you)", true);
     paintMine(); paintTiles();
@@ -445,7 +531,7 @@
   }
 
 
-  /* ---------- Vibes (group rooms only): ambience, music and widgets, just like Work Space ---------- */
+  /* ---------- Vibes (1-to-1 and group rooms): ambience, music and widgets, just like Work Space ---------- */
   var sounds = [];
   function makeSound(list, group, optsBox, volEl, noteEl) {
     var audio = new Audio(); audio.loop = true;

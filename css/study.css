@@ -253,3 +253,60 @@ body.st-immersive .st-controls{ margin-top:auto; }
 body.st-immersive .st-wait{ background:var(--st-glass); padding:6px 14px; border-radius:999px; justify-self:center; }
 .st-bgrow{ display:flex; align-items:center; gap:10px; }
 .st-bgrow span{ flex:1; text-align:center; font-weight:700; font-size:14px; }
+
+
+/* ---------- room sidebar (like Work Space), chat + vibes panels, movable friends panel ---------- */
+.st-stage{ grid-template-columns:minmax(0,1fr); }
+.st-ctl#stChatBtn,.st-ctl#stVibesBtn{ display:none !important; }
+body:not(.st-side-closed) .st-room{ padding-right:80px; }
+
+.st-side{ position:fixed; top:50%; right:12px; transform:translateY(-50%); width:64px; z-index:48; display:flex; flex-direction:column; gap:4px; padding:8px 0;
+  border-radius:22px; background:var(--st-glass); border:1px solid var(--st-gold-soft); -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px); box-shadow:0 8px 30px rgba(0,0,0,.35); }
+body.st-side-closed .st-side{ display:none; }
+.st-sbtn{ all:unset; position:relative; box-sizing:border-box; width:52px; height:52px; margin:0 auto; border-radius:16px; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
+  color:var(--st-text); transition:background-color .2s, box-shadow .2s; }
+.st-sbtn[hidden]{ display:none; }
+.st-sbtn span{ font-size:22px; line-height:1; }
+.st-sbtn small{ font:700 10px "DM Sans",Arial,sans-serif; }
+.st-sbtn:hover,.st-sbtn.on{ background:var(--st-gold-soft); box-shadow:0 0 16px var(--st-gold-soft); }
+.st-sbtn.close{ margin-top:4px; border-top:1px solid var(--st-gold-soft); border-radius:0 0 16px 16px; }
+.st-sbtn .st-dot{ top:4px; right:6px; }
+.st-sopen{ all:unset; position:fixed; top:50%; right:0; transform:translateY(-50%); z-index:48; width:26px; height:64px; display:flex; align-items:center; justify-content:center; cursor:pointer;
+  border-radius:14px 0 0 14px; background:var(--st-glass); border:1px solid var(--st-gold-soft); border-right:0; color:var(--st-gold); font-size:20px; font-weight:700; -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); }
+.st-sopen[hidden]{ display:none; }
+
+/* panels open to the left of the sidebar */
+.st-chat{ display:none; position:fixed; left:auto; right:88px; top:50%; bottom:auto; transform:translateY(-50%); width:min(340px,calc(100vw - 110px)); height:min(70dvh,520px); min-height:0; max-height:none;
+  border-radius:22px; z-index:47; background:var(--st-glass); -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px); }
+.st-chat.open{ display:flex; }
+.st-chat .st-x{ display:inline-block; }
+#stVibes{ inset:auto; right:88px; top:50%; bottom:auto; left:auto; transform:translateY(-50%); background:none; padding:0; display:block; z-index:47; }
+#stVibes[hidden]{ display:none; }
+#stVibes .st-modal{ width:min(330px,calc(100vw - 110px)); max-height:80dvh; box-shadow:0 10px 36px rgba(0,0,0,.45); }
+
+/* the friends panel can float anywhere (Align) */
+.st-videos.floating{ position:fixed !important; z-index:20; margin:0; display:grid; }
+.st-videos.floating.aligning{ outline:2px dashed var(--st-gold); outline-offset:4px; }
+.st-videos.floating[data-count="1"]{ grid-template-columns:minmax(0,1fr); }
+.st-videos.floating .st-tile{ aspect-ratio:auto; min-height:0; height:100%; }
+.st-videos.floating{ grid-auto-rows:minmax(0,1fr); }
+.st-abar{ position:fixed; z-index:49; display:flex; gap:6px; flex-wrap:wrap; }
+.st-abar[hidden]{ display:none; }
+.st-abar .st-chip{ background:var(--st-wine); }
+.st-abar .st-chip.done{ background:var(--st-gold); color:var(--st-bg); }
+.st-grab{ cursor:grab; touch-action:none; }
+.st-grab:active{ cursor:grabbing; }
+
+@media (orientation: landscape) and (max-height: 520px){
+  .st-side{ right:6px; width:56px; padding:4px 0; gap:0; }
+  .st-sbtn{ width:46px; height:42px; }
+  .st-sbtn span{ font-size:18px; }
+  .st-sbtn small{ font-size:9px; }
+  body:not(.st-side-closed) .st-room{ padding-right:68px; }
+  .st-chat,#stVibes{ right:68px; }
+  .st-chat{ height:min(86dvh,340px); width:min(320px,52vw); }
+  #stVibes .st-modal{ max-height:88dvh; width:min(320px,52vw); }
+}
+.st-videos.floating .st-wait{ display:none; }
+.st-videos.floating[data-count="1"]{ grid-template-rows:minmax(0,1fr); }
+.st-wait{ align-self:start; }

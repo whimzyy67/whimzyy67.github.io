@@ -26,7 +26,6 @@
     <header class="st-top">
         <a class="st-back" id="stBack" href="search-homies.html">&larr; Back</a>
         <h1>Study Together 📚</h1>
-        <nav class="top-nav" aria-label="Account"></nav>
     </header>
 
     <main class="st-main">
@@ -106,6 +105,24 @@
                 </aside>
             </div>
 
+            <!-- Right sidebar (like Work Space): tap a button to open its panel -->
+            <aside class="st-side" id="stSide" aria-label="Room tools">
+                <button type="button" class="st-sbtn" id="stSideVibes" hidden title="Vibes: background, ambience, music, widgets"><span aria-hidden="true">🎵</span><small>Vibes</small></button>
+                <button type="button" class="st-sbtn" id="stSideChat" title="Chat"><span aria-hidden="true">💬</span><small>Chat</small><i class="st-dot" id="stSideDot" hidden></i></button>
+                <button type="button" class="st-sbtn" id="stSideAlign" title="Move or resize the friends panel"><span aria-hidden="true">✥</span><small>Friends</small></button>
+                <button type="button" class="st-sbtn close" id="stSideClose" title="Close sidebar"><span aria-hidden="true">»</span><small>Hide</small></button>
+            </aside>
+            <button type="button" class="st-sopen" id="stSideOpen" title="Open sidebar" aria-label="Open sidebar" hidden>«</button>
+
+            <!-- Align bar for the friends panel (appears while you move it) -->
+            <div class="st-abar" id="stAlignBar" hidden>
+                <button type="button" class="st-chip st-grab" id="stAlignGrab" title="Hold and drag to move">✥ Align</button>
+                <button type="button" class="st-chip" id="stSizeDown" title="Smaller">－</button>
+                <button type="button" class="st-chip" id="stSizeUp" title="Bigger">＋</button>
+                <button type="button" class="st-chip" id="stAlignReset" title="Back to the normal layout">Reset</button>
+                <button type="button" class="st-chip done" id="stAlignDone">Done</button>
+            </div>
+
             <div class="st-controls">
                 <button type="button" class="st-ctl" id="stCam"><span aria-hidden="true">📷</span><span id="stCamLbl">Camera on</span></button>
                 <button type="button" class="st-ctl" id="stVibesBtn" hidden><span aria-hidden="true">🎵</span><span>Vibes</span></button>
@@ -124,7 +141,7 @@
             </div>
         </div>
 
-        <!-- Vibes: ambience, music and widgets (group rooms only; only you hear and see these) -->
+        <!-- Vibes: ambience, music and widgets (1-to-1 and group rooms; only you hear and see these) -->
         <div class="st-veil" id="stVibes" hidden>
             <div class="st-modal st-vibes" role="dialog" aria-modal="true" aria-label="Vibes">
                 <div class="st-chat-head"><b>Vibes 🎵</b><button type="button" class="st-x" id="stVibesClose" aria-label="Close">&times;</button></div>
