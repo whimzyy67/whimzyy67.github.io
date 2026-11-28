@@ -16,6 +16,7 @@
   var origSet = Storage.prototype.setItem;
   var origRemove = Storage.prototype.removeItem;
   var PREFIX = "whimzyy-", META = "whimzyy-sync-meta", TABLE = "user_data";
+  var scriptBase = (document.currentScript && document.currentScript.src) || "";
   var SKIP = { "whimzyy-backup": 1, "whimzyy-sync-meta": 1, "whimzyy-install-dismissed": 1 };
   var meta = loadMeta();
   var client = null, uid = null, enabled = false, busy = false, timer = null, lastStatus = "off", lastError = "";
@@ -132,7 +133,22 @@
     for (var i = 0; i < LS.length; i++) { var k = LS.key(i); if (k.indexOf(PREFIX) === 0 && k !== "whimzyy-install-dismissed") { drop.push(k); } }
     drop.forEach(function (k) { origRemove.call(LS, k); });
   }
-  window.WhimzyySync = { flush: flush, status: function () { return lastStatus; } };
+  window.WhimzyySync = { flush: flush, status: function () { return lastStatus; }, error: function () { return lastError; },
+    api: { client: function () { return client; }, uid: function () { return uid; }, enabled: function () { return enabled; }, syncable: syncable } };
+  function openBackup() {
+    function go() { if (window.WhimzyyBackup) { window.WhimzyyBackup.open(); } }
+    if (window.WhimzyyBackup) { go(); return; }
+    var base = (document.currentScript && document.currentScript.src) || scriptBase;
+    var sc = document.createElement("script"); sc.src = base.replace(/auth\.js.*$/, "backup.js"); sc.onload = go;
+    sc.onerror = function () { window.alert("Could not load backup tools. Check your connection."); };
+    document.head.appendChild(sc);
+  }
+  window.addEventListener("whimzyy-sync-status", function (e) {
+    if (e.detail && e.detail.state === "synced" && !window.WhimzyyBackup && enabled) {
+      var sc = document.createElement("script"); sc.src = scriptBase.replace(/auth\.js.*$/, "backup.js");
+      sc.onload = function () { window.WhimzyyBackup.auto(); }; document.head.appendChild(sc);
+    }
+  }, { once: true });
   window.addEventListener("online", function () { push(); });
   document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") { push(); } });
   setInterval(function () { if (enabled && (meta.dirty.length || meta.del.length)) { push(); } }, 30000);
@@ -222,7 +238,7 @@
     if (!u) { return "Account"; }
     if (u.is_anonymous) { return (u.user_metadata && u.user_metadata.display_name) || "Guest"; }
     var m = u.user_metadata || {};
-    return (m.name_set && m.display_name) || (u.email || "Account").split("@")[0];
+    return (m.name_set && m.display_name) || (u.email || "Account").replace(/@.*$/, "");
   }
   // a person who logged in with an email but has not chosen a name yet
   function needsName(u) {
@@ -333,11 +349,14 @@
 
     if (current && !isGuest) {
       card.appendChild(el("h2", "", "Hey, " + who(current)));
-      card.appendChild(el("p", "acct-sub", current.email));
+      card.appendChild(el("p", "acct-sub", "Username: " + String(current.email || "").replace(FAKE, "")));
       card.appendChild(el("p", "acct-sync", ""));
       var ren = el("button", "acct-link", "✏️ Change my name"); ren.type = "button";
       ren.addEventListener("click", function () { askName = true; render(); });
       card.appendChild(ren);
+      var bk = el("button", "acct-btn-alt", "💾 Backup & restore"); bk.type = "button";
+      bk.addEventListener("click", function () { closeModal(); openBackup(); });
+      card.appendChild(bk);
       var out = el("button", "acct-btn-main", "Log out"); out.type = "button";
       out.addEventListener("click", async function () {
         out.disabled = true; out.textContent = "Saving…";
@@ -353,7 +372,7 @@
         card.appendChild(el("p", "acct-sync", ""));
         isGuestBox = true;
       } else if (mode === "choose") {
-        card.appendChild(el("p", "acct-sub", gate ? "Log in or create an account to start. Your stars and progress stay with you on every device." : "Log in to keep everything synced across your devices."));
+        card.appendChild(el("p", "acct-sub", gate ? "Log in with your username, or create an account to start. Your stars and progress stay with you on every device." : "Log in to keep everything synced across your devices."));
       }
       if (!current && mode === "choose") {
         var l = el("button", "acct-btn-main", "Log in"); l.type = "button";
@@ -364,14 +383,14 @@
       } else {
         var signup = isGuest ? mode !== "login" : mode === "signup";
         if (isGuest) { card.appendChild(el("h3", "", "Save my progress")); }
-        var em = field("email", "Email", "you@example.com", "email");
-        var pw = field("password", signup ? "Set a password" : "Password", "at least 6 characters", signup ? "new-password" : "current-password");
+        var em = field("text", "Username", signup ? "pick a username" : "your username", "username");
+        em.input.maxLength = 20; em.input.autocapitalize = "none"; em.input.spellcheck = false;
         var go = el("button", "acct-btn-main", signup ? (isGuest ? "Save my account" : "Create account") : "Log in"); go.type = "button";
         var form = el("form", "acct-form");
-        form.appendChild(em); form.appendChild(pw);
+        form.appendChild(em);
         var m = el("p", "acct-msg" + (msg.bad ? " bad" : ""), msg.text);
         form.appendChild(m); form.appendChild(go);
-        form.addEventListener("submit", function (e) { e.preventDefault(); submit(signup, em.input.value.trim(), pw.input.value, go); });
+        form.addEventListener("submit", function (e) { e.preventDefault(); submit(signup, em.input.value.trim(), "", go); });
         go.type = "submit";
         card.appendChild(form);
         var sw = el("button", "acct-link", signup ? "I already have an account" : (isGuest ? "Save as a new account instead" : "I need an account")); sw.type = "button";
@@ -398,21 +417,34 @@
     return m || "Something went wrong. Please try again.";
   }
 
-  async function submit(signup, email, password, btn) {
-    if (!email || password.length < 6) { say("Enter an email and a password of at least 6 characters.", true); return; }
+  // Login is by username. Supabase needs an email-shaped id, so the username becomes a private, never-mailed address.
+  var FAKE = "@users.whimzyy.app";
+  function cleanName(v) { return String(v || "").trim().toLowerCase(); }
+  function nameOk(v) { return /^[a-z0-9][a-z0-9_.]{2,19}$/.test(v); }
+  async function submit(signup, username, password, btn) {
+    username = cleanName(username);
+    if (!nameOk(username)) { say("Username: 3 to 20 letters, numbers, _ or . (no spaces).", true); return; }
+    password = "wz-" + username + "-login-v1";   // no password by design: the username alone logs you in
+    var email = username + FAKE;
     btn.disabled = true; say("");
     var isGuest = current && current.is_anonymous, r;
     try {
       if (signup && isGuest) {
-        r = await client.auth.updateUser({ email: email, password: password, data: { display_name: email.split("@")[0] } });
+        r = await client.auth.updateUser({ email: email, password: password, data: { display_name: username, name_set: true } });
         if (!r.error) { say("Saved! If asked, confirm the link we emailed you."); setUser(r.data.user); btn.disabled = false; return; }
       } else if (signup) {
-        r = await client.auth.signUp({ email: email, password: password, options: { data: { display_name: email.split("@")[0] } } });
-        if (!r.error && !r.data.session) { say("Check your inbox and confirm your email, then log in."); mode = "login"; btn.disabled = false; return; }
+        r = await client.auth.signUp({ email: email, password: password, options: { data: { display_name: username, name_set: true } } });
+        if (!r.error && !r.data.session) { say("That username may be taken, or sign-up needs one setting changed (turn off Confirm email in Supabase). Try another username.", true); btn.disabled = false; return; }
       } else {
         r = await client.auth.signInWithPassword({ email: email, password: password });
       }
-      if (r.error) { say(friendly(r.error), true); btn.disabled = false; return; }
+      if (r.error) {
+        var em = (r.error.message || "") + " " + (r.error.code || "");
+        if (signup && /already|registered|exists|taken/i.test(em)) { say("Sorry, \"" + username + "\" is already taken. Please pick another username.", true); }
+        else if (!signup && /invalid login|credentials/i.test(em)) { say("No account with that username. Check the spelling or create one.", true); }
+        else { say(friendly(r.error), true); }
+        btn.disabled = false; return;
+      }
       closeModal();
     } catch (e) { say("Something went wrong. Check your connection.", true); btn.disabled = false; }
   }
