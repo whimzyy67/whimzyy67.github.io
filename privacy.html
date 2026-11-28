@@ -18,7 +18,7 @@
       font:400 16px/1.65 "DM Sans",Arial,sans-serif; }
     header{ padding:18px 16px; border-bottom:1px solid var(--wine,#6C1828); }
     header a{ color:var(--gold,#E8B86D); text-decoration:none; font:700 15px "DM Sans",Arial,sans-serif; }
-    main{ width:100%; max-width:1500px; margin:0 auto; padding:24px clamp(16px,4vw,56px) 48px; }
+    main{ max-width:760px; margin:0 auto; padding:32px 16px 72px; }
     h1{ font:700 clamp(30px,6vw,44px)/1.15 "Bricolage Grotesque","DM Sans",Arial,sans-serif; color:var(--gold,#E8B86D); margin:0 0 6px; }
     .updated{ opacity:.7; margin:0 0 28px; font-size:14px; }
     .tldr{ background:var(--wine-soft,#7A1B2B); border:2px solid var(--gold,#E8B86D); border-radius:20px; padding:18px 22px; margin-bottom:34px; }
@@ -30,14 +30,6 @@
     table{ width:100%; border-collapse:collapse; margin:10px 0 14px; font-size:15px; }
     th, td{ text-align:left; padding:9px 10px; border-bottom:1px solid var(--wine,#6C1828); vertical-align:top; }
     th{ color:var(--candle,#E8B86D); }
-    .tldr ul{ column-count:2; column-gap:40px; margin-bottom:0; }
-    .tldr li{ break-inside:avoid; }
-    .cols{ column-count:2; column-gap:56px; }
-    .cols h2{ margin-top:22px; break-after:avoid; }
-    .cols h2:first-child{ margin-top:0; }
-    .cols p, .cols ul, .cols li{ break-inside:avoid; }
-    .cols .span{ column-span:all; }
-    @media (max-width:900px){ .cols, .tldr ul{ column-count:1; } }
     @media (max-width:560px){ table{ font-size:13.5px; } th, td{ padding:7px 6px; } }
   </style>
 </head>
@@ -45,7 +37,7 @@
   <header><a href="home.html">← Back to Whimzyy</a></header>
   <main>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: November 26, 2026</p>
+    <p class="updated">Last updated: November 28, 2026</p>
 
     <section class="tldr">
       <h2>The short version</h2>
@@ -57,21 +49,20 @@
       </ul>
     </section>
 
-    <div class="cols">
-    <h2 class="span">Who we are</h2>
-    <p class="span">Whimzyy ("we", "us") is an independent project run by Amruzinggg. You can reach us at <a href="mailto:whimzyy67@gmail.com">whimzyy67@gmail.com</a>.</p>
+    <h2>Who we are</h2>
+    <p>Whimzyy ("we", "us") is an independent project run by Amruzinggg. You can reach us at <a href="mailto:YOUR-EMAIL@example.com">YOUR-EMAIL@example.com</a>.</p>
 
-    <h2 class="span">What we collect</h2>
-    <table class="span">
+    <h2>What we collect</h2>
+    <table>
       <tr><th>What</th><th>Why</th></tr>
       <tr><td><b>Account details</b>: your email address and a password (we never see your password in plain text; it is stored securely by our login provider), or a random guest name like <i>user12345</i>.</td><td>To sign you in and keep your data tied to you.</td></tr>
       <tr><td><b>Your Whimzyy data</b>: tasks, journal entries, goals, focus sessions, moods, reminders, water and energy logs, stars, unlocked themes, chosen settings, and Detox limits and screen-time logs.</td><td>To run the features and sync them across your devices.</td></tr>
-      <tr><td><b>Social features</b> (only if you use Search Homies): your chosen @username and display name, who you follow and who follows you, and your progress percentage.</td><td>So friends can find you and follow you. Your progress percentage is shown to others only while you have it set to public; your username and display name are visible to other logged-in users who search for you.</td></tr>
-      <tr><td><b>Pictures you upload</b>: vision board pictures and your Day Dump photos, stored in private cloud storage under your account.</td><td>To show them back to you. Vision boards are only visible to you. Day Dump photos are private by default; if you switch your Day Dump to public, only people who follow you can see them. You can switch it back to private or delete any picture at any time.</td></tr>
+      <tr><td><b>Day Dump photos</b> (if you add them): the pictures you save to your days, and who you choose to share them with.</td><td>To show them in My Day and Dayverse. Private ones are visible only to you.</td></tr>
+      <tr><td><b>Reminder settings</b> (if you turn on closed-app reminders): your device's notification address and your water, stretch and rest settings.</td><td>To send reminders when the app is closed.</td></tr>
       <tr><td><b>Detox extension data</b> (only if you install the Whimzyy Detox Chrome extension): the websites you set limits for and the time spent on them.</td><td>To block distracting sites and show your screen time. This stays on your device and in your browser; it is not sent to us unless it is part of your synced Detox data above.</td></tr>
       <tr><td><b>Technical data</b>: standard server and network information such as IP address and browser type.</td><td>Handled by our hosting and login providers for security and to deliver the site.</td></tr>
     </table>
-    <p class="span">We do <b>not</b> collect your location, contacts, payment details, or the content of the pages you visit.</p>
+    <p>We do <b>not</b> collect your location, contacts, payment details, or the content of the pages you visit.</p>
 
     <h2>Where your data is stored</h2>
     <ul>
@@ -88,7 +79,7 @@
     <p>If you choose "Continue as guest", we create an anonymous profile with a random name. It has no email attached. If you log out of guest mode without saving it to an email, that guest data can no longer be reached, so please save it first if you want to keep it.</p>
 
     <h2>Sharing</h2>
-    <p>Your data is private to you unless you choose to share it: your progress percentage (public or private switch) and your Day Dump (private or public switch) are the only things other users can ever see, and only as described above. Beyond that, we share data only with the services that run Whimzyy on our behalf (Supabase for login and storage, GitHub Pages for hosting), and only as needed to provide the site. We may also share information if the law requires it.</p>
+    <p>We share data only with the services that run Whimzyy on our behalf (Supabase for login and storage, Netlify for hosting), and only as needed to provide the site. We may also share information if the law requires it.</p>
 
     <h2>How long we keep it</h2>
     <p>We keep your data for as long as your account or guest profile exists. If you ask us to delete it, we remove your account and the data tied to it. Backups held by our providers may take a short time to clear.</p>
@@ -107,6 +98,10 @@
 
     <h2>Security</h2>
     <p>Data is sent over an encrypted connection (HTTPS), and the database is set up so people can only reach their own rows. No online service is perfectly secure, so please use a strong, unique password.</p>
+    <p><b>Honest note:</b> your saved data is protected by login and database rules, but it is not yet end-to-end encrypted. This means the person who runs the Whimzyy database could technically read what is stored in it.</p>
+
+    <h2>Planned: end-to-end encryption</h2>
+    <p>We are working towards end-to-end encryption, so your journal and other saved data would be locked with a key only you hold (a recovery key you keep safe). Once that is live, nobody else, including us, could read it. This is planned for the future and is not available yet. We will update this page when it is.</p>
 
     <h2>Children</h2>
     <p>Whimzyy is not meant for children under 13, and we do not knowingly collect their data. If you believe a child has given us data, contact us and we will delete it.</p>
@@ -115,8 +110,7 @@
     <p>If we change this policy, we will update the date at the top. For larger changes we will also tell you on the site.</p>
 
     <h2>Contact</h2>
-    <p>Questions or requests? Email <a href="mailto:whimzyy67@gmail.com">whimzyy67@gmail.com</a>.</p>
-    </div>
+    <p>Questions or requests? Email <a href="mailto:YOUR-EMAIL@example.com">YOUR-EMAIL@example.com</a>.</p>
   </main>
 </body>
 </html>
